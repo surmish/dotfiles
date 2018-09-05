@@ -148,6 +148,8 @@ let g:UltiSnipsJumpBackwardTrigger  = "<s-tab>"
 au FileType systemverilog let g:ale_linters = {'systemverilog' : ['iverilog'],}
 let g:ale_verilog_iverilog_options = '-g 2012'
 
+set cursorline
+set cursorcolumn
 " The '^[' is a single character. You enter it by pressing Ctrl+v and then ESC.
 set t_8f=[38;2;%lu;%lu;%lum
 set t_8b=[48;2;%lu;%lu;%lum
