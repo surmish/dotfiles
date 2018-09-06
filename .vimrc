@@ -157,5 +157,8 @@ set background=dark
 " set background=light
 " let g:gruvbox_contrast_light='soft'
 let g:gruvbox_italic=1
+let g:gruvbox_contrast_dark="hard"
+let g:gruvbox_contrast_light="light"
 colorscheme gruvbox
+highlight Normal guibg=NONE ctermbg=NONE
 set termguicolors
