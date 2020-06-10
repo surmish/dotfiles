@@ -31,8 +31,6 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }    " Show Tag list.  :help ta
 " Show function context
 Plug 'wellle/context.vim'
 
-" A light and configurable statusline/tabline plugin for Vim
-" Plug 'itchyny/lightline.vim'
 " Airline tabline theme
 Plug 'vim-airline/vim-airline'         " Status line :help airline
 Plug 'vim-airline/vim-airline-themes'
@@ -320,9 +318,6 @@ if has("autocmd")
 endif
 
 autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
-
-" Show lightline even if one pane is open
-set laststatus=2
 
 let g:gruvbox_contrast_dark='medium'
 let g:gruvbox_contrast_light='hard'
