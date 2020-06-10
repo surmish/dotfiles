@@ -173,7 +173,7 @@ call plug#end()
 
 filetype indent plugin on
 syntax on
-set mouse=a
+set mouse+=a
 set autoindent
 set lazyredraw
 set ttyfast
