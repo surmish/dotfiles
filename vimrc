@@ -4,61 +4,154 @@ Plug 'tpope/vim-surround'     " Manipulate parenthesis :help surround
 Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
 " Plug 'tmsvg/pear-tree'        " Vim auto-pair plugin.
 
+" Navigate through inner words
+Plug 'bkad/camelcasemotion'
+" CamelCase motion mappings {{{
+omap <silent> iw <Plug>CamelCaseMotion_iw
+xmap <silent> iw <Plug>CamelCaseMotion_iw
+omap <silent> ib <Plug>CamelCaseMotion_ib
+xmap <silent> ib <Plug>CamelCaseMotion_ib
+omap <silent> ie <Plug>CamelCaseMotion_ie
+xmap <silent> ie <Plug>CamelCaseMotion_ie
+" }}}
+
+" Move blocks of code instead of deleting/pasting
+Plug 'matze/vim-move'
+" vim-move key binding {{{
+let g:move_key_modifier = 'C'
+" }}}
+
 " On-demand loading
 " The undo history visualizer for VIM 
-Plug 'mbbill/undotree',     { 'on': 'UndotreeToggle' }  " Show Undo tree.     :help undotree-intro
+Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help undotree-intro
+
 " Vim plugin that displays tags in a window, ordered by scope
-Plug 'majutsushi/tagbar'  , { 'on': 'TagbarToggle' }    " Show Tag list.      :help tagbar
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }    " Show Tag list.  :help tagbar
+
+" Show function context
+Plug 'wellle/context.vim'
 
 " A light and configurable statusline/tabline plugin for Vim
 " Plug 'itchyny/lightline.vim'
 " Airline tabline theme
-Plug 'vim-airline/vim-airline' " Status line            :help airline
+Plug 'vim-airline/vim-airline'         " Status line :help airline
 Plug 'vim-airline/vim-airline-themes'
-" Tag file manager
-" Plug 'ludovicchabant/vim-gutentags'
+
+" air-line {{{
+let g:airline_section_a=''
+" let g:airline_section_b='%-0.90{getcwd()}'
+let g:airline_section_b=''
+let g:airline_section_y=''
+let g:airline_section_x=''
+let g:airline_section_error=''
+let g:airline_section_warning=''
+let g:airline_powerline_fonts=1
+" remove separators for empty sections
+let g:airline_skip_empty_sections=1
+
+let g:airline#extensions#tabline#show_splits = 1 "enable/disable displaying open splits per tab (only when tabs are opened). >
+let g:airline#extensions#tabline#show_buffers = 1 " enable/disable displaying buffers with a single tab
+let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
+
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
+
+" AirLine colorscheme
+" let g:airline_theme="base16"
+" let g:airline_theme="molokai"
+" let g:airline_theme="papercolor"
+" }}}
+
+" gdb integration - debugging
+Plug 'puremourning/vimspector'
+
+" easy way to search and navigate the current file
+Plug 'easymotion/vim-easymotion'
+
+Plug 'haya14busa/incsearch.vim'
+Plug 'haya14busa/incsearch-fuzzy.vim'
+Plug 'haya14busa/incsearch-easymotion.vim'
+
+Plug 'haya14busa/vim-operator-flashy'
+Plug 'haya14busa/vim-easyoperator-line'
+Plug 'haya14busa/vim-easyoperator-phrase'
 
 " Retro groove color scheme for Vim
 " Plug 'morhetz/gruvbox'
 Plug 'gruvbox-community/gruvbox'
+Plug 'gruvbox-material/vim', {'as': 'gruvbox-material'}
 
 " Fuzzy file finder
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug '~/.fzf'
+" {{{
+" FZF popup window settings
+nnoremap <silent> <C-p> :FZF<CR>
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+" Border color
+" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo' } }
+" Border style
+" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo', 'rounded': v:false } }
+" }}}
 
-" Plug 'roxma/nvim-yarp'
-" Plug 'roxma/vim-hug-neovim-rpc'
-" Plug 'Shougo/denite.nvim'
+" Dim inactive windows
+Plug 'blueyed/vim-diminactive'
 
-" Asynchronous Linting Tool
-" Plug 'dense-analysis/ale'
+" Resize windows
+Plug 'camspiers/animate.vim'
+Plug 'camspiers/lens.vim'
+" lens.vim {{{
+let g:lens#disabled_filetypes = ['fzf']
+let g:lens#width_resize_min = 20
+let g:lens#width_resize_max = 80
+let g:lens#height_resize_min = 5
+let g:lens#height_resize_max = 35
+" }}}
 
-" autocomplete plugins
-" Plug 'Valloric/YouCompleteMe'
-" Plug 'Valloric/YouCompleteMe', { 'do': './install.py --system-libclang --clang-completer'}  " code completion engine for Vim
-" Plug 'Valloric/YouCompleteMe', { 'do': 'LD=/u/urmish/usr/local/bin/ld CXX=/depot/gcc-7.3.0/bin/g++ ./install.py --clang-completer --system-libclang'}  " code completion engine for Vim
-" Plug 'Valloric/YouCompleteMe', { 'do': 'LD=/depot/binutils-2.30/bin/ld CXX=/depot/gcc-7.3.0/bin/g++ ./install.py --clangd-completer'}  " code completion engine for Vim
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'markonm/traces.vim'
+Plug 'vim/killersheep'
 
 Plug 'vim-scripts/DoxygenToolkit.vim'
+let g:DoxygenToolkit_authorName = $USER
+
+" Code completion engine
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Coc Extensions {{{
+let g:coc_global_extensions = [
+      \'coc-dictionary',
+      \'coc-marketplace',
+      \'coc-syntax',
+      \'coc-tag',
+      \'coc-utils',
+      \'coc-highlight',
+      \'coc-python',
+      \'coc-ultisnips',
+      \'coc-explorer',
+      \'coc-snippets',
+      \'coc-clangd'
+      \]
+" }}}
+" Coc settings {{{
+let g:coc_user_config = {
+    \ "clangd.semanticHighlighting": "true",
+    \ "diagnostic.errorSign": '⚠',
+    \ "diagnostic.warningSign": '⚐',
+    \ "diagnostic.infoSign": '⚐',
+    \ "diagnostic.hintSign": '⚐',
+    \ "diagnostic.signOffset": 9999,
+    \ "coc.preferences.enableFloatHighlight": "v:false",
+  \ }
+" }}}
 
 " Snippet insertion engine and collection
-" Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+let g:UltiSnipsExpandTrigger="<C-j>"
 
-" Plug 'mhinz/vim-startify'
-
-" Plug 'sainnhe/vim-color-desert-night'
-" Plug 'sainnhe/vim-color-forest-night'
-" Plug 'sainnhe/vim-color-vanilla-cake'
-" Plug 'sainnhe/vim-color-grimoire'
-" Plug 'sainnhe/vim-color-ice-age'
-
-" Plug 'sheerun/vim-polyglot'
-" Plug 'jeaye/color_coded'
-Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'jackguo380/vim-lsp-cxx-highlight'
 
 Plug 'scrooloose/nerdcommenter'
 
@@ -75,10 +168,7 @@ Plug 'kana/vim-operator-user'
 " smooth page up/down
 Plug 'psliwka/vim-smoothie'
 
-" disable search highlighting when not needed
-Plug 'romainl/vim-cool'
-
-" aligning tables in code (e.g. glip=, 3gli(,
+" aligning tables in code E.g. glip=, 3gli(,
 Plug 'tommcdo/vim-lion'
 
 call plug#end()
@@ -100,6 +190,11 @@ nnoremap <F5> :UndotreeToggle<CR>
 " Display the tags in your program
 nnoremap <F8> :TagbarToggle<CR>
 
+" Disable netrw (file explorer) plugins
+" let g:loaded_netrw       = 1
+" let g:loaded_netrwPlugin = 1
+
+" Enable netrw (file explorer) plugins
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
@@ -122,10 +217,7 @@ function! ToggleNetrw()
     silent Lexplore
   endif
 endfunction
-
 nnoremap <silent><F7> :call ToggleNetrw()<CR>
-
-" Add your own mapping. For example:
 
 " Allow backspacing over autoindent, line breaks and start of insert
 set backspace=indent,eol,start
@@ -137,7 +229,7 @@ set tabstop=2
 set shiftwidth=2
 
 " Use ';' as the leader key
-let mapleader=";"
+let mapleader="\<Space>"
 
 " Enter normal mode from insert or visual mode
 inoremap jj <ESC>
@@ -159,8 +251,10 @@ function! ToggleNumbersAndSignColumns()
   set nonumber!
   if &signcolumn == 'yes'
     set signcolumn=no
-  else
+  elseif &signcolumn == 'no'
     set signcolumn=yes
+  else
+    set signcolumn=no
   endif
 endfunction
 
@@ -193,9 +287,7 @@ set ignorecase
 nmap <leader>ic <ESC>:set ignorecase!<CR>
 
 " left/right to step through buffers 
-nnoremap <leader>bn :bnext<cr>
-nnoremap <leader><tab> :bnext<CR>
-nnoremap <leader>bp :bprevious<cr>
+nnoremap <leader><tab>   :bnext<CR>
 nnoremap <leader><S-tab> :bprevious<CR>
 
 " Move to the beginning and end of line using 'Ctrl a' and 'Ctrl e'
@@ -213,18 +305,12 @@ nmap <leader>p <ESC>:tp<CR>
 
 " Look for tags file in parent directories until its found
 " set tags=./tags;,tags;
-" set tags=/u/urmish/apbld/tags
-set tags=/u/urmish/ndm_apbld/tags
-" Specify path to executable for universal ctags to be used by Tagbar
 let g:tagbar_width = 40
-let g:tagbar_ctags_bin = '/u/urmish/usr/local/bin/ctags'
-
-" noremap <leader><C-K> :py3f /u/urmish/usr/local/share/clang/clang-format.py<cr>
-autocmd FileType c,cpp,objc map <buffer> = <Plug>(operator-clang-format)
 
 if has("autocmd")
   autocmd BufNewFile,BufRead *.C set filetype=cpp
-  autocmd BufNewFile,BufRead *.tm,*.pcx,*.setup set filetype=tcl
+  autocmd BufNewFile,BufRead *.vs,*.sv,*.v,*.vh set filetype=verilog
+  autocmd BufNewFile,BufRead *.tm,*.pcx,*.setup,*.inc set filetype=tcl
   autocmd BufNewFile,BufRead *.setup.urmish set filetype=tcl
   autocmd BufNewFile,BufRead *.make set filetype=make
   autocmd BufReadPost *.scm,*.rkt,*.tktl set filetype=racket
@@ -233,58 +319,22 @@ if has("autocmd")
   autocmd filetype racket,lisp,scheme setlocal equalprg=scmindent.rkt
 endif
 
+autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
+
 " Show lightline even if one pane is open
 set laststatus=2
 
-" air-line
-let g:airline_section_a=''
-" let g:airline_section_b='%-0.90{getcwd()}'
-let g:airline_section_b=''
-let g:airline_section_y=''
-let g:airline_section_x=''
-let g:airline_section_error=''
-let g:airline_section_warning=''
-let g:airline_powerline_fonts=1
-" remove separators for empty sections
-let g:airline_skip_empty_sections=1
-
-let g:airline#extensions#tabline#show_splits = 1 "enable/disable displaying open splits per tab (only when tabs are opened). >
-let g:airline#extensions#tabline#show_buffers = 1 " enable/disable displaying buffers with a single tab
-let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
-
-" AirLine colorscheme
-" let g:airline_theme="base16"
-" let g:airline_theme="molokai"
-let g:airline_theme="papercolor"
-
-let g:cpp_class_scope_highlight = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_class_decl_highlight = 1
-" let g:cpp_experimental_simple_template_highlight = 1 " Makes scrolling slower
-let g:cpp_experimental__template_highlight = 1 " Faster with corner cases
-let g:cpp_concepts_highlight = 1
-
-let g:gruvbox_contrast_dark='soft'
-let g:gruvbox_contrast_light='medium'
+let g:gruvbox_contrast_dark='medium'
+let g:gruvbox_contrast_light='hard'
 
 " Dark/Light vim background
 set background=dark
 " set background=light
 
-set termguicolors
-" colorscheme desert
 colorscheme gruvbox
-" colorscheme desert-night
-
-" let g:UltiSnipsExpandTrigger="<C-j>"
-
-" Disable highlight Denite file/rec results
-" highlight default link deniteMatchedChar  None
-" highlight default link deniteMatchedRange None
 
 " Use gs to toggle whitespace ignore in vimdiff
 if &diff
-  " colorscheme gruvbox
   map <leader>gs :call IwhiteToggle()<CR>
   function! IwhiteToggle()
     if &diffopt =~ 'iwhite'
@@ -298,17 +348,3 @@ endif
 " Highlight current row and column background
 set cursorline
 set cursorcolumn
-" highlight cursorline cterm=NONE
-" highlight cursorline cterm=NONE ctermbg=239
-" highlight cursorcolumn ctermbg=249
-
-" highlight Search ctermbg=red
-" highlight Search ctermfg=white
-
-let g:DoxygenToolkit_authorName = $USER
-
-" nvim build
-" /depot/cmake/cmake-3.9.0/bin/cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_BUILD_PREFIX=/u/urmish/usr/local -DLIBLUV_LIBRARY:FILEPATH=/u/urmish/usr/local/usr/local/lib/lua/luv.so -DLIBLUV_INCLUDE_DIR=/u/urmish/usr/local/usr/local/lib/lua -DLIBVTERM_LIBRARY:FILEPATH=/u/urmish/usr/local/usr/local/lib/libvterm.la -DLIBVTERM_INCLUDE_DIR=/u/urmish/usr/local/usr/local/lib ..
-"
-" coc settings
-" source ~/.vim/ccls_settings.vim
