@@ -27,6 +27,28 @@ Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help un
 
 " Vim plugin that displays tags in a window, ordered by scope
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }    " Show Tag list.  :help tagbar
+" TagBar Settings {{{
+" Look for tags file in parent directories until its found
+" set tags=./tags;,tags;
+let g:tagbar_width = 40
+let g:tagbar_ctags_bin = "/u/$USER/usr/local/bin/ctags"
+
+" Look for tags file in parent directories until its found
+" set tags=./tags;,tags;
+set tags=VIM_TAG_FILE
+
+" nnoremap <leader>nu :set nonumber!<CR>
+nnoremap <leader>st :call SwitchTagsFile()<CR>
+
+function! SwitchTagsFile()
+  if &tags == "$VIM_ALT_TAG_FILE"
+    set tags=$VIM_TAG_FILE
+  else
+    set tags=$VIM_ALT_TAG_FILE
+  endif
+  echo &tags
+endfunction
+" }}}
 
 " Show function context
 Plug 'wellle/context.vim'
@@ -52,15 +74,16 @@ let g:airline#extensions#tabline#show_buffers = 1 " enable/disable displaying bu
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 
 " Enable the list of buffers
-let g:airline#extensions#tabline#enabled = 1
 
+let g:airline#extensions#tabline#enabled = 1
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
 
 " AirLine colorscheme
-" let g:airline_theme="base16"
+let g:airline_theme="base16"
 " let g:airline_theme="molokai"
 " let g:airline_theme="papercolor"
+" let g:airline_theme="light"
 " }}}
 
 " gdb integration - debugging
@@ -71,6 +94,16 @@ Plug 'easymotion/vim-easymotion'
 
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
+" incsearch settings {{{
+" map z/ <Plug>(incsearch-fuzzy-/)
+" map z? <Plug>(incsearch-fuzzy-?)
+" map zg/ <Plug>(incsearch-fuzzy-stay)
+
+map z/ <Plug>(incsearch-fuzzyspell-/)
+map z? <Plug>(incsearch-fuzzyspell-?)
+map zg/ <Plug>(incsearch-fuzzyspell-stay)
+" }}}
+
 Plug 'haya14busa/incsearch-easymotion.vim'
 
 Plug 'haya14busa/vim-operator-flashy'
@@ -94,7 +127,19 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " Border style
 " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo', 'rounded': v:false } }
 " }}}
-
+" --column: Show column number
+" --line-number: Show line number
+" --no-heading: Do not show file headings in results
+" --fixed-strings: Search term as a literal string
+" --ignore-case: Case insensitive search
+" --no-ignore: Do not respect .gitignore, etc...
+" --hidden: Search hidden files and folders
+" --follow: Follow symlinks
+" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+" --color: Search color options
+command! -bang -nargs=* Rg    call fzf#vim#grep('rg $VIM_RG_ARGS '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Find  call fzf#vim#grep('rg $VIM_RG_ARGS '.shellescape(<q-args>), 1, <bang>0)
+ 
 " Dim inactive windows
 Plug 'blueyed/vim-diminactive'
 
@@ -126,7 +171,6 @@ let g:coc_global_extensions = [
       \'coc-utils',
       \'coc-highlight',
       \'coc-python',
-      \'coc-ultisnips',
       \'coc-explorer',
       \'coc-snippets',
       \'coc-clangd'
@@ -169,6 +213,9 @@ Plug 'psliwka/vim-smoothie'
 " aligning tables in code E.g. glip=, 3gli(,
 Plug 'tommcdo/vim-lion'
 
+" Execute python code in Jupyter notebook
+Plug 'jupyter-vim/jupyter-vim'
+
 call plug#end()
 
 filetype indent plugin on
@@ -182,6 +229,23 @@ set nomodeline
 
 set nocompatible
 runtime macros/matchit.vim
+
+nnoremap ; <Right>
+nnoremap l <Up>
+nnoremap k <Down>
+nnoremap j <Left>
+nmap <silent> <C-w>j :wincmd h<CR>
+nmap <silent> <C-w>k :wincmd j<CR>
+nmap <silent> <C-w>l :wincmd k<CR>
+nmap <silent> <C-w>; :wincmd l<CR>
+nmap <silent> <C-w>J :wincmd H<CR>
+nmap <silent> <C-w>K :wincmd J<CR>
+nmap <silent> <C-w>L :wincmd K<CR>
+nmap <silent> <C-w>: :wincmd L<CR>
+xnoremap ; <Right>
+xnoremap l <Up>
+xnoremap k <Down>
+xnoremap j <Left>
 
 " Display the UndoTree in your program
 nnoremap <F5> :UndotreeToggle<CR>
@@ -230,7 +294,7 @@ set shiftwidth=2
 let mapleader="\<Space>"
 
 " Enter normal mode from insert or visual mode
-inoremap jj <ESC>
+inoremap kk <ESC>
 " Write the changes
 nnoremap <leader><C-m> :w!<CR>
 " Exit if file not modified
@@ -256,10 +320,11 @@ function! ToggleNumbersAndSignColumns()
   endif
 endfunction
 
-set  scrolloff=200
+" set  scrolloff=200
+set  scrolloff=18
 " Keep cursor in the center of the vim window
-nnoremap <leader>so :let &scrolloff = 200 - &scrolloff<CR>
 
+nnoremap <leader>so :let &scrolloff = 18 - &scrolloff<CR>
 " do not wrap around long lines
 set  nowrap
 " Toggle wrap around long lines
@@ -292,10 +357,6 @@ nnoremap <leader><S-tab> :bprevious<CR>
 nnoremap <leader><C-a> 0
 nnoremap <leader><C-e> $
 
-" Move forward 1 page
-nnoremap <leader>f <C-f>
-nnoremap <leader>b <C-b>
-
 " Move to next tag
 nmap <leader>t <ESC>:tn<CR>
 " Move to previous tag
@@ -319,8 +380,8 @@ endif
 
 autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
 
-let g:gruvbox_contrast_dark='medium'
-let g:gruvbox_contrast_light='hard'
+let g:gruvbox_contrast_dark='soft'
+let g:gruvbox_contrast_light='soft'
 
 " Dark/Light vim background
 set background=dark
@@ -339,6 +400,15 @@ if &diff
     endif
   endfunction
 endif
+
+" easymotion settings {{{
+" Move to char
+nmap <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+" Move to word
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
+" }}}
 
 " Highlight current row and column background
 set cursorline
