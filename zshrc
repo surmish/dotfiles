@@ -1,3 +1,6 @@
+# oh-my-zsh plugins
+plugins=(git)
+
 [ -f ~/usr/local/share/z/z.sh ] && source ~/usr/local/share/z/z.sh
 [ -f ~/.zshrc.$USER.work ] && source ~/.zshrc.$USER.work
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
