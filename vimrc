@@ -18,6 +18,7 @@ let g:tagbar_ctags_bin = "/u/$USER/usr/local/bin/ctags"
 
 " Look for tags file in parent directories until its found
 " set tags=./tags;,tags;
+let g:tagbar_width = 40
 set tags=VIM_TAG_FILE
 
 " nnoremap <leader>nu :set nonumber!<CR>
@@ -336,18 +337,10 @@ nmap <leader>ic <ESC>:set ignorecase!<CR>
 nnoremap <leader><tab>   :bnext<CR>
 nnoremap <leader><S-tab> :bprevious<CR>
 
-" Move to the beginning and end of line using 'Ctrl a' and 'Ctrl e'
-nnoremap <leader><C-a> 0
-nnoremap <leader><C-e> $
-
 " Move to next tag
 nmap <leader>t <ESC>:tn<CR>
 " Move to previous tag
 nmap <leader>p <ESC>:tp<CR>
-
-" Look for tags file in parent directories until its found
-" set tags=./tags;,tags;
-let g:tagbar_width = 40
 
 if has("autocmd")
   autocmd BufNewFile,BufRead *.C set filetype=cpp
