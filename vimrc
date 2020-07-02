@@ -4,23 +4,6 @@ Plug 'tpope/vim-surround'     " Manipulate parenthesis :help surround
 Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
 " Plug 'tmsvg/pear-tree'        " Vim auto-pair plugin.
 
-" Navigate through inner words
-Plug 'bkad/camelcasemotion'
-" CamelCase motion mappings {{{
-omap <silent> iw <Plug>CamelCaseMotion_iw
-xmap <silent> iw <Plug>CamelCaseMotion_iw
-omap <silent> ib <Plug>CamelCaseMotion_ib
-xmap <silent> ib <Plug>CamelCaseMotion_ib
-omap <silent> ie <Plug>CamelCaseMotion_ie
-xmap <silent> ie <Plug>CamelCaseMotion_ie
-" }}}
-
-" Move blocks of code instead of deleting/pasting
-Plug 'matze/vim-move'
-" vim-move key binding {{{
-let g:move_key_modifier = 'C'
-" }}}
-
 " On-demand loading
 " The undo history visualizer for VIM 
 Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help undotree-intro
