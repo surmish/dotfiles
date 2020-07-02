@@ -114,37 +114,6 @@ function compile_gcc () {
   ./configure --prefix=/u/urmish/usr/local --disable-gcov --disable-multilib --disable-bootstrap --disable-libada --with-dwarf2 --disable-checking --disable-nls --with-gmp=/u/urmish/usr/local --with-mpfr=/u/urmish/usr/local --with-mpc=/u/urmish/usr/local
 }
 
-# =============================================================================
-#                                   Plugins
-# =============================================================================
-# Check if zplug is installed
-# [ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
-# source ~/.zplug/init.zsh
-
-# Check if zplug is installed
-if [[ ! -d ~/.zplug ]]; then
-    git clone https://github.com/zplug/zplug ~/.zplug
-    source ~/.zplug/init.zsh && zplug update
-    zplug "zplug/zplug", hook-build:"zplug --self-manage"
-fi
-source ~/.zplug/init.zsh
-
-# Enhanced cd - mapped to 'c'
-zplug "b4b4r07/enhancd", use:init.sh
-export ENHANCD_FILTER=fzf
-export ENHANCD_COMMAND="c"
-
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
-
-# Then, source plugins and add commands to $PATH
-zplug load
-
 bindkey -v
 export KEYTIMEOUT=20
 
@@ -176,3 +145,46 @@ bindkey "^e" end-of-line
 
 bindkey "^p" up-line-or-history
 bindkey "^n" down-line-or-history
+
+# =============================================================================
+#                                   Plugins
+# =============================================================================
+# Check if zplug is installed
+# [ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
+# source ~/.zplug/init.zsh
+
+# Check if zplug is installed
+if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    source ~/.zplug/init.zsh && zplug update
+    zplug "zplug/zplug", hook-build:"zplug --self-manage"
+fi
+source ~/.zplug/init.zsh
+
+# Enhanced cd - mapped to 'c'
+zplug "b4b4r07/enhancd", use:init.sh
+export ENHANCD_FILTER=fzf
+export ENHANCD_COMMAND="c"
+
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-history-substring-search"
+
+zplug "agkozak/zsh-z"
+
+zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
+
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+# Then, source plugins and add commands to $PATH
+zplug load
+
+ZSH_THEME="spaceship"
