@@ -1,5 +1,4 @@
-# oh-my-zsh plugins
-plugins=(git extract ripgrep z zsh-autosuggestions zsh-completions zsh-syntax-highlighting)
+export ZSH_THEME="spaceship"
 
 [ -f ~/.zshrc.$USER.work ] && source ~/.zshrc.$USER.work
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
@@ -125,7 +124,7 @@ if [[ ! -d ~/.zplug ]]; then
 fi
 source ~/.zplug/init.zsh
 
-# Enhanced cd
+# Enhanced cd - mapped to 'c'
 zplug "b4b4r07/enhancd", use:init.sh
 export ENHANCD_FILTER=fzf
 export ENHANCD_COMMAND="c"
@@ -140,3 +139,40 @@ fi
 
 # Then, source plugins and add commands to $PATH
 zplug load
+
+bindkey -v
+export KEYTIMEOUT=20
+
+# Use vim keys in tab complete menu:
+bindkey -M menuselect 'j' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect ';' vi-down-line-or-history
+bindkey -v '^?' backward-delete-char
+
+# Add bindings to the vicmd keymap
+bindkey -a 'j' backward-char
+bindkey -a 'k' down-history
+bindkey -a 'l' up-history
+bindkey -a ';' forward-char
+bindkey -a 'h' vi-repeat-find
+
+# Map char sequence to escape key
+bindkey -M viins 'kk' vi-cmd-mode
+
+bindkey "^p" history-beginning-search-backward
+bindkey "^n" history-beginning-search-forward
+bindkey "^h" backward-delete-char
+bindkey "^w" backward-delete-word
+
+function zle-line-init zle-keymap-select {
+    case ${KEYMAP} in
+        (vicmd)      PROMPT=$'%{\e[0;32m%}%~%{\e[0m%} %{\e[0;31m%}$%{\e[0m%} ' ;;
+        (main|viins) PROMPT=$'%{\e[0;32m%}%~%{\e[0m%} $ ' ;;
+        (*)          PROMPT=$'%{\e[0;32m%}%~%{\e[0m%} $ ' ;;
+    esac
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
