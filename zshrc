@@ -1,7 +1,6 @@
 # oh-my-zsh plugins
-plugins=(git)
+plugins=(git extract ripgrep z zsh-autosuggestions zsh-completions zsh-syntax-highlighting)
 
-[ -f ~/usr/local/share/z/z.sh ] && source ~/usr/local/share/z/z.sh
 [ -f ~/.zshrc.$USER.work ] && source ~/.zshrc.$USER.work
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
 
@@ -11,6 +10,7 @@ export EDITOR=vim
 # export PS1='\[\033[01;33m\]prompt:> \[\e[m\]'
 
 # alias fzf='/u/urmish/usr/local/bin/fzf'
+export FZF_BASE=$HOME/.vim/plugged/fzf
 
 # graveyard var for rip (rm replacement)
 export GRAVEYARD=/tmp/$USER/graveyard
@@ -49,7 +49,6 @@ function etmux () { vim ~/.tmux.conf ; }
 alias tmux="tmux -2"
 alias takeover="tmux detach -a"
 
-alias c="cd"
 alias ..="cd .."
 alias ...="cd ../../"
 alias ....="cd ../../../"
@@ -110,3 +109,34 @@ function pip_upgrade_all {
 function compile_gcc () { 
   ./configure --prefix=/u/urmish/usr/local --disable-gcov --disable-multilib --disable-bootstrap --disable-libada --with-dwarf2 --disable-checking --disable-nls --with-gmp=/u/urmish/usr/local --with-mpfr=/u/urmish/usr/local --with-mpc=/u/urmish/usr/local
 }
+
+# =============================================================================
+#                                   Plugins
+# =============================================================================
+# Check if zplug is installed
+# [ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
+# source ~/.zplug/init.zsh
+
+# Check if zplug is installed
+if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    source ~/.zplug/init.zsh && zplug update
+    zplug "zplug/zplug", hook-build:"zplug --self-manage"
+fi
+source ~/.zplug/init.zsh
+
+# Enhanced cd
+zplug "b4b4r07/enhancd", use:init.sh
+export ENHANCD_FILTER=fzf
+export ENHANCD_COMMAND="c"
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+# Then, source plugins and add commands to $PATH
+zplug load
