@@ -8,7 +8,6 @@ export EDITOR=vim
 # export PS1='\[\033[40;33;01m\]\h: \[\e[m\]'
 # export PS1='\[\033[01;33m\]prompt:> \[\e[m\]'
 
-# alias fzf='/u/urmish/usr/local/bin/fzf'
 export FZF_BASE=$HOME/.vim/plugged/fzf
 
 # graveyard var for rip (rm replacement)
@@ -20,8 +19,8 @@ alias ls="ls --color=auto"
 function v () { exa -l --sort new $@ ; }
 function p () { pwd ; }
 
-alias ealias="vim ~/.zshrc.$USER"
-alias salias="source ~/.zshrc.$USER"
+alias ealias="vim ~/.zshrc.urmish"
+alias salias="source ~/.zshrc.urmish"
 
 # alias fd='/u/urmish/usr/local/bin/fd'
 alias lc="wc -l"
@@ -35,6 +34,8 @@ alias e-="vim -"
 # alias vt="vim -t"
 # alias r="vim -R"
 
+function g () { rg $@ ; }
+
 # function e- () { vim - ; }
 function e  () { vim $@ ; }
 function eo () { vim -o $@ ; }
@@ -44,6 +45,9 @@ function vt () { vim -t $@ ; }
 function vd () { vimdiff -o $@ ; }
 function evim  () { vim ~/.vimrc ; }
 function etmux () { vim ~/.tmux.conf ; }
+
+function update () { sudo apt update -y ; }
+function upgrade () { sudo apt upgrade -y ; }
 
 alias tmux="tmux -2"
 alias takeover="tmux detach -a"
@@ -68,7 +72,7 @@ alias rp.="readlink -e ."
 
 alias tf='tail -f'
 
-# alias yaudio="youtube-dl --extract-audio --audio-quality 0"
+alias yaudio="youtube-dl --extract-audio --audio-quality 0"
 
 function dirdiff () {
   # Shell-escape each path:
