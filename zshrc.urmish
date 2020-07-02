@@ -1,4 +1,5 @@
-export ZSH_THEME="spaceship"
+[[ -d "/home/$USER/.local/bin" ]] && [[ ":$PATH:" != *":/home/$USER/.local/bin:"* ]] && export PATH=/home/$USER/.local/bin:$PATH
+[[ -d "/home/$USER/.cargo/bin" ]] && [[ ":$PATH:" != *":/home/$USER/.cargo/bin:"* ]] && export PATH=/home/$USER/.cargo/bin:$PATH
 
 [ -f ~/.zshrc.$USER.work ] && source ~/.zshrc.$USER.work
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
@@ -170,14 +171,8 @@ bindkey -M viins 'kk' vi-cmd-mode
 bindkey "^h" backward-delete-char
 bindkey "^w" backward-delete-word
 
-function zle-line-init zle-keymap-select {
-    case ${KEYMAP} in
-        (vicmd)      PROMPT=$'%{\e[0;32m%}%~%{\e[0m%} %{\e[0;31m%}$%{\e[0m%} ' ;;
-        (main|viins) PROMPT=$'%{\e[0;32m%}%~%{\e[0m%} $ ' ;;
-        (*)          PROMPT=$'%{\e[0;32m%}%~%{\e[0m%} $ ' ;;
-    esac
-    zle reset-prompt
-}
+bindkey "^a" beginning-of-line
+bindkey "^e" end-of-line
 
-zle -N zle-line-init
-zle -N zle-keymap-select
+bindkey "^p" up-line-or-history
+bindkey "^n" down-line-or-history
