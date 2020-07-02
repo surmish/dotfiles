@@ -14,7 +14,7 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }    " Show Tag list.  :help ta
 " Look for tags file in parent directories until its found
 " set tags=./tags;,tags;
 let g:tagbar_width = 40
-let g:tagbar_ctags_bin = "/u/$USER/usr/local/bin/ctags"
+let g:tagbar_ctags_bin = "$HOME/usr/local/bin/ctags"
 
 " Look for tags file in parent directories until its found
 " set tags=./tags;,tags;
