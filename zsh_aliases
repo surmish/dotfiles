@@ -1,17 +1,25 @@
-source ~/.bashrc.urmish.work
+[ -f ~/usr/local/share/z/z.sh ] && source ~/usr/local/share/z/z.sh
+[ -f ~/.zshrc.$USER.work ] && source ~/.zshrc.$USER.work
+[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
 
 export EDITOR=vim
 # export PS1='\[\033[0;35m\]\h\[\033[0;33m\] \w\[\033[00m\]: '
 # export PS1='\[\033[40;33;01m\]\h: \[\e[m\]'
-export PS1='\[\033[01;33m\]prompt:> \[\e[m\]'
+# export PS1='\[\033[01;33m\]prompt:> \[\e[m\]'
 
 # alias fzf='/u/urmish/usr/local/bin/fzf'
 
-alias ls="ls --color=auto"
-alias v="ls -ltr"
+# graveyard var for rip (rm replacement)
+export GRAVEYARD=/tmp/$USER/graveyard
 
-alias ealias="vim ~/.bashrc.urmish"
-alias salias="source ~/.bashrc.urmish"
+alias ls="ls --color=auto"
+# alias v="ls -ltr"
+
+function v () { exa -l --sort new $@ ; }
+function p () { pwd ; }
+
+alias ealias="vim ~/.zshrc.urmish"
+alias salias="source ~/.zshrc.urmish"
 
 # alias fd='/u/urmish/usr/local/bin/fd'
 alias lc="wc -l"
@@ -42,15 +50,17 @@ alias c="cd"
 alias ..="cd .."
 alias ...="cd ../../"
 alias ....="cd ../../../"
-alias ....="cd ../../../../"
+alias .....="cd ../../../../"
 
 alias rmf="rm -f"
 alias rmrf="rm -rf"
 
 alias cpr="cp -r"
 
-alias dus="du -hc --summarize"
-alias dfh="df -h ."
+# function dus () { du -hc --summarizea $@ ; }
+function dfh () { df -h . ; }
+
+function dus () { sn all $@ ; }
 
 alias rp="readlink -e "
 alias rp.="readlink -e ."
@@ -59,22 +69,6 @@ alias tf='tail -f'
 
 # alias yaudio="youtube-dl --extract-audio --audio-quality 0"
 
-function main_tmux () {
-  export DISPLAY=us01odcvde03846:110.0
-  if [ -z "$TMUX" ] && [ ${UID} != 0 ]
-  then
-    tmux new-session -A -s main
-  fi
-}
-
-function putty_tmux () {
-  export DISPLAY=us01odcvde03846:110.0
-  if [ -z "$TMUX" ] && [ ${UID} != 0 ]
-  then
-    tmux new-session -A -s putty
-  fi
-}
-
 function dirdiff () {
   # Shell-escape each path:
   DIR1=$(printf '%q' "$1"); shift
@@ -82,12 +76,12 @@ function dirdiff () {
   vim $@ -c "DirDiff $DIR1 $DIR2"
 }
 
-function topu () { top -u urmish ; }
+function topu () { top -u $USER ; }
 
 function efzf () { vim $(fzf -e) ; }
 
 export TERM=xterm-256color
-export TLDR_HEADER='yellow bold underline'
+# export TLDR_HEADER='yellow bold underline'
 # export TLDR_QUOTE='italic'
 # export TLDR_DESCRIPTION='green'
 # export TLDR_CODE='violet'
@@ -97,8 +91,19 @@ export LS_COLORS='rs=0:di=1;36:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;3
 
 function compile_vim () { 
   set -x
-  ./configure --prefix=/u/urmish/usr/local --with-tclsh=~/usr/local/bin/tclsh --enable-luainterp=yes --with-lua-prefix=/u/urmish/usr/local --disable-terminal --with-features=huge --enable-tclinterp=no --enable-perlinterp=no --disable-cscope --enable-python3interp=dynamic --disable-gui --disable-gpm --disable-xim --disable-fontset --disable-rightleft --disable-arabic --disable-darwin --disable-smack --disable-xsmp -disable-xsmp-interact --disable-gtk2-check --disable-gtktest --disable-acl --disable-canberra
+  # ./configure --prefix=/u/urmish/usr/local --with-tclsh=~/usr/local/bin/tclsh --enable-luainterp=yes --with-lua-prefix=/u/urmish/usr/local --enable-terminal --with-features=huge --enable-tclinterp=no --enable-perlinterp=no --disable-cscope --enable-python3interp=dynamic --disable-gui --disable-gpm --disable-xim --disable-fontset --disable-rightleft --disable-arabic --disable-darwin --disable-smack --disable-xsmp -disable-xsmp-interact --disable-gtk2-check --disable-gtktest --disable-acl --disable-canberra
+  # CFLAGS='-g -gdwarf-4 -DDEBUG -O0 -fno-omit-frame-pointer' ./configure --prefix=/u/urmish/usr/local --with-tclsh=~/usr/local/bin/tclsh --enable-luainterp=yes --with-lua-prefix=/u/urmish/usr/local --enable-terminal --with-features=huge --enable-tclinterp=no --enable-perlinterp=no --disable-cscope --enable-python3interp=yes --disable-gui --disable-gpm --disable-xim --disable-fontset --disable-rightleft --disable-arabic --disable-darwin --disable-smack --disable-xsmp -disable-xsmp-interact --disable-gtk2-check --disable-gtktest --disable-acl --disable-canberra
+  ./configure --prefix=/u/urmish/usr/local --with-tclsh=~/usr/local/bin/tclsh --enable-luainterp=yes --with-lua-prefix=/u/urmish/usr/local --enable-terminal --with-features=huge --enable-tclinterp=no --enable-perlinterp=no --disable-cscope --enable-python3interp=yes --disable-gui --disable-gpm --disable-xim --disable-fontset --disable-rightleft --disable-arabic --disable-darwin --disable-smack --disable-xsmp -disable-xsmp-interact --disable-gtk2-check --disable-gtktest --disable-acl --disable-canberra
   # make -j16
   # make install
   set +x
+}
+
+function pip_upgrade_all {
+  pip install --upgrade pip ;
+  pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U ;
+}
+
+function compile_gcc () { 
+  ./configure --prefix=/u/urmish/usr/local --disable-gcov --disable-multilib --disable-bootstrap --disable-libada --with-dwarf2 --disable-checking --disable-nls --with-gmp=/u/urmish/usr/local --with-mpfr=/u/urmish/usr/local --with-mpc=/u/urmish/usr/local
 }
