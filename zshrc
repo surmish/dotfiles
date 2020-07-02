@@ -18,8 +18,8 @@ alias ls="ls --color=auto"
 function v () { exa -l --sort new $@ ; }
 function p () { pwd ; }
 
-alias ealias="vim ~/.zshrc.urmish"
-alias salias="source ~/.zshrc.urmish"
+alias ealias="vim ~/.zshrc.$USER"
+alias salias="source ~/.zshrc.$USER"
 
 # alias fd='/u/urmish/usr/local/bin/fd'
 alias lc="wc -l"
