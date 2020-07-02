@@ -10,29 +10,6 @@ Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help un
 
 " Vim plugin that displays tags in a window, ordered by scope
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }    " Show Tag list.  :help tagbar
-" TagBar Settings {{{
-" Look for tags file in parent directories until its found
-" set tags=./tags;,tags;
-let g:tagbar_width = 40
-let g:tagbar_ctags_bin = "$HOME/usr/local/bin/ctags"
-
-" Look for tags file in parent directories until its found
-" set tags=./tags;,tags;
-let g:tagbar_width = 40
-set tags=VIM_TAG_FILE
-
-" nnoremap <leader>nu :set nonumber!<CR>
-nnoremap <leader>st :call SwitchTagsFile()<CR>
-
-function! SwitchTagsFile()
-  if &tags == "$VIM_ALT_TAG_FILE"
-    set tags=$VIM_TAG_FILE
-  else
-    set tags=$VIM_ALT_TAG_FILE
-  endif
-  echo &tags
-endfunction
-" }}}
 
 " Show function context
 Plug 'wellle/context.vim'
@@ -121,8 +98,8 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " --follow: Follow symlinks
 " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 " --color: Search color options
-command! -bang -nargs=* Rg    call fzf#vim#grep('rg $VIM_RG_ARGS '.shellescape(<q-args>), 1, <bang>0)
-command! -bang -nargs=* Find  call fzf#vim#grep('rg $VIM_RG_ARGS '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Rg    call fzf#vim#grep("rg $VIM_RG_ARGS ".shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Find  call fzf#vim#grep("rg $VIM_RG_ARGS ".shellescape(<q-args>), 1, <bang>0)
  
 " Dim inactive windows
 Plug 'blueyed/vim-diminactive'
@@ -230,6 +207,9 @@ xnoremap ; <Right>
 xnoremap l <Up>
 xnoremap k <Down>
 xnoremap j <Left>
+
+set path+=**
+set wildmenu
 
 " Display the UndoTree in your program
 nnoremap <F5> :UndotreeToggle<CR>
@@ -341,6 +321,25 @@ nnoremap <leader><S-tab> :bprevious<CR>
 nmap <leader>t <ESC>:tn<CR>
 " Move to previous tag
 nmap <leader>p <ESC>:tp<CR>
+
+" TagBar Settings {{{
+" Look for tags file in parent directories until its found
+" set tags=./tags;,tags;
+let g:tagbar_width = 40
+let g:tagbar_ctags_bin = "$HOME/usr/local/bin/ctags"
+
+set tags=$VIM_TAG_FILE
+nnoremap <leader>st :call SwitchTagsFile()<CR>
+
+function! SwitchTagsFile()
+  if &tags == $VIM_ALT_TAG_FILE
+    set tags=$VIM_TAG_FILE
+  else
+    set tags=$VIM_ALT_TAG_FILE
+  endif
+  echo &tags
+endfunction
+" }}}
 
 if has("autocmd")
   autocmd BufNewFile,BufRead *.C set filetype=cpp
