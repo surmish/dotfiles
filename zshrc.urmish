@@ -145,23 +145,24 @@ export KEYTIMEOUT=20
 
 # Use vim keys in tab complete menu:
 bindkey -M menuselect 'j' vi-backward-char
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'l' vi-forward-char
-bindkey -M menuselect ';' vi-down-line-or-history
-bindkey -v '^?' backward-delete-char
+bindkey -M menuselect 'k' vi-down-line-or-history
+bindkey -M menuselect 'l' vi-up-line-or-history
+bindkey -M menuselect ';' vi-forward-char
 
 # Add bindings to the vicmd keymap
 bindkey -a 'j' backward-char
 bindkey -a 'k' down-history
 bindkey -a 'l' up-history
 bindkey -a ';' forward-char
+
 bindkey -a 'h' vi-repeat-find
+
+bindkey -M visual 'j' backward-char
+bindkey -M visual ';' forward-char
 
 # Map char sequence to escape key
 bindkey -M viins 'kk' vi-cmd-mode
 
-bindkey "^p" history-beginning-search-backward
-bindkey "^n" history-beginning-search-forward
 bindkey "^h" backward-delete-char
 bindkey "^w" backward-delete-word
 
