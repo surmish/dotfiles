@@ -75,7 +75,6 @@ plugins=(
   ripgrep
   fzf
   tmux
-  z
   fd
 )
 
