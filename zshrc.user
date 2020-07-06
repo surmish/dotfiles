@@ -14,7 +14,10 @@ export GRAVEYARD=/tmp/$USER/graveyard
 
 # alias ls="ls --color=auto"
 # alias v="ls -ltr"
-alias ls='exa'
+
+function ls () {
+  exa $*
+}
 
 function v () { exa -l --sort new $@ ; }
 function p () { pwd ; }
