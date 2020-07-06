@@ -260,13 +260,13 @@ let mapleader="\<Space>"
 " Enter normal mode from insert or visual mode
 inoremap kk <ESC>
 " Write the changes
-nnoremap <leader><C-m> :w!<CR>
+nnoremap <leader>w :w!<CR>
 " Exit if file not modified
-nnoremap <leader><C-n> :q<CR>
+nnoremap <leader>q :q<CR>
 " Force exit irrespective of changes
-nnoremap <leader><C-l> :q!<CR>
+nnoremap <leader>Q :q!<CR>
 " Close current buffer 
-nnoremap <leader><C-d> :bd<CR>
+nnoremap <leader>x :x<CR>
 
 " Display line numbers by default
 set number
@@ -378,8 +378,8 @@ endif
 
 " easymotion settings {{{
 " Move to char
-nmap <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
+nmap <Leader><Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
 " Move to word
 map  <Leader>w <Plug>(easymotion-bd-w)
 nmap <Leader>w <Plug>(easymotion-overwin-w)
