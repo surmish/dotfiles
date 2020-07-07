@@ -379,7 +379,7 @@ endif
 nmap <Leader><Leader>f <Plug>(easymotion-bd-f)
 " nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
 " Move to word
-map  <Leader><Leader>w <Plug>(easymotion-bd-w)
+nmap  <Leader><Leader>w <Plug>(easymotion-bd-w)
 " nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
 " }}}
 
