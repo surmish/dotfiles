@@ -257,8 +257,6 @@ set shiftwidth=2
 " Use ';' as the leader key
 let mapleader="\<Space>"
 
-" Enter normal mode from insert or visual mode
-inoremap kk <ESC>
 " Write the changes
 nnoremap <leader>w :w!<CR>
 " Exit if file not modified
