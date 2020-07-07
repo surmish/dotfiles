@@ -377,10 +377,10 @@ endif
 " easymotion settings {{{
 " Move to char
 nmap <Leader><Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
+" nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
 " Move to word
-map  <Leader>w <Plug>(easymotion-bd-w)
-nmap <Leader>w <Plug>(easymotion-overwin-w)
+map  <Leader><Leader>w <Plug>(easymotion-bd-w)
+" nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
 " }}}
 
 " Highlight current row and column background
