@@ -22,8 +22,8 @@ function ls () {
 function v () { exa -l --sort new $@ ; }
 function p () { pwd ; }
 
-alias ealias="vim ~/.zshrc.urmish"
-alias salias="source ~/.zshrc.urmish"
+alias ealias="vim ~/.zshrc.user"
+alias salias="source ~/.zshrc.user"
 
 # alias fd='/u/urmish/usr/local/bin/fd'
 alias lc="wc -l"
