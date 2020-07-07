@@ -49,6 +49,15 @@ function vd () { vimdiff -o $@ ; }
 function evim  () { vim ~/.vimrc ; }
 function etmux () { vim ~/.tmux.conf ; }
 
+alias -s C="vim "
+alias -s cpp="vim "
+alias -s h="vim "
+alias -s log="vim "
+alias -s tcl="vim "
+alias -s txt="vim "
+alias -s py="vim "
+alias -s sh="vim "
+
 function update () { sudo apt update -y ; }
 function upgrade () { sudo apt upgrade -y ; }
 
@@ -138,11 +147,20 @@ export ENHANCD_COMMAND="c"
 antigen bundle agkozak/zsh-z
 
 antigen theme denysdovhan/spaceship-prompt
-export SPACESHIP_USER_SHOW=false
-export SPACESHIP_HOST_SHOW=false
+SPACESHIP_PROMPT_ORDER=(
+  time
+  user
+  dir
+  exec_time
+  line_sep
+  vi_mode
+  char
+)
+# export SPACESHIP_USER_SHOW=false
+# export SPACESHIP_HOST_SHOW=false
 export SPACESHIP_BATTERY_SHOW=false
-export SPACESHIP_TIME_SHOW=false
-export SPACESHIP_EXEC_TIME_SHOW=false
+# export SPACESHIP_TIME_SHOW=false
+# export SPACESHIP_EXEC_TIME_SHOW=false
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-completions
@@ -150,7 +168,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-history-substring-search
 
 # Keep syntax highlighting as the last plugin
-antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zdharma/fast-syntax-highlighting
 
 # Tell Antigen that you're done.
 antigen apply
@@ -192,5 +210,7 @@ bindkey "^p" up-line-or-history
 bindkey "^n" down-line-or-history
 
 bindkey -a "^d" delete-char
+
+fast-theme clean
 
 spaceship_vi_mode_enable
