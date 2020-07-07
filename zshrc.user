@@ -141,7 +141,7 @@ antigen use oh-my-zsh
 
 antigen bundle b4b4r07/enhancd
 export ENHANCD_FILTER=fzf
-export ENHANCD_COMMAND="c"
+# export ENHANCD_COMMAND="c"
 
 # Jump around directories using Z
 antigen bundle agkozak/zsh-z
