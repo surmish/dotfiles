@@ -27,19 +27,12 @@ let g:airline_section_x=''
 let g:airline_section_error=''
 let g:airline_section_warning=''
 let g:airline_powerline_fonts=1
-" remove separators for empty sections
-let g:airline_skip_empty_sections=1
-
+let g:airline_skip_empty_sections=1 " remove separators for empty sections
 let g:airline#extensions#tabline#show_splits = 1 "enable/disable displaying open splits per tab (only when tabs are opened). >
 let g:airline#extensions#tabline#show_buffers = 1 " enable/disable displaying buffers with a single tab
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
-
-" Enable the list of buffers
-
-let g:airline#extensions#tabline#enabled = 1
-" Show just the filename
-let g:airline#extensions#tabline#fnamemod = ':t'
-
+let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
+let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
 " AirLine colorscheme
 let g:airline_theme="base16"
 " let g:airline_theme="molokai"
@@ -47,11 +40,16 @@ let g:airline_theme="base16"
 " let g:airline_theme="light"
 " }}}
 
-" gdb integration - debugging
-Plug 'puremourning/vimspector'
-
 " easy way to search and navigate the current file
 Plug 'easymotion/vim-easymotion'
+" easymotion settings {{{
+" Move to char
+nmap <Leader><Leader>f <Plug>(easymotion-bd-f)
+" nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
+" Move to word
+map  <Leader><Leader>w <Plug>(easymotion-bd-w)
+" nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
+" }}}
 
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
@@ -177,6 +175,13 @@ Plug 'tommcdo/vim-lion'
 " Execute python code in Jupyter notebook
 Plug 'jupyter-vim/jupyter-vim'
 
+" (The latter must be installed before it can be used.)
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+" Also add Glaive, which is used to configure codefmt's maktaba flags. See
+" `:help :Glaive` for usage.
+Plug 'google/vim-glaive'
+
 call plug#end()
 
 filetype indent plugin on
@@ -254,7 +259,7 @@ set tabstop=2
 " Indent size
 set shiftwidth=2
 
-" Use ';' as the leader key
+" Use ' ' as the leader key
 let mapleader="\<Space>"
 
 " Write the changes
@@ -263,8 +268,10 @@ nnoremap <leader>w :w!<CR>
 nnoremap <leader>q :q<CR>
 " Force exit irrespective of changes
 nnoremap <leader>Q :q!<CR>
-" Close current buffer 
+" Write and quit
 nnoremap <leader>x :x<CR>
+" Close current buffer 
+nnoremap <leader>bd :bd<CR>
 
 " Display line numbers by default
 set number
@@ -373,15 +380,6 @@ if &diff
     endif
   endfunction
 endif
-
-" easymotion settings {{{
-" Move to char
-nmap <Leader><Leader>f <Plug>(easymotion-bd-f)
-" nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
-" Move to word
-nmap  <Leader><Leader>w <Plug>(easymotion-bd-w)
-" nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
-" }}}
 
 " Highlight current row and column background
 set cursorline
