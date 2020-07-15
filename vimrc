@@ -1,3 +1,4 @@
+" vim:fdm=marker
 call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-surround'     " Manipulate parenthesis :help surround
@@ -5,20 +6,39 @@ Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
 " Plug 'tmsvg/pear-tree'        " Vim auto-pair plugin.
 
 " On-demand loading
-" The undo history visualizer for VIM 
+" The undo history visualizer for VIM  {{{
 Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help undotree-intro
+nnoremap <F5> :UndotreeToggle<CR>
+" }}}
 
-" Vim plugin that displays tags in a window, ordered by scope
+" Vim plugin that displays tags in a window, ordered by scope {{{
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }    " Show Tag list.  :help tagbar
+nnoremap <F8> :TagbarToggle<CR>
+" Look for tags file in parent directories until its found
+" set tags=./tags;,tags;
+let g:tagbar_width = 40
+let g:tagbar_ctags_bin = "$HOME/usr/local/bin/ctags"
+
+set tags=$VIM_TAG_FILE
+nnoremap <leader>st :call SwitchTagsFile()<CR>
+
+function! SwitchTagsFile()
+  if &tags == $VIM_ALT_TAG_FILE
+    set tags=$VIM_TAG_FILE
+  else
+    set tags=$VIM_ALT_TAG_FILE
+  endif
+  echo &tags
+endfunction
+" }}}
 
 " Show function context
 Plug 'wellle/context.vim'
 
-" Airline tabline theme
+" Airline status bar {{{
 Plug 'vim-airline/vim-airline'         " Status line :help airline
 Plug 'vim-airline/vim-airline-themes'
 
-" air-line {{{
 let g:airline_section_a=''
 " let g:airline_section_b='%-0.90{getcwd()}'
 let g:airline_section_b=''
@@ -27,12 +47,19 @@ let g:airline_section_x=''
 let g:airline_section_error=''
 let g:airline_section_warning=''
 let g:airline_powerline_fonts=1
-let g:airline_skip_empty_sections=1 " remove separators for empty sections
+" remove separators for empty sections
+let g:airline_skip_empty_sections=1
+
 let g:airline#extensions#tabline#show_splits = 1 "enable/disable displaying open splits per tab (only when tabs are opened). >
 let g:airline#extensions#tabline#show_buffers = 1 " enable/disable displaying buffers with a single tab
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
-let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
-let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
+
+" Enable the list of buffers
+
+let g:airline#extensions#tabline#enabled = 1
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
+
 " AirLine colorscheme
 let g:airline_theme="base16"
 " let g:airline_theme="molokai"
@@ -42,14 +69,6 @@ let g:airline_theme="base16"
 
 " easy way to search and navigate the current file
 Plug 'easymotion/vim-easymotion'
-" easymotion settings {{{
-" Move to char
-nmap <Leader><Leader>f <Plug>(easymotion-bd-f)
-" nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
-" Move to word
-map  <Leader><Leader>w <Plug>(easymotion-bd-w)
-" nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
-" }}}
 
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
@@ -71,21 +90,16 @@ Plug 'haya14busa/vim-easyoperator-phrase'
 
 " Retro groove color scheme for Vim
 " Plug 'morhetz/gruvbox'
-Plug 'gruvbox-community/gruvbox'
-Plug 'gruvbox-material/vim', {'as': 'gruvbox-material'}
+Plug 'gruvbox-community/gruvbox' 
 
 " Fuzzy file finder
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 " {{{
 " FZF popup window settings
-nnoremap <silent> <C-p> :FZF<CR>
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
-" Border color
-" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo' } }
-" Border style
-" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo', 'rounded': v:false } }
-" }}}
+nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <C-l> :Buffers<CR>
+" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " --column: Show column number
 " --line-number: Show line number
 " --no-heading: Do not show file headings in results
@@ -96,8 +110,9 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " --follow: Follow symlinks
 " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 " --color: Search color options
-command! -bang -nargs=* Rg    call fzf#vim#grep("rg $VIM_RG_ARGS ".shellescape(<q-args>), 1, <bang>0)
-command! -bang -nargs=* Find  call fzf#vim#grep("rg $VIM_RG_ARGS ".shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* AFind call fzf#vim#grep('rg $VIM_RG_ARGS '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Rg call fzf#vim#grep( 'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+" }}}
  
 " Dim inactive windows
 Plug 'blueyed/vim-diminactive'
@@ -119,9 +134,8 @@ Plug 'vim/killersheep'
 Plug 'vim-scripts/DoxygenToolkit.vim'
 let g:DoxygenToolkit_authorName = $USER
 
-" Code completion engine
+" Code completion engine {{{
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Coc Extensions {{{
 let g:coc_global_extensions = [
       \'coc-dictionary',
       \'coc-marketplace',
@@ -134,8 +148,6 @@ let g:coc_global_extensions = [
       \'coc-snippets',
       \'coc-clangd'
       \]
-" }}}
-" Coc settings {{{
 let g:coc_user_config = {
     \ "clangd.semanticHighlighting": "true",
     \ "diagnostic.errorSign": '⚠',
@@ -169,18 +181,8 @@ Plug 'kana/vim-operator-user'
 " smooth page up/down
 Plug 'psliwka/vim-smoothie'
 
-" aligning tables in code E.g. glip=, 3gli(,
-Plug 'tommcdo/vim-lion'
-
 " Execute python code in Jupyter notebook
 Plug 'jupyter-vim/jupyter-vim'
-
-" (The latter must be installed before it can be used.)
-Plug 'google/vim-maktaba'
-Plug 'google/vim-codefmt'
-" Also add Glaive, which is used to configure codefmt's maktaba flags. See
-" `:help :Glaive` for usage.
-Plug 'google/vim-glaive'
 
 call plug#end()
 
@@ -194,8 +196,12 @@ set ttyfast
 set nomodeline
 
 set nocompatible
+set foldmethod=syntax
 runtime macros/matchit.vim
 
+set dictionary+=/usr/share/dict/words
+
+" moving around with jkl; {{{
 nnoremap ; <Right>
 nnoremap l <Up>
 nnoremap k <Down>
@@ -212,15 +218,12 @@ xnoremap ; <Right>
 xnoremap l <Up>
 xnoremap k <Down>
 xnoremap j <Left>
+" }}}
 
 set path+=**
 set wildmenu
 
-" Display the UndoTree in your program
-nnoremap <F5> :UndotreeToggle<CR>
-" Display the tags in your program
-nnoremap <F8> :TagbarToggle<CR>
-
+" netrw plugin settings {{{
 " Disable netrw (file explorer) plugins
 " let g:loaded_netrw       = 1
 " let g:loaded_netrwPlugin = 1
@@ -249,6 +252,7 @@ function! ToggleNetrw()
   endif
 endfunction
 nnoremap <silent><F7> :call ToggleNetrw()<CR>
+" }}}
 
 " Allow backspacing over autoindent, line breaks and start of insert
 set backspace=indent,eol,start
@@ -268,12 +272,10 @@ nnoremap <leader>w :w!<CR>
 nnoremap <leader>q :q<CR>
 " Force exit irrespective of changes
 nnoremap <leader>Q :q!<CR>
-" Write and quit
-nnoremap <leader>x :x<CR>
 " Close current buffer 
-nnoremap <leader>bd :bd<CR>
+nnoremap <leader>x :x<CR>
 
-" Display line numbers by default
+" Display line numbers by default {{{
 set number
 " nnoremap <leader>nu :set nonumber!<CR>
 nnoremap <leader>nu :call ToggleNumbersAndSignColumns()<CR>
@@ -288,35 +290,37 @@ function! ToggleNumbersAndSignColumns()
     set signcolumn=no
   endif
 endfunction
+" }}}
 
+" Keep cursor in the center of the vim window {{{
 " set  scrolloff=200
 set  scrolloff=18
-" Keep cursor in the center of the vim window
-
 nnoremap <leader>so :let &scrolloff = 18 - &scrolloff<CR>
+" }}}
+
 " do not wrap around long lines
 set  nowrap
 " Toggle wrap around long lines
 nmap <leader><C-h> <ESC>:set wrap!<CR>
-" Show break chars for wrapped lines
-" set showbreak=...
 
 " highlight entire current file
 nnoremap <leader>va ggvG$
 " yank all lines of the file and return to current position
 nnoremap <leader>ya maggvG$y'a
 
-" highlight searches
+" search settings {{{
+" search highlighting
 set  hlsearch
-" Toggle search highlightinh
 nmap <leader>sh <ESC>:set hlsearch!<CR>
 " live search while typing, cursor returns to original position on no match or pressing ESC
 set incsearch
+" }}}
 
-" ignore case while searching
+" ignore case while searching {{{
 set ignorecase
 " Toggle ignorecase while searching
 nmap <leader>ic <ESC>:set ignorecase!<CR>
+" }}}
 
 " left/right to step through buffers 
 nnoremap <leader><tab>   :bnext<CR>
@@ -326,25 +330,6 @@ nnoremap <leader><S-tab> :bprevious<CR>
 nmap <leader>t <ESC>:tn<CR>
 " Move to previous tag
 nmap <leader>p <ESC>:tp<CR>
-
-" TagBar Settings {{{
-" Look for tags file in parent directories until its found
-" set tags=./tags;,tags;
-let g:tagbar_width = 40
-let g:tagbar_ctags_bin = "$HOME/usr/local/bin/ctags"
-
-set tags=$VIM_TAG_FILE
-nnoremap <leader>st :call SwitchTagsFile()<CR>
-
-function! SwitchTagsFile()
-  if &tags == $VIM_ALT_TAG_FILE
-    set tags=$VIM_TAG_FILE
-  else
-    set tags=$VIM_ALT_TAG_FILE
-  endif
-  echo &tags
-endfunction
-" }}}
 
 if has("autocmd")
   autocmd BufNewFile,BufRead *.C set filetype=cpp
@@ -356,18 +341,8 @@ if has("autocmd")
   autocmd filetype racket set lisp
   autocmd filetype racket set autoindent
   autocmd filetype racket,lisp,scheme setlocal equalprg=scmindent.rkt
+  autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
 endif
-
-autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
-
-let g:gruvbox_contrast_dark='soft'
-let g:gruvbox_contrast_light='soft'
-
-" Dark/Light vim background
-set background=dark
-" set background=light
-
-colorscheme gruvbox
 
 " Use gs to toggle whitespace ignore in vimdiff
 if &diff
@@ -380,6 +355,26 @@ if &diff
     endif
   endfunction
 endif
+
+" easymotion settings {{{
+" Move to char
+nmap <Leader><Leader>f <Plug>(easymotion-bd-f)
+" nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
+" Move to word
+nmap  <Leader><Leader>w <Plug>(easymotion-bd-w)
+" nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
+" }}}
+
+" Gruvbox settings {{{
+let g:gruvbox_contrast_dark='soft'
+let g:gruvbox_contrast_light='soft'
+
+" Dark/Light vim background
+set background=dark
+" set background=light
+
+colorscheme gruvbox
+" }}}
 
 " Highlight current row and column background
 set cursorline
