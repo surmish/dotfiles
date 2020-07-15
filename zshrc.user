@@ -3,6 +3,7 @@
 
 [ -f ~/.zshrc.$USER.work ] && source ~/.zshrc.$USER.work
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
+ 
 
 export EDITOR=vim
 # export PS1='\[\033[0;35m\]\h\[\033[0;33m\] \w\[\033[00m\]: '
@@ -21,6 +22,9 @@ function ls () {
 
 function v () { exa -l --sort new $@ ; }
 function p () { pwd ; }
+
+function cat () { bat $* ; }
+export BAT_THEME="Solarized (dark)"
 
 alias ealias="vim ~/.zshrc.user"
 alias salias="source ~/.zshrc.user"
@@ -95,7 +99,15 @@ function dirdiff () {
 
 function topu () { top -u $USER ; }
 
-function efzf () { vim $(fzf -e) ; }
+# FZF settings: Plugin must be installed/maintained via vim
+function efzf () { vim $(fzf) ; }
+FZF_DEFAULT_OPTS='--bind=ctrl-k:down,ctrl-l:up'
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source "$HOME/.vim/plugged/fzf/shell/completion.zsh" 2> /dev/null
+# Key bindings
+# ------------
+source "$HOME/.vim/plugged/fzf/shell/key-bindings.zsh"
 
 export TERM=xterm-256color
 # export TLDR_HEADER='yellow bold underline'
@@ -138,19 +150,23 @@ source ~/.zsh/antigen/antigen.zsh
 
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
+antigen bundle fd
+antigen bundle ripgrep
+antigen bundle extract
+antigen bundle colored-man-pages
 
 antigen bundle b4b4r07/enhancd
 export ENHANCD_FILTER=fzf
-# export ENHANCD_COMMAND="c"
 
 # Jump around directories using Z
 antigen bundle agkozak/zsh-z
+ZSHZ_UNCOMMON=1
 
 antigen theme denysdovhan/spaceship-prompt
 SPACESHIP_PROMPT_ORDER=(
   time
-  user
   dir
+  git
   exec_time
   line_sep
   vi_mode
@@ -165,6 +181,8 @@ export SPACESHIP_BATTERY_SHOW=false
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_USE_ASYNC=1
 antigen bundle zsh-users/zsh-history-substring-search
 
 # Keep syntax highlighting as the last plugin
@@ -210,7 +228,6 @@ bindkey "^p" up-line-or-history
 bindkey "^n" down-line-or-history
 
 bindkey -a "^d" delete-char
-
-fast-theme clean
+bindkey "^d" delete-char
 
 spaceship_vi_mode_enable
