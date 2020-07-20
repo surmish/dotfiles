@@ -192,11 +192,13 @@ set mouse+=a
 set autoindent
 set lazyredraw
 set ttyfast
-
+set hidden
 set nomodeline
-
 set nocompatible
 set foldmethod=syntax
+set path+=**
+set wildmenu
+
 runtime macros/matchit.vim
 
 set dictionary+=/usr/share/dict/words
@@ -220,8 +222,6 @@ xnoremap k <Down>
 xnoremap j <Left>
 " }}}
 
-set path+=**
-set wildmenu
 
 " netrw plugin settings {{{
 " Disable netrw (file explorer) plugins
@@ -294,7 +294,8 @@ endfunction
 
 " Keep cursor in the center of the vim window {{{
 " set  scrolloff=200
-set  scrolloff=18
+" move cursor freely
+set  scrolloff=0
 nnoremap <leader>so :let &scrolloff = 18 - &scrolloff<CR>
 " }}}
 
