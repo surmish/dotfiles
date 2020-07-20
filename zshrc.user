@@ -105,7 +105,7 @@ function topu () { top -u $USER ; }
 
 # FZF settings: Plugin must be installed/maintained via vim
 function efzf () { vim $(fzf) ; }
-FZF_DEFAULT_OPTS='--bind=ctrl-k:down,ctrl-l:up'
+export FZF_DEFAULT_OPTS='--height=70% --preview="bat --color=always --style=numbers --line-range :500 {}" --preview-window=right:60%:wrap --bind=ctrl-k:down,ctrl-l:up,ctrl-j:accept'
 # Auto-completion
 # ---------------
 [[ $- == *i* ]] && source "$HOME/.vim/plugged/fzf/shell/completion.zsh" 2> /dev/null
