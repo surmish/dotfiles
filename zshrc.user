@@ -1,6 +1,10 @@
 [[ -d "/home/$USER/.local/bin" ]] && [[ ":$PATH:" != *":/home/$USER/.local/bin:"* ]] && export PATH=/home/$USER/.local/bin:$PATH
 [[ -d "/home/$USER/.cargo/bin" ]] && [[ ":$PATH:" != *":/home/$USER/.cargo/bin:"* ]] && export PATH=/home/$USER/.cargo/bin:$PATH
 
+# For the raspberry pi
+[[ -d "/home/.local/bin" ]] && [[ ":$PATH:" != *":/home/.local/bin:"* ]] && export PATH=/home/.local/bin:$PATH
+[[ -d "/home/.cargo/bin" ]] && [[ ":$PATH:" != *":/home/.cargo/bin:"* ]] && export PATH=/home/.cargo/bin:$PATH
+
 [ -f ~/.zshrc.$USER.work ] && source ~/.zshrc.$USER.work
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
  
@@ -177,6 +181,7 @@ SPACESHIP_PROMPT_ORDER=(
 export SPACESHIP_BATTERY_SHOW=false
 # export SPACESHIP_TIME_SHOW=false
 # export SPACESHIP_EXEC_TIME_SHOW=false
+export ZSH_THEME="spaceship"
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-completions
