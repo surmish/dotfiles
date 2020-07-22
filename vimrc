@@ -285,12 +285,12 @@ nnoremap <leader>Q :q!<CR>
 nnoremap <leader>x :x<CR>
 
 " Display line numbers by default {{{
-set number
+set number relativenumber
 " nnoremap <leader>nu :set nonumber!<CR>
 nnoremap <leader>nu :call ToggleNumbersAndSignColumns()<CR>
 
 function! ToggleNumbersAndSignColumns()
-  set nonumber!
+  set number! norelativenumber!
   if &signcolumn == 'yes'
     set signcolumn=no
   elseif &signcolumn == 'no'
@@ -299,6 +299,12 @@ function! ToggleNumbersAndSignColumns()
     set signcolumn=no
   endif
 endfunction
+
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber number
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
 " }}}
 
 " Keep cursor in the center of the vim window {{{
