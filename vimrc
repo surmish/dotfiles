@@ -32,8 +32,10 @@ function! SwitchTagsFile()
 endfunction
 " }}}
 
-" Show function context
-Plug 'wellle/context.vim'
+" Show function context {{{
+Plug 'wellle/context.vim',   { 'on': 'ContextToggle' }  " Show context.
+nnoremap <F4> :ContextToggle<CR>
+" }}}
 
 " Airline status bar {{{
 Plug 'vim-airline/vim-airline'         " Status line :help airline
