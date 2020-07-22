@@ -112,8 +112,15 @@ nnoremap <silent> <C-l> :Buffers<CR>
 " --color: Search color options
 command! -bang -nargs=* AFind call fzf#vim#grep('rg $VIM_RG_ARGS '.shellescape(<q-args>), 1, <bang>0)
 command! -bang -nargs=* Rg call fzf#vim#grep( 'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+let $FZF_DEFAULT_OPTS = $FZF_DEFAULT_OPTS . ' --no-reverse'
 " }}}
- 
+
+Plug 'junegunn/rainbow_parentheses.vim'
+let g:rainbow#max_level = 16 
+let g:rainbow#blacklist = [175]
+let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+highlight MatchParen cterm=bold
+
 " Dim inactive windows
 Plug 'blueyed/vim-diminactive'
 
@@ -304,7 +311,7 @@ set  nowrap
 " Toggle wrap around long lines
 nmap <leader><C-h> <ESC>:set wrap!<CR>
 
-" highlight entire current file
+" visually select the entire buffer
 nnoremap <leader>va ggvG$
 " yank all lines of the file and return to current position
 nnoremap <leader>ya maggvG$y'a
@@ -343,6 +350,8 @@ if has("autocmd")
   autocmd filetype racket set autoindent
   autocmd filetype racket,lisp,scheme setlocal equalprg=scmindent.rkt
   autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
+  " Activation based on file type
+  autocmd FileType c,cpp,tcl,lisp,clojure,scheme RainbowParentheses
 endif
 
 " Use gs to toggle whitespace ignore in vimdiff
@@ -366,17 +375,22 @@ nmap  <Leader><Leader>w <Plug>(easymotion-bd-w)
 " nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
 " }}}
 
-" Gruvbox settings {{{
-let g:gruvbox_contrast_dark='soft'
-let g:gruvbox_contrast_light='soft'
-
+" Colorscheme settings {{{
 " Dark/Light vim background
 set background=dark
 " set background=light
 
+let g:gruvbox_contrast_dark='medium'
+let g:gruvbox_contrast_light='hard'
+" following colors work well with gruvbox dark medium contrast
+highlight cursorline ctermbg=236
+highlight cursorcolumn ctermbg=236
 colorscheme gruvbox
 " }}}
 
-" Highlight current row and column background
-set cursorline
-set cursorcolumn
+" Highlight cursor row and column background in current window
+augroup Cursor
+  au!
+  au VimEnter,WinEnter,BufWinEnter * setlocal cursorline cursorcolumn
+  au WinLeave * setlocal nocursorline nocursorcolumn
+augroup END
