@@ -8,7 +8,6 @@
 [ -f ~/.zshrc.$USER.work ] && source ~/.zshrc.$USER.work
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
  
-
 export EDITOR=vim
 # export PS1='\[\033[0;35m\]\h\[\033[0;33m\] \w\[\033[00m\]: '
 # export PS1='\[\033[40;33;01m\]\h: \[\e[m\]'
@@ -17,18 +16,13 @@ export EDITOR=vim
 # graveyard var for rip (rm replacement)
 export GRAVEYARD=/tmp/$USER/graveyard
 
-# alias ls="ls --color=auto"
-# alias v="ls -ltr"
-
-function ls () {
-  exa $*
-}
-
+function ls () { exa $* ; }
 function v () { exa -l --sort new $@ ; }
 function p () { pwd ; }
 
 function cat () { bat $* ; }
 export BAT_THEME="Solarized (dark)"
+export BAT_CONFIG_PATH="$HOME/.config/bat/config"
 
 alias ealias="vim ~/.zshrc.user"
 alias salias="source ~/.zshrc.user"
@@ -57,14 +51,17 @@ function vd () { vimdiff -o $@ ; }
 function evim  () { vim ~/.vimrc ; }
 function etmux () { vim ~/.tmux.conf ; }
 
-alias -s C="vim "
 alias -s cpp="vim "
+alias -s C="vim "
 alias -s h="vim "
 alias -s log="vim "
-alias -s tcl="vim "
-alias -s txt="vim "
 alias -s py="vim "
 alias -s sh="vim "
+alias -s tcl="vim "
+alias -s txt="vim "
+alias -s v="vim "
+alias -s sv="vim "
+alias -s vh="vim "
 
 function update () { sudo apt update -y ; }
 function upgrade () { sudo apt upgrade -y ; }
@@ -102,16 +99,6 @@ function dirdiff () {
 }
 
 function topu () { top -u $USER ; }
-
-# FZF settings: Plugin must be installed/maintained via vim
-function efzf () { vim $(fzf) ; }
-export FZF_DEFAULT_OPTS='--height=70% --preview="bat --color=always --style=numbers --line-range :500 {}" --preview-window=right:60%:wrap --bind=ctrl-k:down,ctrl-l:up,ctrl-j:accept'
-# Auto-completion
-# ---------------
-[[ $- == *i* ]] && source "$HOME/.vim/plugged/fzf/shell/completion.zsh" 2> /dev/null
-# Key bindings
-# ------------
-source "$HOME/.vim/plugged/fzf/shell/key-bindings.zsh"
 
 export TERM=xterm-256color
 # export TLDR_HEADER='yellow bold underline'
@@ -197,7 +184,6 @@ antigen bundle zdharma/fast-syntax-highlighting
 antigen apply
 
 bindkey -v
-export KEYTIMEOUT=20
 
 zstyle ':completion:*' menu select
 zmodload zsh/complist
@@ -236,3 +222,18 @@ bindkey -a "^d" delete-char
 bindkey "^d" delete-char
 
 spaceship_vi_mode_enable
+
+# FZF settings: Plugin must be installed/maintained via vim
+function efzf () { vim $(fzf) ; }
+export FZF_COMMON_OPTS="--ansi --reverse --height=70% --preview-window=right:60%:wrap --bind=ctrl-k:down,ctrl-l:up,ctrl-j:accept"
+export FZF_PREVIEW_COMMAND="bat --color=always --style=numbers --line-range :500 {} || cat {} || tree -C {}"
+export FZF_DEFAULT_OPTS="$FZF_COMMON_OPTS --preview='($FZF_PREVIEW_COMMAND) 2> /dev/null'"
+# export FZF_CTRL_T_OPTS="--min-height 30 --preview-window noborder $FZF_COMMON_OPTS --preview='($FZF_PREVIEW_COMMAND) 2> /dev/null'"
+export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --border"
+
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source "$HOME/.vim/plugged/fzf/shell/completion.zsh" 2> /dev/null
+# Key bindings
+# ------------
+source "$HOME/.vim/plugged/fzf/shell/key-bindings.zsh"
