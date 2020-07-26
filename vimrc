@@ -212,26 +212,6 @@ runtime macros/matchit.vim
 
 set dictionary+=/usr/share/dict/words
 
-" moving around with jkl; {{{
-nnoremap ; <Right>
-nnoremap l <Up>
-nnoremap k <Down>
-nnoremap j <Left>
-nmap <silent> <C-w>j :wincmd h<CR>
-nmap <silent> <C-w>k :wincmd j<CR>
-nmap <silent> <C-w>l :wincmd k<CR>
-nmap <silent> <C-w>; :wincmd l<CR>
-nmap <silent> <C-w>J :wincmd H<CR>
-nmap <silent> <C-w>K :wincmd J<CR>
-nmap <silent> <C-w>L :wincmd K<CR>
-nmap <silent> <C-w>: :wincmd L<CR>
-xnoremap ; <Right>
-xnoremap l <Up>
-xnoremap k <Down>
-xnoremap j <Left>
-" }}}
-
-
 " netrw plugin settings {{{
 " Disable netrw (file explorer) plugins
 " let g:loaded_netrw       = 1
@@ -284,6 +264,43 @@ nnoremap <leader>Q :q!<CR>
 " Close current buffer 
 nnoremap <leader>x :x<CR>
 
+" disable command history
+map q: <Nop>
+" disable Ex mode
+noremap Q <Nop>
+
+" moving around with jkl; {{{
+" moving around the current buffer
+nnoremap ; <Right>
+nnoremap l <Up>
+nnoremap k <Down>
+nnoremap j <Left>
+" move between windows
+nmap <silent> <C-w>j :wincmd h<CR>
+nmap <silent> <C-w>k :wincmd j<CR>
+nmap <silent> <C-w>l :wincmd k<CR>
+nmap <silent> <C-w>; :wincmd l<CR>
+" move windows
+nmap <silent> <C-w>J :wincmd H<CR>
+nmap <silent> <C-w>K :wincmd J<CR>
+nmap <silent> <C-w>L :wincmd K<CR>
+nmap <silent> <C-w>: :wincmd L<CR>
+" visual mode
+xnoremap ; <Right>
+xnoremap l <Up>
+xnoremap k <Down>
+xnoremap j <Left>
+" operator pending
+onoremap ; <Right>
+onoremap l <Up>
+onoremap k <Down>
+onoremap j <Left>
+" capitalized 
+nnoremap K k
+xnoremap K k
+onoremap K k
+" }}}
+
 " Display line numbers by default {{{
 set number relativenumber
 " nnoremap <leader>nu :set nonumber!<CR>
@@ -307,12 +324,7 @@ augroup numbertoggle
 augroup END
 " }}}
 
-" Keep cursor in the center of the vim window {{{
-" set  scrolloff=200
-" move cursor freely
-set  scrolloff=0
 nnoremap <leader>so :let &scrolloff = 18 - &scrolloff<CR>
-" }}}
 
 " do not wrap around long lines
 set  nowrap
