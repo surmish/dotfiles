@@ -3,7 +3,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-surround'     " Manipulate parenthesis :help surround
 Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
-" Plug 'tmsvg/pear-tree'        " Vim auto-pair plugin.
+"" Plug 'tmsvg/pear-tree'        " Vim auto-pair plugin.
 
 " On-demand loading
 " The undo history visualizer for VIM  {{{
@@ -56,6 +56,8 @@ let g:airline#extensions#tabline#show_splits = 1 "enable/disable displaying open
 let g:airline#extensions#tabline#show_buffers = 1 " enable/disable displaying buffers with a single tab
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 
+let g:airline#extensions#tabline#buffer_idx_mode = 1 " show buffer numbers
+
 " Enable the list of buffers
 
 let g:airline#extensions#tabline#enabled = 1
@@ -72,9 +74,9 @@ let g:airline_theme="base16"
 " easy way to search and navigate the current file
 Plug 'easymotion/vim-easymotion'
 
+" incsearch {{{
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-fuzzy.vim'
-" incsearch settings {{{
 " map z/ <Plug>(incsearch-fuzzy-/)
 " map z? <Plug>(incsearch-fuzzy-?)
 " map zg/ <Plug>(incsearch-fuzzy-stay)
@@ -82,16 +84,17 @@ Plug 'haya14busa/incsearch-fuzzy.vim'
 map z/ <Plug>(incsearch-fuzzyspell-/)
 map z? <Plug>(incsearch-fuzzyspell-?)
 map zg/ <Plug>(incsearch-fuzzyspell-stay)
-" }}}
 
 Plug 'haya14busa/incsearch-easymotion.vim'
-
+Plug 'kana/vim-operator-user'
 Plug 'haya14busa/vim-operator-flashy'
 Plug 'haya14busa/vim-easyoperator-line'
 Plug 'haya14busa/vim-easyoperator-phrase'
+map y <Plug>(operator-flashy)
+nmap Y <Plug>(operator-flashy)$
+" }}}
 
 " Retro groove color scheme for Vim
-" Plug 'morhetz/gruvbox'
 Plug 'gruvbox-community/gruvbox' 
 
 " Fuzzy file finder
@@ -138,7 +141,6 @@ let g:lens#height_resize_max = 35
 " }}}
 
 Plug 'markonm/traces.vim'
-Plug 'vim/killersheep'
 
 Plug 'vim-scripts/DoxygenToolkit.vim'
 let g:DoxygenToolkit_authorName = $USER
@@ -153,10 +155,10 @@ let g:coc_global_extensions = [
       \'coc-utils',
       \'coc-highlight',
       \'coc-python',
-      \'coc-explorer',
       \'coc-snippets',
       \'coc-clangd'
       \]
+
 let g:coc_user_config = {
     \ "clangd.semanticHighlighting": "true",
     \ "diagnostic.errorSign": '⚠',
@@ -185,13 +187,26 @@ Plug 'nfvs/vim-perforce'
 
 Plug 'rhysd/vim-clang-format'
 
-Plug 'kana/vim-operator-user'
-
 " smooth page up/down
 Plug 'psliwka/vim-smoothie'
 
 " Execute python code in Jupyter notebook
 Plug 'jupyter-vim/jupyter-vim'
+
+" directory browser {{{
+" Disable netrw (file explorer) plugins
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+Plug 'preservim/nerdtree'
+nnoremap <F7> :NERDTreeToggle<CR>
+" Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
+" nnoremap <F7> :CHADopen<CR>
+
+" }}}
+
+Plug 'ryanoasis/vim-devicons'
+
+Plug 'bignimbus/you-are-here.vim'
 
 call plug#end()
 
@@ -212,37 +227,6 @@ runtime macros/matchit.vim
 
 set dictionary+=/usr/share/dict/words
 
-" netrw plugin settings {{{
-" Disable netrw (file explorer) plugins
-" let g:loaded_netrw       = 1
-" let g:loaded_netrwPlugin = 1
-
-" Enable netrw (file explorer) plugins
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 25
-
-let g:NetrwIsOpen=0
-function! ToggleNetrw()
-  if g:NetrwIsOpen
-    let i = bufnr("$")
-    while (i >= 1)
-      if (getbufvar(i, "&filetype") == "netrw")
-        silent exe "bwipeout " . i
-      endif
-      let i-=1
-    endwhile
-    let g:NetrwIsOpen=0
-  else
-    let g:NetrwIsOpen=1
-    silent Lexplore
-  endif
-endfunction
-nnoremap <silent><F7> :call ToggleNetrw()<CR>
-" }}}
-
 " Allow backspacing over autoindent, line breaks and start of insert
 set backspace=indent,eol,start
 " Use spaces instead of tab
@@ -256,7 +240,7 @@ set shiftwidth=2
 let mapleader="\<Space>"
 
 " Write the changes
-nnoremap <leader>w :w!<CR>
+nnoremap <leader>w :update!<CR>
 " Exit if file not modified
 nnoremap <leader>q :q<CR>
 " Force exit irrespective of changes
@@ -386,6 +370,11 @@ if &diff
   endfunction
 endif
 
+" You-are-here settings {{{
+nnoremap <silent> <leader>here :call you_are_here#Toggle()<CR>
+nnoremap <silent> <leader>upd  :call you_are_here#Update()<CR>
+" }}}
+
 " easymotion settings {{{
 " Move to char
 nmap <Leader><Leader>f <Plug>(easymotion-bd-f)
@@ -414,3 +403,8 @@ augroup Cursor
   au VimEnter,WinEnter,BufWinEnter * setlocal cursorline cursorcolumn
   au WinLeave * setlocal nocursorline nocursorcolumn
 augroup END
+
+imap <C-f> <plug>(fzf-complete-file)
+imap <C-p> <plug>(fzf-complete-path)
+
+nnoremap <leader>edate i<C-r>=strftime('%F')<CR>
