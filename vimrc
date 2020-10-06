@@ -32,6 +32,10 @@ function! SwitchTagsFile()
 endfunction
 " }}}
 
+" Plugin to provide additional text objects: E.g. change inside brackets and
+" parenthesis
+Plug 'wellle/targets.vim'
+
 " Show function context {{{
 Plug 'wellle/context.vim',   { 'on': 'ContextToggle' }  " Show context.
 nnoremap <F4> :ContextToggle<CR>
@@ -104,6 +108,7 @@ Plug 'junegunn/fzf.vim'
 " FZF popup window settings
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <C-l> :Buffers<CR>
+let g:fzf_layout = { 'down': "~60%" }
 " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " --column: Show column number
 " --line-number: Show line number
@@ -187,11 +192,13 @@ Plug 'nfvs/vim-perforce'
 
 Plug 'rhysd/vim-clang-format'
 
+" Plug 'wfxr/minimap.vim'
+
 " smooth page up/down
 Plug 'psliwka/vim-smoothie'
 
 " Execute python code in Jupyter notebook
-Plug 'jupyter-vim/jupyter-vim'
+" Plug 'jupyter-vim/jupyter-vim'
 
 " directory browser {{{
 " Disable netrw (file explorer) plugins
@@ -407,4 +414,5 @@ augroup END
 imap <C-f> <plug>(fzf-complete-file)
 imap <C-p> <plug>(fzf-complete-path)
 
+" Enter date
 nnoremap <leader>edate i<C-r>=strftime('%F')<CR>
