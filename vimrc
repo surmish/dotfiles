@@ -302,7 +302,7 @@ xnoremap K k
 onoremap K k
 " }}}
 
-" Display line numbears by default {{{
+" Display line numbers by default {{{
 set number relativenumber
 " nnoremap <leader>nu :set nonumber!<CR>
 nnoremap <leader>nu :call ToggleNumbersAndSignColumns()<CR>
