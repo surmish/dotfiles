@@ -56,26 +56,25 @@ let g:airline_powerline_fonts=1
 " remove separators for empty sections
 let g:airline_skip_empty_sections=1
 
-let g:airline#extensions#tabline#show_splits = 1 "enable/disable displaying open splits per tab (only when tabs are opened). >
-let g:airline#extensions#tabline#show_buffers = 1 " enable/disable displaying buffers with a single tab
-let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
-
-let g:airline#extensions#tabline#buffer_idx_mode = 1 " show buffer numbers
-
-" Enable the list of buffers
-
-let g:airline#extensions#tabline#enabled = 1
-" Show just the filename
-let g:airline#extensions#tabline#fnamemod = ':t'
+" let g:airline#extensions#tabline#show_splits      = 1 " enable/disable displaying open splits per tab (only when tabs are opened). >
+let g:airline#extensions#tabline#show_buffers     = 1 " enable/disable displaying buffers with a single tab
+let g:airline#extensions#tabline#tab_nr_type      = 1 " tab number
+let g:airline#extensions#tabline#buffer_idx_mode  = 1 " show buffer numbers
+let g:airline#extensions#tabline#enabled          = 1 " Enable the list of buffers
+let g:airline#extensions#tabline#fnamemod         = ':t' " Show just the filename
 
 " AirLine colorscheme
-let g:airline_theme="base16"
+" let g:airline_theme="ayu_dark"
+" let g:airline_theme="base16"
+" let g:airline_theme="base16_bright"
+" let g:airline_theme="base16_chalk"
 " let g:airline_theme="molokai"
 " let g:airline_theme="papercolor"
 " let g:airline_theme="light"
+let g:airline_theme="onedark"
 " }}}
 
-" easy way to search and navigate the current file
+" " easy way to search and navigate the current file
 Plug 'easymotion/vim-easymotion'
 
 " incsearch {{{
@@ -98,17 +97,16 @@ map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
 " }}}
 
-" Retro groove color scheme for Vim
+" Retro groove color scheme for Vim {{{
 Plug 'gruvbox-community/gruvbox' 
+" }}}
 
-" Fuzzy file finder
+" Fuzzy file finder {{{
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-" {{{
-" FZF popup window settings
 nnoremap <silent> <C-p> :Files<CR>
 nnoremap <silent> <C-l> :Buffers<CR>
-let g:fzf_layout = { 'down': "~60%" }
+" let g:fzf_layout = { 'down': "~60%" }
 " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " --column: Show column number
 " --line-number: Show line number
@@ -125,19 +123,28 @@ command! -bang -nargs=* Rg call fzf#vim#grep( 'rg --column --line-number --no-he
 let $FZF_DEFAULT_OPTS = $FZF_DEFAULT_OPTS . ' --no-reverse'
 " }}}
 
+" Rainbow plugin {{{
 Plug 'junegunn/rainbow_parentheses.vim'
 let g:rainbow#max_level = 16 
 let g:rainbow#blacklist = [175]
 let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
 highlight MatchParen cterm=bold
+" }}}
+
+" Align plugin {{{
+Plug 'junegunn/vim-easy-align'
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+" }}}
 
 " Dim inactive windows
 Plug 'blueyed/vim-diminactive'
 
-" Resize windows
+" lens.vim {{{
 Plug 'camspiers/animate.vim'
 Plug 'camspiers/lens.vim'
-" lens.vim {{{
 let g:lens#disabled_filetypes = ['fzf']
 let g:lens#width_resize_min = 20
 let g:lens#width_resize_max = 80
@@ -208,18 +215,21 @@ Plug 'preservim/nerdtree'
 nnoremap <F7> :NERDTreeToggle<CR>
 " Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
 " nnoremap <F7> :CHADopen<CR>
-
 " }}}
 
 Plug 'ryanoasis/vim-devicons'
 
 Plug 'bignimbus/you-are-here.vim'
 
+Plug 'mhinz/vim-startify'
+Plug 'edkolev/tmuxline.vim'
+
 call plug#end()
 
 filetype indent plugin on
 syntax on
 set mouse+=a
+set ttymouse=xterm2
 set autoindent
 set lazyredraw
 set ttyfast
@@ -292,7 +302,7 @@ xnoremap K k
 onoremap K k
 " }}}
 
-" Display line numbers by default {{{
+" Display line numbears by default {{{
 set number relativenumber
 " nnoremap <leader>nu :set nonumber!<CR>
 nnoremap <leader>nu :call ToggleNumbersAndSignColumns()<CR>
