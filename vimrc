@@ -11,13 +11,45 @@ Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help un
 nnoremap <F5> :UndotreeToggle<CR>
 " }}}
 
-" Vim plugin that displays tags in a window, ordered by scope {{{
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }    " Show Tag list.  :help tagbar
-nnoremap <F8> :TagbarToggle<CR>
-" Look for tags file in parent directories until its found
-" set tags=./tags;,tags;
-let g:tagbar_width = 40
-let g:tagbar_ctags_bin = "$HOME/usr/local/bin/ctags"
+" LSP alternative for preservim {{{
+Plug 'liuchengxu/vista.vim'
+nnoremap <F8> :Vista!!<CR>
+ let g:vista#executives = ['coc', 'ctags', 'vim_lsc', 'vim_lsp']
+ let g:vista#extensions = ['markdown', 'rst']
+ let g:vista#finders = ['fzf']
+ let g:vista#renderer#ctags = 'line'
+ let g:vista#renderer#enable_icon = 1
+ let g:vista_blink = [2, 100]
+ let g:vista_close_on_jump = 0
+ let g:vista_cursor_delay = 100
+ let g:vista_default_executive = 'ctags'
+ let g:vista_disable_statusline = 0
+ let g:vista_echo_cursor = 1
+ let g:vista_echo_cursor_strategy = 'floating_win'
+ let g:vista_executive_for = {}
+ let g:vista_find_absolute_nearest_method_or_function = 0
+ let g:vista_find_nearest_method_or_function_delay = 300
+ let g:vista_fold_toggle_icons = ['▼', '▶']
+ let g:vista_fzf_preview = ['right:50%']
+ let g:vista_icon_indent = ['└ ', '│ ']
+ let g:vista_ignore_kinds = []
+ let g:vista_no_mappings = 0
+ let g:vista_sidebar_position = 'vertical botright'
+ let g:vista_sidebar_width = 40
+ let g:vista_stay_on_open = 0
+ let g:vista_top_level_blink = [2, 100]
+ let g:vista_update_on_text_changed = 0
+ let g:vista_update_on_text_changed_delay = 500
+" }}}
+
+" " Vim plugin that displays tags in a window, ordered by scope {{{
+" Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }    " Show Tag list.  :help tagbar
+" nnoremap <F8> :TagbarToggle<CR>
+" " Look for tags file in parent directories until its found
+" " set tags=./tags;,tags;
+" let g:tagbar_width = 40
+" let g:tagbar_ctags_bin = "$HOME/usr/local/bin/ctags"
+" " }}}
 
 set tags=$VIM_TAG_FILE
 nnoremap <leader>st :call SwitchTagsFile()<CR>
@@ -30,7 +62,6 @@ function! SwitchTagsFile()
   endif
   echo &tags
 endfunction
-" }}}
 
 " Plugin to provide additional text objects: E.g. change inside brackets and
 " parenthesis
@@ -45,16 +76,23 @@ nnoremap <F4> :ContextToggle<CR>
 Plug 'vim-airline/vim-airline'         " Status line :help airline
 Plug 'vim-airline/vim-airline-themes'
 
-let g:airline_section_a=''
+" let g:airline_section_a=''
 " let g:airline_section_b='%-0.90{getcwd()}'
 let g:airline_section_b=''
+let g:airline_section_c='%t'
+" let g:airline_section_x=''
 let g:airline_section_y=''
-let g:airline_section_x=''
 let g:airline_section_error=''
 let g:airline_section_warning=''
 let g:airline_powerline_fonts=1
 " remove separators for empty sections
 let g:airline_skip_empty_sections=1
+
+" Disable tagbar integration, enable vista integration
+" let g:airline#extensions#tagbar#flags   = 'f'
+" let g:airline#extensions#tagbar#enabled = 1
+let g:airline#extensions#vista#enabled = 1
+
 
 " let g:airline#extensions#tabline#show_splits      = 1 " enable/disable displaying open splits per tab (only when tabs are opened). >
 let g:airline#extensions#tabline#show_buffers     = 1 " enable/disable displaying buffers with a single tab
@@ -62,6 +100,10 @@ let g:airline#extensions#tabline#tab_nr_type      = 1 " tab number
 let g:airline#extensions#tabline#buffer_idx_mode  = 1 " show buffer numbers
 let g:airline#extensions#tabline#enabled          = 1 " Enable the list of buffers
 let g:airline#extensions#tabline#fnamemod         = ':t' " Show just the filename
+
+let g:airline#extensions#wordcount#enabled = 0
+
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 
 " AirLine colorscheme
 " let g:airline_theme="ayu_dark"
@@ -121,6 +163,8 @@ nnoremap <silent> <C-l> :Buffers<CR>
 command! -bang -nargs=* AFind call fzf#vim#grep('rg $VIM_RG_ARGS '.shellescape(<q-args>), 1, <bang>0)
 command! -bang -nargs=* Rg call fzf#vim#grep( 'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
 let $FZF_DEFAULT_OPTS = $FZF_DEFAULT_OPTS . ' --no-reverse'
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+let g:fzf_buffers_jump = 1
 " }}}
 
 " Rainbow plugin {{{
@@ -426,3 +470,9 @@ imap <C-p> <plug>(fzf-complete-path)
 
 " Enter date
 nnoremap <leader>edate i<C-r>=strftime('%F')<CR>
+
+autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
+
+set title
+set titleold=
+autocmd BufRead * let &titlestring = expand("%:t")
