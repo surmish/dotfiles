@@ -51,7 +51,8 @@ nnoremap <F8> :Vista!!<CR>
 " let g:tagbar_ctags_bin = "$HOME/usr/local/bin/ctags"
 " " }}}
 
-set tags=$VIM_TAG_FILE
+" set tags=$VIM_TAG_FILE
+set tags=$VIM_TAG_FILE2
 nnoremap <leader>st :call SwitchTagsFile()<CR>
 
 function! SwitchTagsFile()
@@ -133,15 +134,21 @@ map zg/ <Plug>(incsearch-fuzzyspell-stay)
 Plug 'haya14busa/incsearch-easymotion.vim'
 Plug 'kana/vim-operator-user'
 Plug 'haya14busa/vim-operator-flashy'
-Plug 'haya14busa/vim-easyoperator-line'
-Plug 'haya14busa/vim-easyoperator-phrase'
 map y <Plug>(operator-flashy)
 nmap Y <Plug>(operator-flashy)$
+Plug 'haya14busa/vim-easyoperator-line'
+Plug 'haya14busa/vim-easyoperator-phrase'
 " }}}
 
 " Retro groove color scheme for Vim {{{
 Plug 'gruvbox-community/gruvbox' 
 " }}}
+
+if has('nvim')
+  Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
+  Plug 'kdav5758/TrueZen.nvim'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+endif
 
 " Fuzzy file finder {{{
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -194,6 +201,7 @@ let g:lens#width_resize_min = 20
 let g:lens#width_resize_max = 80
 let g:lens#height_resize_min = 5
 let g:lens#height_resize_max = 35
+nnoremap <F6> :let g:lens#disabled = 1 - g:lens#disabled<CR>
 " }}}
 
 Plug 'markonm/traces.vim'
@@ -208,22 +216,22 @@ let g:coc_global_extensions = [
       \'coc-marketplace',
       \'coc-syntax',
       \'coc-tag',
-      \'coc-utils',
       \'coc-highlight',
-      \'coc-python',
+      \'coc-pyright',
+      \'coc-yank',
       \'coc-snippets',
+      \'coc-json',
+      \'coc-xml',
       \'coc-clangd'
       \]
 
 let g:coc_user_config = {
-    \ "clangd.semanticHighlighting": "true",
-    \ "diagnostic.errorSign": '⚠',
-    \ "diagnostic.warningSign": '⚐',
-    \ "diagnostic.infoSign": '⚐',
-    \ "diagnostic.hintSign": '⚐',
-    \ "diagnostic.signOffset": 9999,
-    \ "coc.preferences.enableFloatHighlight": "v:false",
+    \ "diagnostic.errorSign"  : '✘',
+    \ "diagnostic.warningSign": '⚠',
+    \ "diagnostic.infoSign"   : '',
+    \ "diagnostic.hintSign"   : '➤',
   \ }
+" \ "diagnostic.signOffset" : 9999,
 " }}}
 
 " Snippet insertion engine and collection
@@ -255,17 +263,21 @@ Plug 'psliwka/vim-smoothie'
 " Disable netrw (file explorer) plugins
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-Plug 'preservim/nerdtree'
-nnoremap <F7> :NERDTreeToggle<CR>
-" Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
-" nnoremap <F7> :CHADopen<CR>
+if !has('nvim')
+  Plug 'preservim/nerdtree'
+  nnoremap <F7> :NERDTreeToggle<CR>
+else
+  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+  nnoremap <F7> :CHADopen<CR>
+endif
 " }}}
 
 Plug 'ryanoasis/vim-devicons'
 
 Plug 'bignimbus/you-are-here.vim'
 
-Plug 'mhinz/vim-startify'
+" Plug 'mhinz/vim-startify'
 Plug 'edkolev/tmuxline.vim'
 
 call plug#end()
@@ -273,7 +285,9 @@ call plug#end()
 filetype indent plugin on
 syntax on
 set mouse+=a
-set ttymouse=xterm2
+if !has('nvim')
+  set ttymouse=xterm2
+endif
 set autoindent
 set lazyredraw
 set ttyfast
@@ -348,14 +362,11 @@ onoremap K k
 
 " Display line numbers by default {{{
 set number relativenumber
-" nnoremap <leader>nu :set nonumber!<CR>
-nnoremap <leader>nu :call ToggleNumbersAndSignColumns()<CR>
+nnoremap <leader>nu :set nonumber! relativenumber!<CR>
+nnoremap <leader>si :call ToggleSignColumn()<CR>
 
-function! ToggleNumbersAndSignColumns()
-  set number! norelativenumber!
-  if &signcolumn == 'yes'
-    set signcolumn=no
-  elseif &signcolumn == 'no'
+function! ToggleSignColumn()
+  if &signcolumn == 'no'
     set signcolumn=yes
   else
     set signcolumn=no
@@ -364,8 +375,10 @@ endfunction
 
 augroup numbertoggle
   autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber number
-  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+  " autocmd BufEnter,FocusGained,InsertLeave * set relativenumber number
+  " autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+  autocmd BufEnter,FocusGained * set relativenumber number
+  autocmd BufLeave,FocusLost   * set norelativenumber
 augroup END
 " }}}
 
@@ -436,15 +449,6 @@ nnoremap <silent> <leader>here :call you_are_here#Toggle()<CR>
 nnoremap <silent> <leader>upd  :call you_are_here#Update()<CR>
 " }}}
 
-" easymotion settings {{{
-" Move to char
-nmap <Leader><Leader>f <Plug>(easymotion-bd-f)
-" nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
-" Move to word
-nmap  <Leader><Leader>w <Plug>(easymotion-bd-w)
-" nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
-" }}}
-
 " Colorscheme settings {{{
 " Dark/Light vim background
 set background=dark
@@ -469,7 +473,7 @@ imap <C-f> <plug>(fzf-complete-file)
 imap <C-p> <plug>(fzf-complete-path)
 
 " Enter date
-nnoremap <leader>edate i<C-r>=strftime('%F')<CR>
+nnoremap <leader>edate i <C-r>=strftime('%F')<CR><ESC>
 
 autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
 
