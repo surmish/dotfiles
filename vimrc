@@ -5,6 +5,8 @@ Plug 'tpope/vim-surround'     " Manipulate parenthesis :help surround
 Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
 "" Plug 'tmsvg/pear-tree'        " Vim auto-pair plugin.
 
+Plug 'wlangstroth/vim-racket'
+
 " On-demand loading
 " The undo history visualizer for VIM  {{{
 Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help undotree-intro
@@ -239,7 +241,9 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 let g:UltiSnipsExpandTrigger="<C-j>"
 
-Plug 'jackguo380/vim-lsp-cxx-highlight'
+if !has('nvim')
+  Plug 'jackguo380/vim-lsp-cxx-highlight'
+endif
 
 Plug 'scrooloose/nerdcommenter'
 
@@ -423,8 +427,8 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.tm,*.pcx,*.setup,*.inc set filetype=tcl
   autocmd BufNewFile,BufRead *.setup.urmish set filetype=tcl
   autocmd BufNewFile,BufRead *.make set filetype=make
-  autocmd BufReadPost *.scm,*.rkt,*.tktl set filetype=racket
-  autocmd filetype racket set lisp
+  autocmd BufReadPost *.lisp,*.scm,*.rkt,*.tktl set filetype=racket
+  " autocmd filetype racket set lisp
   autocmd filetype racket set autoindent
   autocmd filetype racket,lisp,scheme setlocal equalprg=scmindent.rkt
   autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
