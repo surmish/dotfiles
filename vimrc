@@ -96,7 +96,6 @@ let g:airline_skip_empty_sections=1
 " let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#vista#enabled = 1
 
-
 " let g:airline#extensions#tabline#show_splits      = 1 " enable/disable displaying open splits per tab (only when tabs are opened). >
 let g:airline#extensions#tabline#show_buffers     = 1 " enable/disable displaying buffers with a single tab
 let g:airline#extensions#tabline#tab_nr_type      = 1 " tab number
@@ -143,13 +142,11 @@ Plug 'haya14busa/vim-easyoperator-phrase'
 " }}}
 
 " Retro groove color scheme for Vim {{{
-Plug 'gruvbox-community/gruvbox' 
+Plug 'sainnhe/gruvbox-material'
 " }}}
 
 if has('nvim')
   Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
-  Plug 'kdav5758/TrueZen.nvim'
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 endif
 
 " Fuzzy file finder {{{
@@ -241,7 +238,7 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 let g:UltiSnipsExpandTrigger="<C-j>"
 
-if !has('nvim')
+if has('vim')
   Plug 'jackguo380/vim-lsp-cxx-highlight'
 endif
 
@@ -257,9 +254,6 @@ Plug 'rhysd/vim-clang-format'
 
 " Plug 'wfxr/minimap.vim'
 
-" smooth page up/down
-Plug 'psliwka/vim-smoothie'
-
 " Execute python code in Jupyter notebook
 " Plug 'jupyter-vim/jupyter-vim'
 
@@ -273,6 +267,7 @@ if !has('nvim')
 else
   Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
   Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+  Plug 'psliwka/vim-smoothie'
   nnoremap <F7> :CHADopen<CR>
 endif
 " }}}
@@ -287,9 +282,8 @@ Plug 'edkolev/tmuxline.vim'
 call plug#end()
 
 filetype indent plugin on
-syntax on
 set mouse+=a
-if !has('nvim')
+if has('vim')
   set ttymouse=xterm2
 endif
 set autoindent
@@ -428,7 +422,8 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.setup.urmish set filetype=tcl
   autocmd BufNewFile,BufRead *.make set filetype=make
   autocmd BufReadPost *.lisp,*.scm,*.rkt,*.tktl set filetype=racket
-  " autocmd filetype racket set lisp
+  autocmd BufReadPost *.gdbinit.urmish set filetype=gdb
+  autocmd filetype racket set lisp
   autocmd filetype racket set autoindent
   autocmd filetype racket,lisp,scheme setlocal equalprg=scmindent.rkt
   autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
@@ -453,19 +448,6 @@ nnoremap <silent> <leader>here :call you_are_here#Toggle()<CR>
 nnoremap <silent> <leader>upd  :call you_are_here#Update()<CR>
 " }}}
 
-" Colorscheme settings {{{
-" Dark/Light vim background
-set background=dark
-" set background=light
-
-let g:gruvbox_contrast_dark='medium'
-let g:gruvbox_contrast_light='hard'
-" following colors work well with gruvbox dark medium contrast
-highlight cursorline ctermbg=236
-highlight cursorcolumn ctermbg=236
-colorscheme gruvbox
-" }}}
-
 " Highlight cursor row and column background in current window
 augroup Cursor
   au!
@@ -479,8 +461,21 @@ imap <C-p> <plug>(fzf-complete-path)
 " Enter date
 nnoremap <leader>edate i <C-r>=strftime('%F')<CR><ESC>
 
-autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
+if has('nvim')
+  syntax off
+  autocmd FileType vim,tcl,gdb syntax on
+endif
 
-set title
-set titleold=
-autocmd BufRead * let &titlestring = expand("%:t")
+" Colorscheme settings {{{
+if has('termguicolors')
+  set termguicolors
+endif
+
+set background=dark
+let g:gruvbox_material_background='medium'
+let g:gruvbox_material_disable_italic_comment = 1
+colorscheme gruvbox-material
+highlight CursorLine    ctermbg=236 guibg=#444444 cterm=none gui=none
+highlight CursorColumn  ctermbg=236 guibg=#444444
+highlight CursorLineNr  cterm=none  gui=none 
+" }}}
