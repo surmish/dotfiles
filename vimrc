@@ -260,11 +260,7 @@ Plug 'rhysd/vim-clang-format'
 " Disable netrw (file explorer) plugins
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-if has('nvim')
-  Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
-  nnoremap <F7> :CHADopen<CR>
-  Plug 'psliwka/vim-smoothie'
-else
+if has('vim')
   Plug 'preservim/nerdtree'
   nnoremap <F7> :NERDTreeToggle<CR>
 endif

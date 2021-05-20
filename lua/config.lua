@@ -1,6 +1,7 @@
 require('plugins')
 
 vim.cmd 'autocmd BufWritePost plugins.lua PackerCompile'
+vim.cmd 'nnoremap <F7> :CHADopen<CR>'
 
 require("zen-mode").setup {
   window = {
