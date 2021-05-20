@@ -213,7 +213,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = [
       \'coc-dictionary',
       \'coc-marketplace',
-      \'coc-syntax',
       \'coc-tag',
       \'coc-highlight',
       \'coc-pyright',
@@ -261,14 +260,13 @@ Plug 'rhysd/vim-clang-format'
 " Disable netrw (file explorer) plugins
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-if !has('nvim')
+if has('nvim')
+  Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+  nnoremap <F7> :CHADopen<CR>
+  Plug 'psliwka/vim-smoothie'
+else
   Plug 'preservim/nerdtree'
   nnoremap <F7> :NERDTreeToggle<CR>
-else
-  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
-  Plug 'psliwka/vim-smoothie'
-  nnoremap <F7> :CHADopen<CR>
 endif
 " }}}
 
