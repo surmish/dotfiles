@@ -76,47 +76,47 @@ nnoremap <F4> :ContextToggle<CR>
 " }}}
 
 " Airline status bar {{{
-Plug 'vim-airline/vim-airline'         " Status line :help airline
-Plug 'vim-airline/vim-airline-themes'
+  Plug 'vim-airline/vim-airline'         " Status line :help airline
+  Plug 'vim-airline/vim-airline-themes'
 
-" let g:airline_section_a=''
-" let g:airline_section_b='%-0.90{getcwd()}'
-let g:airline_section_b=''
-let g:airline_section_c='%t'
-" let g:airline_section_x=''
-let g:airline_section_y=''
-let g:airline_section_error=''
-let g:airline_section_warning=''
-let g:airline_powerline_fonts=1
-" remove separators for empty sections
-let g:airline_skip_empty_sections=1
+  " let g:airline_section_a=''
+  " let g:airline_section_b='%-0.90{getcwd()}'
+  let g:airline_section_b=''
+  let g:airline_section_c='%t'
+  " let g:airline_section_x=''
+  let g:airline_section_y=''
+  let g:airline_section_error=''
+  let g:airline_section_warning=''
+  let g:airline_powerline_fonts=1
+  " remove separators for empty sections
+  let g:airline_skip_empty_sections=1
 
-" Disable tagbar integration, enable vista integration
-" let g:airline#extensions#tagbar#flags   = 'f'
-" let g:airline#extensions#tagbar#enabled = 1
-let g:airline#extensions#vista#enabled = 1
+  " Disable tagbar integration, enable vista integration
+  " let g:airline#extensions#tagbar#flags   = 'f'
+  " let g:airline#extensions#tagbar#enabled = 1
+  let g:airline#extensions#vista#enabled = 1
 
-" let g:airline#extensions#tabline#show_splits      = 1 " enable/disable displaying open splits per tab (only when tabs are opened). >
-let g:airline#extensions#tabline#show_buffers     = 1 " enable/disable displaying buffers with a single tab
-let g:airline#extensions#tabline#tab_nr_type      = 1 " tab number
-let g:airline#extensions#tabline#buffer_idx_mode  = 1 " show buffer numbers
-let g:airline#extensions#tabline#enabled          = 1 " Enable the list of buffers
-let g:airline#extensions#tabline#fnamemod         = ':t' " Show just the filename
+  " let g:airline#extensions#tabline#show_splits      = 1 " enable/disable displaying open splits per tab (only when tabs are opened). >
+  let g:airline#extensions#tabline#show_buffers     = 1 " enable/disable displaying buffers with a single tab
+  let g:airline#extensions#tabline#tab_nr_type      = 1 " tab number
+  let g:airline#extensions#tabline#buffer_idx_mode  = 1 " show buffer numbers
+  let g:airline#extensions#tabline#enabled          = 1 " Enable the list of buffers
+  let g:airline#extensions#tabline#fnamemod         = ':t' " Show just the filename
 
-let g:airline#extensions#wordcount#enabled = 0
+  let g:airline#extensions#wordcount#enabled = 0
 
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+  let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 
-" AirLine colorscheme
-" let g:airline_theme="ayu_dark"
-" let g:airline_theme="base16"
-" let g:airline_theme="base16_bright"
-" let g:airline_theme="base16_chalk"
-" let g:airline_theme="molokai"
-" let g:airline_theme="papercolor"
-" let g:airline_theme="light"
-let g:airline_theme="onedark"
-" }}}
+  " AirLine colorscheme
+  " let g:airline_theme="ayu_dark"
+  " let g:airline_theme="base16"
+  " let g:airline_theme="base16_bright"
+  " let g:airline_theme="base16_chalk"
+  " let g:airline_theme="molokai"
+  " let g:airline_theme="papercolor"
+  " let g:airline_theme="light"
+  let g:airline_theme="onedark"
+  " }}}
 
 " " easy way to search and navigate the current file
 Plug 'easymotion/vim-easymotion'
@@ -144,10 +144,6 @@ Plug 'haya14busa/vim-easyoperator-phrase'
 " Retro groove color scheme for Vim {{{
 Plug 'sainnhe/gruvbox-material'
 " }}}
-
-if has('nvim')
-  Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
-endif
 
 " Fuzzy file finder {{{
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -190,7 +186,9 @@ nmap ga <Plug>(EasyAlign)
 " }}}
 
 " Dim inactive windows
-Plug 'blueyed/vim-diminactive'
+if !has('nvim')
+  Plug 'blueyed/vim-diminactive'
+endif
 
 " lens.vim {{{
 Plug 'camspiers/animate.vim'
@@ -237,8 +235,9 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 let g:UltiSnipsExpandTrigger="<C-j>"
 
-if has('vim')
+if !has('nvim')
   Plug 'jackguo380/vim-lsp-cxx-highlight'
+  Plug 'psliwka/vim-smoothie'
 endif
 
 Plug 'scrooloose/nerdcommenter'
@@ -260,7 +259,7 @@ Plug 'rhysd/vim-clang-format'
 " Disable netrw (file explorer) plugins
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-if has('vim')
+if !has('nvim')
   Plug 'preservim/nerdtree'
   nnoremap <F7> :NERDTreeToggle<CR>
 endif
@@ -277,7 +276,7 @@ call plug#end()
 
 filetype indent plugin on
 set mouse+=a
-if has('vim')
+if !has('nvim')
   set ttymouse=xterm2
 endif
 set autoindent
@@ -455,16 +454,11 @@ imap <C-p> <plug>(fzf-complete-path)
 " Enter date
 nnoremap <leader>edate i <C-r>=strftime('%F')<CR><ESC>
 
-if has('nvim')
-  syntax off
-  autocmd FileType vim,tcl,gdb syntax on
-endif
-
-" Colorscheme settings {{{
 if has('termguicolors')
   set termguicolors
 endif
 
+" Colorscheme settings {{{
 set background=dark
 let g:gruvbox_material_background='medium'
 let g:gruvbox_material_disable_italic_comment = 1
