@@ -16,42 +16,11 @@ nnoremap <F5> :UndotreeToggle<CR>
 " LSP alternative for preservim {{{
 Plug 'liuchengxu/vista.vim'
 nnoremap <F8> :Vista!!<CR>
- let g:vista#executives = ['coc', 'ctags', 'vim_lsc', 'vim_lsp']
- let g:vista#extensions = ['markdown', 'rst']
- let g:vista#finders = ['fzf']
- let g:vista#renderer#ctags = 'line'
- let g:vista#renderer#enable_icon = 1
- let g:vista_blink = [2, 100]
- let g:vista_close_on_jump = 0
- let g:vista_cursor_delay = 100
- let g:vista_default_executive = 'ctags'
- let g:vista_disable_statusline = 0
- let g:vista_echo_cursor = 1
- let g:vista_echo_cursor_strategy = 'floating_win'
- let g:vista_executive_for = {}
- let g:vista_find_absolute_nearest_method_or_function = 0
- let g:vista_find_nearest_method_or_function_delay = 300
- let g:vista_fold_toggle_icons = ['▼', '▶']
- let g:vista_fzf_preview = ['right:50%']
- let g:vista_icon_indent = ['└ ', '│ ']
- let g:vista_ignore_kinds = []
- let g:vista_no_mappings = 0
- let g:vista_sidebar_position = 'vertical botright'
- let g:vista_sidebar_width = 40
- let g:vista_stay_on_open = 0
- let g:vista_top_level_blink = [2, 100]
- let g:vista_update_on_text_changed = 0
- let g:vista_update_on_text_changed_delay = 500
+let g:vista#finders = ['fzf']
+let g:vista_echo_cursor_strategy = 'floating_win'
+let g:vista_fzf_preview = ['right:30%']
+let g:vista_sidebar_width = 40
 " }}}
-
-" " Vim plugin that displays tags in a window, ordered by scope {{{
-" Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }    " Show Tag list.  :help tagbar
-" nnoremap <F8> :TagbarToggle<CR>
-" " Look for tags file in parent directories until its found
-" " set tags=./tags;,tags;
-" let g:tagbar_width = 40
-" let g:tagbar_ctags_bin = "$HOME/usr/local/bin/ctags"
-" " }}}
 
 " set tags=$VIM_TAG_FILE
 set tags=$VIM_TAG_FILE2
@@ -76,8 +45,8 @@ nnoremap <F4> :ContextToggle<CR>
 " }}}
 
 " Airline status bar {{{
-  Plug 'vim-airline/vim-airline'         " Status line :help airline
-  Plug 'vim-airline/vim-airline-themes'
+  " Plug 'vim-airline/vim-airline'         " Status line :help airline
+  " Plug 'vim-airline/vim-airline-themes'
 
   " let g:airline_section_a=''
   " let g:airline_section_b='%-0.90{getcwd()}'
@@ -251,9 +220,6 @@ Plug 'nfvs/vim-perforce'
 Plug 'rhysd/vim-clang-format'
 
 " Plug 'wfxr/minimap.vim'
-
-" Execute python code in Jupyter notebook
-" Plug 'jupyter-vim/jupyter-vim'
 
 " directory browser {{{
 " Disable netrw (file explorer) plugins
@@ -463,7 +429,7 @@ set background=dark
 let g:gruvbox_material_background='medium'
 let g:gruvbox_material_disable_italic_comment = 1
 colorscheme gruvbox-material
-highlight CursorLine    ctermbg=236 guibg=#444444 cterm=none gui=none
-highlight CursorColumn  ctermbg=236 guibg=#444444
-highlight CursorLineNr  cterm=none  gui=none 
+highlight CursorLine   ctermbg=236 guibg=#444444 cterm=none gui=none
+highlight CursorColumn ctermbg=236 guibg=#444444
+highlight CursorLineNr cterm=none  gui=none 
 " }}}
