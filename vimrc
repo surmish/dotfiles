@@ -16,11 +16,42 @@ nnoremap <F5> :UndotreeToggle<CR>
 " LSP alternative for preservim {{{
 Plug 'liuchengxu/vista.vim'
 nnoremap <F8> :Vista!!<CR>
+let g:vista#executives = ['coc', 'ctags', 'vim_lsc', 'vim_lsp']
+let g:vista#extensions = ['markdown', 'rst']
 let g:vista#finders = ['fzf']
+let g:vista#renderer#ctags = 'line'
+let g:vista#renderer#enable_icon = 1
+let g:vista_blink = [2, 100]
+let g:vista_close_on_jump = 0
+let g:vista_cursor_delay = 100
+let g:vista_default_executive = 'ctags'
+let g:vista_disable_statusline = 0
+let g:vista_echo_cursor = 1
 let g:vista_echo_cursor_strategy = 'floating_win'
-let g:vista_fzf_preview = ['right:30%']
+let g:vista_executive_for = {}
+let g:vista_find_absolute_nearest_method_or_function = 0
+let g:vista_find_nearest_method_or_function_delay = 300
+let g:vista_fold_toggle_icons = ['▼', '▶']
+let g:vista_fzf_preview = ['right:50%']
+let g:vista_icon_indent = ['└ ', '│ ']
+let g:vista_ignore_kinds = []
+let g:vista_no_mappings = 0
+let g:vista_sidebar_position = 'vertical botright'
 let g:vista_sidebar_width = 40
+let g:vista_stay_on_open = 0
+let g:vista_top_level_blink = [2, 100]
+let g:vista_update_on_text_changed = 0
+let g:vista_update_on_text_changed_delay = 500
 " }}}
+
+" " Vim plugin that displays tags in a window, ordered by scope {{{
+" Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }    " Show Tag list.  :help tagbar
+" nnoremap <F8> :TagbarToggle<CR>
+" " Look for tags file in parent directories until its found
+" " set tags=./tags;,tags;
+" let g:tagbar_width = 40
+" let g:tagbar_ctags_bin = "$HOME/usr/local/bin/ctags"
+" " }}}
 
 " set tags=$VIM_TAG_FILE
 set tags=$VIM_TAG_FILE2
@@ -45,8 +76,9 @@ nnoremap <F4> :ContextToggle<CR>
 " }}}
 
 " Airline status bar {{{
-  " Plug 'vim-airline/vim-airline'         " Status line :help airline
-  " Plug 'vim-airline/vim-airline-themes'
+if !has('nvim')
+  Plug 'vim-airline/vim-airline'         " Status line :help airline
+  Plug 'vim-airline/vim-airline-themes'
 
   " let g:airline_section_a=''
   " let g:airline_section_b='%-0.90{getcwd()}'
@@ -85,7 +117,8 @@ nnoremap <F4> :ContextToggle<CR>
   " let g:airline_theme="papercolor"
   " let g:airline_theme="light"
   let g:airline_theme="onedark"
-  " }}}
+endif
+" }}}
 
 " " easy way to search and navigate the current file
 Plug 'easymotion/vim-easymotion'
@@ -176,36 +209,41 @@ Plug 'vim-scripts/DoxygenToolkit.vim'
 let g:DoxygenToolkit_authorName = $USER
 
 " Code completion engine {{{
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-let g:coc_global_extensions = [
-      \'coc-dictionary',
-      \'coc-marketplace',
-      \'coc-tag',
-      \'coc-highlight',
-      \'coc-pyright',
-      \'coc-yank',
-      \'coc-snippets',
-      \'coc-json',
-      \'coc-xml',
-      \'coc-clangd'
-      \]
-
-let g:coc_user_config = {
-    \ "diagnostic.errorSign"  : '✘',
-    \ "diagnostic.warningSign": '⚠',
-    \ "diagnostic.infoSign"   : '',
-    \ "diagnostic.hintSign"   : '➤',
-  \ }
-" \ "diagnostic.signOffset" : 9999,
+if !has('nvim')
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  let g:coc_global_extensions = [
+        \'coc-dictionary',
+        \'coc-marketplace',
+        \'coc-tag',
+        \'coc-highlight',
+        \'coc-pyright',
+        \'coc-yank',
+        \'coc-snippets',
+        \'coc-json',
+        \'coc-xml',
+        \'coc-clangd'
+        \]
+  let g:coc_user_config = {
+        \ "diagnostic.errorSign"  : '✘',
+        \ "diagnostic.warningSign": '⚠',
+        \ "diagnostic.infoSign"   : '',
+        \ "diagnostic.hintSign"   : '➤',
+        \ }
+  " \ "diagnostic.signOffset" : 9999,
+endif
 " }}}
 
 " Snippet insertion engine and collection
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-let g:UltiSnipsExpandTrigger="<C-j>"
-
 if !has('nvim')
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
+  let g:UltiSnipsExpandTrigger="<C-j>"
+
   Plug 'jackguo380/vim-lsp-cxx-highlight'
+endif
+
+" Smooth scrolling plugin in vimscript
+if !has('nvim')
   Plug 'psliwka/vim-smoothie'
 endif
 
@@ -220,6 +258,9 @@ Plug 'nfvs/vim-perforce'
 Plug 'rhysd/vim-clang-format'
 
 " Plug 'wfxr/minimap.vim'
+
+" Execute python code in Jupyter notebook
+" Plug 'jupyter-vim/jupyter-vim'
 
 " directory browser {{{
 " Disable netrw (file explorer) plugins
@@ -339,6 +380,7 @@ augroup numbertoggle
 augroup END
 " }}}
 
+let &scrolloff = 18
 nnoremap <leader>so :let &scrolloff = 18 - &scrolloff<CR>
 
 " do not wrap around long lines
@@ -375,6 +417,7 @@ nmap <leader>t <ESC>:tn<CR>
 nmap <leader>p <ESC>:tp<CR>
 
 if has("autocmd")
+  autocmd BufNewFile,BufRead *.zsh set filetype=bash
   autocmd BufNewFile,BufRead *.C set filetype=cpp
   autocmd BufNewFile,BufRead *.vs,*.sv,*.v,*.vh set filetype=verilog
   autocmd BufNewFile,BufRead *.tm,*.pcx,*.setup,*.inc set filetype=tcl
@@ -384,10 +427,13 @@ if has("autocmd")
   autocmd BufReadPost *.gdbinit.urmish set filetype=gdb
   autocmd filetype racket set lisp
   autocmd filetype racket set autoindent
-  autocmd filetype racket,lisp,scheme setlocal equalprg=scmindent.rkt
+  autocmd filetype racket,lisp,scheme,commonlisp setlocal equalprg=scmindent.rkt
   autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
   " Activation based on file type
-  autocmd FileType c,cpp,tcl,lisp,clojure,scheme RainbowParentheses
+  autocmd FileType tcl,perl RainbowParentheses
+  if !has("nvim")
+    autocmd FileType c,cpp,lua,lisp,clojure,scheme RainbowParentheses
+  endif
 endif
 
 " Use gs to toggle whitespace ignore in vimdiff
@@ -426,10 +472,12 @@ endif
 
 " Colorscheme settings {{{
 set background=dark
-let g:gruvbox_material_background='medium'
+let g:gruvbox_material_background='hard'
 let g:gruvbox_material_disable_italic_comment = 1
-colorscheme gruvbox-material
-highlight CursorLine   ctermbg=236 guibg=#444444 cterm=none gui=none
-highlight CursorColumn ctermbg=236 guibg=#444444
-highlight CursorLineNr cterm=none  gui=none 
+if !('nvim')
+  colorscheme gruvbox-material
+  highlight CursorLine    ctermbg=236 guibg=#444444 cterm=none gui=none
+  highlight CursorColumn  ctermbg=236 guibg=#444444
+  highlight CursorLineNr  cterm=none  gui=none 
+endif
 " }}}
