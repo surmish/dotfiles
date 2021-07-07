@@ -393,7 +393,7 @@ if has("autocmd")
   autocmd BufReadPost *.gdbinit.urmish set filetype=gdb
   autocmd filetype racket set lisp
   autocmd filetype racket set autoindent
-  autocmd filetype racket,lisp,scheme,commonlisp setlocal equalprg=scmindent.rkt
+  autocmd filetype racket,lisp,scheme,commonlisp setlocal equalprg=scmindent
   autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
   " Activation based on file type
   autocmd FileType tcl,perl RainbowParentheses
