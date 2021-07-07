@@ -228,9 +228,6 @@ Plug 'rhysd/vim-clang-format'
 
 " Plug 'wfxr/minimap.vim'
 
-" Execute python code in Jupyter notebook
-" Plug 'jupyter-vim/jupyter-vim'
-
 " directory browser {{{
 " Disable netrw (file explorer) plugins
 let g:loaded_netrw       = 1
@@ -392,7 +389,7 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.tm,*.pcx,*.setup,*.inc set filetype=tcl
   autocmd BufNewFile,BufRead *.setup.urmish set filetype=tcl
   autocmd BufNewFile,BufRead *.make set filetype=make
-  autocmd BufReadPost *.lisp,*.scm,*.rkt,*.tktl set filetype=racket
+  autocmd BufReadPost *.lisp,*.scm,*.rkt,*.tktl set filetype=lisp
   autocmd BufReadPost *.gdbinit.urmish set filetype=gdb
   autocmd filetype racket set lisp
   autocmd filetype racket set autoindent
