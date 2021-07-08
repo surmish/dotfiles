@@ -370,4 +370,5 @@ syntax off
 autocmd FileType tcl,perl,lisp,clojure,scheme,vim syntax on
 colorscheme gruvbox-flat
 set guicursor=
+set shortmess=I
 ]]
