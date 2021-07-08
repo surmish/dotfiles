@@ -57,7 +57,7 @@ require'lspconfig'.pyright.setup{}
 require'lspconfig'.clangd.setup {
   default_config = { 
     capabilities = capabilities; 
-    cmd = { "clangd", "--background-index", "--pch-storage=memory", "--clang-tidy", "--suggest-missing-includes", "--cross-file-rename" }, 
+    cmd = { "clangd", "--background-index","--all-scopes-completion", "--pch-storage=memory", "--clang-tidy", "--suggest-missing-includes", "--cross-file-rename" }, 
     filetypes = {"c", "cpp", "objc", "objcpp"}, 
     init_options = { 
       clangdFileStatus     = true,
@@ -97,7 +97,7 @@ require('lualine').setup{
 }
 
 vim.o.completeopt = "menuone,noselect"
-require('compe').setup {
+require'compe'.setup {
   enabled = true;
   autocomplete = true;
   debug = false;
@@ -105,20 +105,29 @@ require('compe').setup {
   preselect = 'enable';
   throttle_time = 80;
   source_timeout = 200;
+  resolve_timeout = 800;
   incomplete_delay = 400;
   max_abbr_width = 100;
   max_kind_width = 100;
   max_menu_width = 100;
-  documentation = true;
+  documentation = {
+    border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
+    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+    max_width = 120,
+    min_width = 60,
+    max_height = math.floor(vim.o.lines * 0.3),
+    min_height = 1,
+  };
   source = {
     path = true;
     buffer = true;
     calc = true;
     nvim_lsp = true;
     nvim_lua = true;
-    vsnip = true;
-    ultisnips = true;
+    -- vsnip = true;
+    -- ultisnips = true;
     luasnip = true;
+    treesitter = true;
   };
 }
 
