@@ -9,8 +9,8 @@ Plug 'wlangstroth/vim-racket'
 
 " On-demand loading
 " The undo history visualizer for VIM  {{{
-Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help undotree-intro
-nnoremap <F5> :UndotreeToggle<CR>
+" Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help undotree-intro
+" nnoremap <F5> :UndotreeToggle<CR>
 " }}}
 
 " LSP alternative for preservim {{{
@@ -172,7 +172,7 @@ let g:lens#height_resize_max = 35
 nnoremap <F6> :let g:lens#disabled = 1 - g:lens#disabled<CR>
 " }}}
 
-Plug 'markonm/traces.vim'
+" Plug 'markonm/traces.vim'
 
 Plug 'vim-scripts/DoxygenToolkit.vim'
 let g:DoxygenToolkit_authorName = $USER
@@ -383,6 +383,7 @@ nmap <leader>t <ESC>:tn<CR>
 nmap <leader>p <ESC>:tp<CR>
 
 if has("autocmd")
+  autocmd BufNewFile,BufRead *.pro set filetype=make
   autocmd BufNewFile,BufRead *.zsh set filetype=bash
   autocmd BufNewFile,BufRead *.C set filetype=cpp
   autocmd BufNewFile,BufRead *.vs,*.sv,*.v,*.vh set filetype=verilog
@@ -398,7 +399,7 @@ if has("autocmd")
   " Activation based on file type
   autocmd FileType tcl,perl RainbowParentheses
   if !has("nvim")
-    autocmd FileType c,cpp,lua,lisp,clojure,scheme RainbowParentheses
+    autocmd FileType c,cpp,lua,lisp,clojure,scheme,rust,python RainbowParentheses
   endif
 endif
 
@@ -431,10 +432,6 @@ imap <C-p> <plug>(fzf-complete-path)
 
 " Enter date
 nnoremap <leader>edate i <C-r>=strftime('%F')<CR><ESC>
-
-if has('termguicolors')
-  set termguicolors
-endif
 
 " Colorscheme settings {{{
 set background=dark
