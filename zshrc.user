@@ -18,7 +18,7 @@ then
   alias -s C="nvim "
   alias -s h="nvim "
   alias -s log="nvim "
-  alias -s py="nvim "
+  # alias -s py="nvim "
   alias -s tcl="nvim "
   alias -s txt="nvim "
   alias -s v="nvim "
@@ -29,7 +29,8 @@ then
 
 fi
 
-export EDITOR=vim
+export EDITOR=nvim
+export P4EDITOR=nvim
 
 if [[ $0 =~ "bash" ]]
 then
@@ -88,6 +89,7 @@ function r  () { vim -R $@ ; }
 function vt () { vim -t $@ ; }
 function vd () { vim -d $@ ; }
 function evim  () { vim ~/.vimrc ; }
+function einit () { vim ~/.config/nvim/init.lua ; }
 function etmux () { vim ~/.tmux.conf ; }
 
 function update () { sudo apt update -y ; }
@@ -127,7 +129,6 @@ function dirdiff () {
 
 function topu () { top -u $USER ; }
 
-export TERM=xterm-256color
 # export TLDR_HEADER='yellow bold underline'
 # export TLDR_QUOTE='italic'
 # export TLDR_DESCRIPTION='green'
