@@ -22,8 +22,8 @@ let g:vista_fzf_preview = ['right:30%']
 let g:vista_sidebar_width = 40
 " }}}
 
-" set tags=$VIM_TAG_FILE
-set tags=$VIM_TAG_FILE2
+set tags=$VIM_TAG_FILE
+" set tags=$VIM_TAG_FILE2
 nnoremap <leader>st :call SwitchTagsFile()<CR>
 
 function! SwitchTagsFile()
@@ -355,9 +355,21 @@ set  nowrap
 nmap <leader><C-h> <ESC>:set wrap!<CR>
 
 " visually select the entire buffer
-nnoremap <leader>va ggvG$
+nnoremap <leader>av ggvG$
 " yank all lines of the file and return to current position
-nnoremap <leader>ya maggvG$y'a
+nnoremap <leader>ay maggvG$y'a
+" yank into/paste from clipboard register
+nnoremap <leader>y "+y
+nnoremap <leader>p "+p
+
+" disable help via F1 key
+nmap <F1> <>
+
+" Map enter in normal mode to :
+nnoremap <CR> :
+
+" ignore = in filename completion
+set isfname-==
 
 " search settings {{{
 " search highlighting
