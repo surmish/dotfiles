@@ -22,7 +22,6 @@ require('packer').startup(function()
   use 'nvim-treesitter/nvim-treesitter-refactor'
   use 'p00f/nvim-ts-rainbow'
   use 'folke/zen-mode.nvim'
-  use 'folke/tokyonight.nvim'
   use 'kkonghao/snippet-dog'
   use 'sakhnik/nvim-gdb'
   use 'karb94/neoscroll.nvim'
