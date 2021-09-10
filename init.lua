@@ -22,6 +22,7 @@ require('packer').startup(function()
   use 'nvim-treesitter/nvim-treesitter-refactor'
   use 'p00f/nvim-ts-rainbow'
   use 'folke/zen-mode.nvim'
+  use 'folke/tokyonight.nvim'
   use 'kkonghao/snippet-dog'
   use 'sakhnik/nvim-gdb'
   use 'karb94/neoscroll.nvim'
@@ -316,9 +317,9 @@ require('neoscroll').setup()
 
 require('bufferline').setup {
   options = {
-    numbers = "both" ,
-    number_style = { "none", "superscript" }, -- buffer_id at index 1, ordinal at index 2
-    mappings = true ,
+    numbers = "buffer_id" ,
+    -- number_style = { "none", "superscript" }, -- buffer_id at index 1, ordinal at index 2
+    -- mappings = true ,
     persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
     -- can also be a table containing 2 custom separators
     -- [focused and unfocused]. eg: { '|', '|' }
@@ -455,7 +456,6 @@ let g:gruvbox_italic_variables  = 0
 let g:gruvbox_flat_style = "hard"
 let g:chadtree_settings = { "theme.text_colour_set": "nerdtree_syntax_dark" }
 colorscheme gruvbox-flat
-set guicursor=
 inoremap <silent><expr> <C-k> compe#complete()
 inoremap <silent><expr> <C-j> compe#confirm('<CR>')
 inoremap <silent><expr> <C-e> compe#close('<C-e>')
