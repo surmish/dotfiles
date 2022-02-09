@@ -1,4 +1,9 @@
 " vim:fdm=marker
+
+" Use ' ' as the leader key
+let mapleader="\<Space>"
+
+" Write the changes
 call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-surround'     " Manipulate parenthesis :help surround
@@ -112,15 +117,17 @@ Plug 'haya14busa/vim-easyoperator-line'
 Plug 'haya14busa/vim-easyoperator-phrase'
 " }}}
 
+if !has('nvim')
 " Retro groove color scheme for Vim {{{
-Plug 'sainnhe/gruvbox-material'
+  Plug 'sainnhe/gruvbox-material'
 " }}}
+endif
 
 " Fuzzy file finder {{{
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-nnoremap <silent> <C-p> :Files<CR>
-nnoremap <silent> <C-l> :Buffers<CR>
+nnoremap <silent> <leader><C-p> :Files<CR>
+nnoremap <silent> <leader><C-l> :Buffers<CR>
 " let g:fzf_layout = { 'down': "~60%" }
 " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " --column: Show column number
@@ -138,6 +145,13 @@ command! -bang -nargs=* Rg call fzf#vim#grep( 'rg --column --line-number --no-he
 let $FZF_DEFAULT_OPTS = $FZF_DEFAULT_OPTS . ' --no-reverse'
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_buffers_jump = 1
+inoremap <c-x><c-w> <plug>(fzf-complete-word)
+inoremap <c-x><c-p> <plug>(fzf-complete-path)
+inoremap <c-x><c-l> <plug>(fzf-complete-line)
+" inoremap <expr> <c-x><c-p> fzf#vim#complete#path('fd')
+" inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+" inoremap <expr> <c-x><c-w> fzf#vim#complete#word({'window': { 'width': 0.5, 'height': 0.8, 'xoffset': 1 }})
+" Enter date
 " }}}
 
 " Rainbow plugin {{{
@@ -160,17 +174,6 @@ nmap ga <Plug>(EasyAlign)
 if !has('nvim')
   Plug 'blueyed/vim-diminactive'
 endif
-
-" lens.vim {{{
-Plug 'camspiers/animate.vim'
-Plug 'camspiers/lens.vim'
-let g:lens#disabled_filetypes = ['fzf']
-let g:lens#width_resize_min = 20
-let g:lens#width_resize_max = 80
-let g:lens#height_resize_min = 5
-let g:lens#height_resize_max = 35
-nnoremap <F6> :let g:lens#disabled = 1 - g:lens#disabled<CR>
-" }}}
 
 " Plug 'markonm/traces.vim'
 
@@ -225,6 +228,12 @@ Plug 'will133/vim-dirdiff'
 Plug 'nfvs/vim-perforce'
 
 Plug 'rhysd/vim-clang-format'
+let g:clang_format#style_options = {
+      \ "AccessModifierOffset" : 2,
+      \ "AllowShortIfStatementsOnASingleLine" : "true",
+      \ "AlwaysBreakTemplateDeclarations" : "true",
+      \ "Standard" : "C++11",
+      \ "ColumnLimit": 120}
 
 " Plug 'wfxr/minimap.vim'
 
@@ -232,15 +241,13 @@ Plug 'rhysd/vim-clang-format'
 " Disable netrw (file explorer) plugins
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-if !has('nvim')
+" if !has('nvim')
   Plug 'preservim/nerdtree'
   nnoremap <F7> :NERDTreeToggle<CR>
-endif
+" endif
 " }}}
 
 Plug 'ryanoasis/vim-devicons'
-
-Plug 'bignimbus/you-are-here.vim'
 
 " Plug 'mhinz/vim-startify'
 Plug 'edkolev/tmuxline.vim'
@@ -275,10 +282,6 @@ set tabstop=2
 " Indent size
 set shiftwidth=2
 
-" Use ' ' as the leader key
-let mapleader="\<Space>"
-
-" Write the changes
 nnoremap <leader>w :update!<CR>
 " Exit if file not modified
 nnoremap <leader>q :q<CR>
@@ -409,7 +412,6 @@ if has("autocmd")
   autocmd filetype racket,lisp,scheme,commonlisp setlocal equalprg=scmindent
   autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
   " Activation based on file type
-  autocmd FileType tcl,perl RainbowParentheses
   if !has("nvim")
     autocmd FileType c,cpp,lua,lisp,clojure,scheme,rust,python RainbowParentheses
   endif
@@ -417,7 +419,7 @@ endif
 
 " Use gs to toggle whitespace ignore in vimdiff
 if &diff
-  map <leader>gs :call IwhiteToggle()<CR>
+  map <leader>ds :call IwhiteToggle()<CR>
   function! IwhiteToggle()
     if &diffopt =~ 'iwhite'
       set diffopt-=iwhite
@@ -427,11 +429,6 @@ if &diff
   endfunction
 endif
 
-" You-are-here settings {{{
-nnoremap <silent> <leader>here :call you_are_here#Toggle()<CR>
-nnoremap <silent> <leader>upd  :call you_are_here#Update()<CR>
-" }}}
-
 " Highlight cursor row and column background in current window
 augroup Cursor
   au!
@@ -439,20 +436,16 @@ augroup Cursor
   au WinLeave * setlocal nocursorline nocursorcolumn
 augroup END
 
-imap <C-f> <plug>(fzf-complete-file)
-imap <C-p> <plug>(fzf-complete-path)
-
-" Enter date
 nnoremap <leader>edate i <C-r>=strftime('%F')<CR><ESC>
 
 " Colorscheme settings {{{
 set background=dark
 let g:gruvbox_material_background='hard'
 let g:gruvbox_material_disable_italic_comment = 1
-if !('nvim')
+if !has('nvim')
   colorscheme gruvbox-material
-  highlight CursorLine    ctermbg=236 guibg=#444444 cterm=none gui=none
-  highlight CursorColumn  ctermbg=236 guibg=#444444
-  highlight CursorLineNr  cterm=none  gui=none 
 endif
+highlight CursorLine    ctermbg=236 guibg=#444444 cterm=none gui=none
+highlight CursorColumn  ctermbg=236 guibg=#444444
+highlight CursorLineNr  cterm=none  gui=none 
 " }}}
