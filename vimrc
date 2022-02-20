@@ -145,9 +145,9 @@ command! -bang -nargs=* Rg call fzf#vim#grep( 'rg --column --line-number --no-he
 let $FZF_DEFAULT_OPTS = $FZF_DEFAULT_OPTS . ' --no-reverse'
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_buffers_jump = 1
-inoremap <c-x><c-w> <plug>(fzf-complete-word)
-inoremap <c-x><c-p> <plug>(fzf-complete-path)
-inoremap <c-x><c-l> <plug>(fzf-complete-line)
+imap <c-x><c-w> <plug>(fzf-complete-word)
+imap <c-x><c-p> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
 " inoremap <expr> <c-x><c-p> fzf#vim#complete#path('fd')
 " inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
 " inoremap <expr> <c-x><c-w> fzf#vim#complete#word({'window': { 'width': 0.5, 'height': 0.8, 'xoffset': 1 }})
