@@ -22,7 +22,7 @@ require('packer').startup(function()
   -- use 'nvim-treesitter/playground'
   use 'nvim-treesitter/nvim-treesitter-refactor'
   use 'nvim-treesitter/nvim-treesitter-textobjects'
-  -- use 'RRethy/nvim-treesitter-endwise'
+  use 'RRethy/nvim-treesitter-endwise'
   use 'nathom/filetype.nvim'
   -- use 'folke/zen-mode.nvim'
   use { 'hoschi/yode-nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
@@ -415,9 +415,9 @@ require'nvim-treesitter.configs'.setup {
       },
     },
   },
-  -- endwise = {
-  --   enable = true,
-  -- },
+  endwise = {
+    enable = true,
+  },
 }
 
 require('neoscroll').setup()
