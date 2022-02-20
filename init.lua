@@ -55,23 +55,23 @@ require('packer').startup(function()
 
   use 'simrat39/rust-tools.nvim'
 
--- use({
---   "aserowy/tmux.nvim",
---   config = function()
---     require("tmux").setup({
---       -- overwrite default configuration
---       -- here, e.g. to enable default bindings
---       navigation = {
---         -- enables default keybindings (C-hjkl) for normal mode
---         enable_default_keybindings = false,
---       },
---       resize = {
---         -- enables default keybindings (A-hjkl) for normal mode
---         enable_default_keybindings = false,
---       }
---     })
---   end
--- })
+  use({
+    "aserowy/tmux.nvim",
+    config = function()
+      require("tmux").setup({
+        -- overwrite default configuration
+        -- here, e.g. to enable default bindings
+        navigation = {
+          -- enables default keybindings (C-hjkl) for normal mode
+          enable_default_keybindings = false,
+        },
+        resize = {
+          -- enables default keybindings (A-hjkl) for normal mode
+          enable_default_keybindings = false,
+        }
+      })
+    end
+  })
 
 end)
 
@@ -391,7 +391,7 @@ require'nvim-treesitter.configs'.setup {
         ["[["] = "@class.outer",
       },
       goto_previous_end = {
-  ["[M"] = "@function.outer",
+        ["[M"] = "@function.outer",
         ["[]"] = "@class.outer",
       },
     },
