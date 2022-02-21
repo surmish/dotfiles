@@ -12,6 +12,8 @@ Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
 
 Plug 'wlangstroth/vim-racket'
 
+" Plug 'dstein64/vim-startuptime'
+
 " On-demand loading
 " The undo history visualizer for VIM  {{{
 " Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help undotree-intro
@@ -95,27 +97,33 @@ endif
 " }}}
 
 " " easy way to search and navigate the current file
-Plug 'easymotion/vim-easymotion'
+if !has('nvim')
+  " f,F,t,T smarter find/till char commands
+  Plug 'rhysd/clever-f.vim'
 
-" incsearch {{{
-Plug 'haya14busa/incsearch.vim'
-Plug 'haya14busa/incsearch-fuzzy.vim'
-" map z/ <Plug>(incsearch-fuzzy-/)
-" map z? <Plug>(incsearch-fuzzy-?)
-" map zg/ <Plug>(incsearch-fuzzy-stay)
+  " Easy navigation around the burrent buffer.
+  Plug 'easymotion/vim-easymotion'
 
-map z/ <Plug>(incsearch-fuzzyspell-/)
-map z? <Plug>(incsearch-fuzzyspell-?)
-map zg/ <Plug>(incsearch-fuzzyspell-stay)
+  " incsearch {{{
+  Plug 'haya14busa/incsearch.vim'
+  Plug 'haya14busa/incsearch-fuzzy.vim'
+  " map z/ <Plug>(incsearch-fuzzy-/)
+  " map z? <Plug>(incsearch-fuzzy-?)
+  " map zg/ <Plug>(incsearch-fuzzy-stay)
 
-Plug 'haya14busa/incsearch-easymotion.vim'
-Plug 'kana/vim-operator-user'
-Plug 'haya14busa/vim-operator-flashy'
-map y <Plug>(operator-flashy)
-nmap Y <Plug>(operator-flashy)$
-Plug 'haya14busa/vim-easyoperator-line'
-Plug 'haya14busa/vim-easyoperator-phrase'
-" }}}
+  map z/ <Plug>(incsearch-fuzzyspell-/)
+  map z? <Plug>(incsearch-fuzzyspell-?)
+  map zg/ <Plug>(incsearch-fuzzyspell-stay)
+
+  Plug 'haya14busa/incsearch-easymotion.vim'
+  Plug 'kana/vim-operator-user'
+  Plug 'haya14busa/vim-operator-flashy'
+  map y <Plug>(operator-flashy)
+  nmap Y <Plug>(operator-flashy)$
+  Plug 'haya14busa/vim-easyoperator-line'
+  Plug 'haya14busa/vim-easyoperator-phrase'
+  " }}}
+endif
 
 if !has('nvim')
 " Retro groove color scheme for Vim {{{
@@ -290,8 +298,6 @@ nnoremap <leader>Q :q!<CR>
 " Close current buffer 
 nnoremap <leader>x :x<CR>
 
-" disable command history
-map q: <Nop>
 " disable Ex mode
 noremap Q <Nop>
 
@@ -369,7 +375,7 @@ nnoremap <leader>p "+p
 nmap <F1> <>
 
 " Map enter in normal mode to :
-nnoremap <CR> :
+nnoremap <expr> <CR> &buftype ==# 'nofile' ? "\<CR>" : ':'
 
 " ignore = in filename completion
 set isfname-==

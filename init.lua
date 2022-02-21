@@ -53,7 +53,13 @@ require('packer').startup(function()
   use 'lukas-reineke/cmp-under-comparator'
   use 'hrsh7th/cmp-nvim-lsp-signature-help'
 
+  use 'surmish/lua-style-snippets'
+
   use 'simrat39/rust-tools.nvim'
+
+  use {'kevinhwang91/nvim-bqf', ft = 'qf'}
+
+  use 'ggandor/lightspeed.nvim'
 
   use({
     "aserowy/tmux.nvim",
@@ -270,9 +276,17 @@ require'luasnip'.config.set_config {
   },
 }
 
--- <c-o> is my jump backwards key.
+-- <c-k> is my expansion key
+-- this will expand the current item or jump to the next item within the snippet.
+vim.keymap.set({ "i", "s" }, "<c-k>", function()
+  if ls.jumpable(1) then
+    ls.jump(1)
+  end
+end, { silent = true })
+
+-- <c-j> is my jump backwards key.
 -- this always moves to the previous item within the snippet
-vim.keymap.set({ "i", "s" }, "<c-o>", function()
+vim.keymap.set({ "i", "s" }, "<c-j>", function()
   if ls.jumpable(-1) then
     ls.jump(-1)
   end
@@ -594,7 +608,7 @@ nnoremap <leader>fb :Telescope file_browser<Cr>
 map  <Leader>yc :YodeCreateSeditorFloating<CR>
 map  <Leader>yr :YodeCreateSeditorReplace<CR>
 nmap <Leader>bd :YodeBufferDelete<cr>
-imap <Leader>bd <esc>:YodeBufferDelete<cr>
+nmap <Leader>bd <esc>:YodeBufferDelete<cr>
 " these commands fall back to overwritten keys when cursor is in split window
 map <C-W>r :YodeLayoutShiftWinDown<CR>
 map <C-W>R :YodeLayoutShiftWinUp<CR>
@@ -602,4 +616,8 @@ map <C-W>J :YodeLayoutShiftWinBottom<CR>
 map <C-W>K :YodeLayoutShiftWinTop<CR>
 " at the moment this is needed to have no gap for floating windows
 set showtabline=2
+augroup highlight_yank
+autocmd!
+au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=200})
+augroup END
 ]]
