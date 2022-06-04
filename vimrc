@@ -240,6 +240,8 @@ let g:clang_format#style_options = {
       \ "AccessModifierOffset" : 2,
       \ "AllowShortIfStatementsOnASingleLine" : "true",
       \ "AlwaysBreakTemplateDeclarations" : "true",
+      \ "BinPackArguments" : "false",
+      \ "BinPackParameters" : "false",
       \ "Standard" : "C++11",
       \ "ColumnLimit": 120}
 
@@ -249,10 +251,10 @@ let g:clang_format#style_options = {
 " Disable netrw (file explorer) plugins
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-" if !has('nvim')
+if !has('nvim')
   Plug 'preservim/nerdtree'
   nnoremap <F7> :NERDTreeToggle<CR>
-" endif
+endif
 " }}}
 
 Plug 'ryanoasis/vim-devicons'
@@ -425,6 +427,7 @@ endif
 
 " Use gs to toggle whitespace ignore in vimdiff
 if &diff
+  syntax off
   map <leader>ds :call IwhiteToggle()<CR>
   function! IwhiteToggle()
     if &diffopt =~ 'iwhite'
@@ -446,7 +449,7 @@ nnoremap <leader>edate i <C-r>=strftime('%F')<CR><ESC>
 
 " Colorscheme settings {{{
 set background=dark
-let g:gruvbox_material_background='hard'
+let g:gruvbox_material_background='medium'
 let g:gruvbox_material_disable_italic_comment = 1
 if !has('nvim')
   colorscheme gruvbox-material
