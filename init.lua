@@ -24,7 +24,7 @@ require('packer').startup(function()
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'RRethy/nvim-treesitter-endwise'
   use 'nathom/filetype.nvim'
-  -- use 'folke/zen-mode.nvim'
+  use 'folke/zen-mode.nvim'
   use { 'hoschi/yode-nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
   use 'sakhnik/nvim-gdb'
   use 'karb94/neoscroll.nvim'
@@ -434,7 +434,7 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
-require('neoscroll').setup()
+-- require('neoscroll').setup()
 
 require('bufferline').setup {
   options = {
@@ -589,6 +589,8 @@ require('rust-tools').setup {
 require("telescope").load_extension "file_browser"
 
 vim.cmd [[
+set laststatus=3
+highlight WinSeperator guibg=None
 set clipboard+=unnamedplus
 let g:gruvbox_italic_keywords   = 0
 let g:gruvbox_italic_comments   = 0
