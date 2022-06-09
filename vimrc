@@ -51,8 +51,8 @@ Plug 'wellle/context.vim',   { 'on': 'ContextToggle' }  " Show context.
 nnoremap <F4> :ContextToggle<CR>
 " }}}
 
-" Airline status bar {{{
 if !has('nvim')
+" Airline status bar {{{
   Plug 'vim-airline/vim-airline'         " Status line :help airline
   Plug 'vim-airline/vim-airline-themes'
 
@@ -88,18 +88,62 @@ if !has('nvim')
   " let g:airline_theme="ayu_dark"
   " let g:airline_theme="base16"
   " let g:airline_theme="base16_bright"
-  " let g:airline_theme="base16_chalk"
+  let g:airline_theme="base16_chalk"
   " let g:airline_theme="molokai"
   " let g:airline_theme="papercolor"
   " let g:airline_theme="light"
-  let g:airline_theme="onedark"
-endif
+  " let g:airline_theme="onedark"
+  "
 " }}}
 
-" " easy way to search and navigate the current file
-if !has('nvim')
+" Retro groove color scheme for Vim {{{
+  Plug 'sainnhe/gruvbox-material'
+" }}}
+
+" Dim inactive windows {{{
+  Plug 'blueyed/vim-diminactive'
+" }}}
+
+" Plug 'markonm/traces.vim'
+
+" Code completion engine {{{
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  let g:coc_global_extensions = [
+        \'coc-dictionary',
+        \'coc-marketplace',
+        \'coc-tag',
+        \'coc-highlight',
+        \'coc-pyright',
+        \'coc-yank',
+        \'coc-snippets',
+        \'coc-json',
+        \'coc-xml',
+        \'coc-clangd'
+        \]
+  let g:coc_user_config = {
+        \ "diagnostic.errorSign"  : '✘',
+        \ "diagnostic.warningSign": '⚠',
+        \ "diagnostic.infoSign"   : '',
+        \ "diagnostic.hintSign"   : '➤',
+        \ }
+  " \ "diagnostic.signOffset" : 9999,
+" }}}
+
+" Snippet insertion engine and collection {{{
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
+  let g:UltiSnipsExpandTrigger="<C-j>"
+  " }}}
+
+  Plug 'jackguo380/vim-lsp-cxx-highlight'
+
+" Smooth scrolling plugin in vimscript
+  Plug 'psliwka/vim-smoothie'
+
+  " easy way to search and navigate the current file {{{
   " f,F,t,T smarter find/till char commands
   Plug 'rhysd/clever-f.vim'
+  " }}}
 
   " Easy navigation around the burrent buffer.
   Plug 'easymotion/vim-easymotion'
@@ -123,12 +167,6 @@ if !has('nvim')
   Plug 'haya14busa/vim-easyoperator-line'
   Plug 'haya14busa/vim-easyoperator-phrase'
   " }}}
-endif
-
-if !has('nvim')
-" Retro groove color scheme for Vim {{{
-  Plug 'sainnhe/gruvbox-material'
-" }}}
 endif
 
 " Fuzzy file finder {{{
@@ -178,54 +216,9 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 " }}}
 
-" Dim inactive windows
-if !has('nvim')
-  Plug 'blueyed/vim-diminactive'
-endif
-
-" Plug 'markonm/traces.vim'
 
 Plug 'vim-scripts/DoxygenToolkit.vim'
 let g:DoxygenToolkit_authorName = $USER
-
-" Code completion engine {{{
-if !has('nvim')
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  let g:coc_global_extensions = [
-        \'coc-dictionary',
-        \'coc-marketplace',
-        \'coc-tag',
-        \'coc-highlight',
-        \'coc-pyright',
-        \'coc-yank',
-        \'coc-snippets',
-        \'coc-json',
-        \'coc-xml',
-        \'coc-clangd'
-        \]
-  let g:coc_user_config = {
-        \ "diagnostic.errorSign"  : '✘',
-        \ "diagnostic.warningSign": '⚠',
-        \ "diagnostic.infoSign"   : '',
-        \ "diagnostic.hintSign"   : '➤',
-        \ }
-  " \ "diagnostic.signOffset" : 9999,
-endif
-" }}}
-
-" Snippet insertion engine and collection
-if !has('nvim')
-  Plug 'SirVer/ultisnips'
-  Plug 'honza/vim-snippets'
-  let g:UltiSnipsExpandTrigger="<C-j>"
-
-  Plug 'jackguo380/vim-lsp-cxx-highlight'
-endif
-
-" Smooth scrolling plugin in vimscript
-if !has('nvim')
-  Plug 'psliwka/vim-smoothie'
-endif
 
 Plug 'scrooloose/nerdcommenter'
 
