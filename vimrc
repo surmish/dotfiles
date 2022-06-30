@@ -138,7 +138,9 @@ if !has('nvim')
   Plug 'jackguo380/vim-lsp-cxx-highlight'
 
 " Smooth scrolling plugin in vimscript
+if has('patch4746')
   Plug 'psliwka/vim-smoothie'
+endif
 
   " easy way to search and navigate the current file {{{
   " f,F,t,T smarter find/till char commands
