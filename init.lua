@@ -59,7 +59,7 @@ require('packer').startup(function()
 
   use {'kevinhwang91/nvim-bqf', ft = 'qf'}
 
-  use 'ggandor/lightspeed.nvim'
+  use 'ggandor/leap.nvim'
 
   use({
     "aserowy/tmux.nvim",
@@ -96,12 +96,10 @@ cmp.setup({
   mapping = {
     ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
     ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-    ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-    ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-    ['<C-e>'] = cmp.mapping({
-      i = cmp.mapping.abort(),
-      c = cmp.mapping.close(),
-    }),
+    ['<C-p>'] = cmp.mapping.select_prev_item(), 
+    ['<C-n>'] = cmp.mapping.select_next_item(), 
+    ['<C-e']  = cmp.mapping.close(), 
+    ['<Shift-Space>'] = cmp.mapping.complete(),
     ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   },
   sorting = {
@@ -242,13 +240,12 @@ require'lspconfig'.rust_analyzer.setup({
 })
 
 require('lualine').setup {
-  -- options = {
+  options = {
   -- theme = 'gruvbox-flat'
   -- theme = 'gruvbox'
-  -- theme = 'gruvbox'
   -- theme = 'everforest'
-  -- theme = 'dracula'
-  -- }
+  theme = 'dracula'
+  }
 }
 
 local ls      = require "luasnip"
@@ -302,30 +299,30 @@ end)
 
 require("luasnip.loaders.from_vscode").lazy_load()
 
--- require("zen-mode").setup {
---   window = {
---     backdrop = 0.95, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
---     -- height and width can be:
---     -- * an absolute number of cells when > 1
---     -- * a percentage of the width / height of the editor when <= 1
---     width = 0.8, -- width of the Zen window
---     height = 0.8, -- height of the Zen window
---     -- by default, no options are changed for the Zen window
---     -- uncomment any of the options below, or add other vim.wo options you want to apply
---     options = {
---       signcolumn = "no", -- disable signcolumn
---       number = false, -- disable number column
---       relativenumber = false, -- disable relative numbers
---       -- cursorline = false, -- disable cursorline
---       -- cursorcolumn = false, -- disable cursor column
---       -- foldcolumn = "0", -- disable fold column
---       -- list = false, -- disable whitespace characters
---     },
---   },
---   plugins = { 
---     tmux = { enabled = true },
---   }
--- }
+require("zen-mode").setup {
+  window = {
+    backdrop = 0.75, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
+    -- height and width can be:
+    -- * an absolute number of cells when > 1
+    -- * a percentage of the width / height of the editor when <= 1
+    width = 0.8, -- width of the Zen window
+    height = 0.8, -- height of the Zen window
+    -- by default, no options are changed for the Zen window
+    -- uncomment any of the options below, or add other vim.wo options you want to apply
+    options = {
+      signcolumn = "no", -- disable signcolumn
+      number = false, -- disable number column
+      relativenumber = false, -- disable relative numbers
+      -- cursorline = false, -- disable cursorline
+      -- cursorcolumn = false, -- disable cursor column
+      -- foldcolumn = "0", -- disable fold column
+      -- list = false, -- disable whitespace characters
+    },
+  },
+  plugins = { 
+    tmux = { enabled = true },
+  }
+}
 
 require'nvim-treesitter.configs'.setup {
   ensure_installed = {"c","cpp","rust","python","lua","commonlisp","verilog","bash","json","vim"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
@@ -587,6 +584,8 @@ require('rust-tools').setup {
 -- -- To get telescope-file-browser loaded and working with telescope,
 -- -- you need to call load_extension, somewhere after setup function:
 require("telescope").load_extension "file_browser"
+
+require('leap').set_default_keymaps()
 
 vim.cmd [[
 set laststatus=3
