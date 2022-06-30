@@ -1,624 +1,455 @@
-vim.cmd[[
-set runtimepath^=~/.vim runtimepath+=~/.vim/after
-let &packpath=&runtimepath
-source ~/.vimrc
-]]
+" vim:fdm=marker
 
-local execute = vim.api.nvim_command
-local fn = vim.fn
+" Use ' ' as the leader key
+let mapleader="\<Space>"
 
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+" Write the changes
+call plug#begin('~/.vim/plugged')
 
-if fn.empty(fn.glob(install_path)) > 0 then
-  fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
-  execute 'packadd packer.nvim'
-end
+Plug 'tpope/vim-surround'     " Manipulate parenthesis :help surround
+Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
+"" Plug 'tmsvg/pear-tree'        " Vim auto-pair plugin.
 
-require('packer').startup(function()
-  use 'wbthomason/packer.nvim'
+Plug 'wlangstroth/vim-racket'
 
-  -- Treesitter
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-  -- use 'nvim-treesitter/playground'
-  use 'nvim-treesitter/nvim-treesitter-refactor'
-  use 'nvim-treesitter/nvim-treesitter-textobjects'
-  use 'RRethy/nvim-treesitter-endwise'
-  use 'nathom/filetype.nvim'
-  use 'folke/zen-mode.nvim'
-  use { 'hoschi/yode-nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
-  use 'sakhnik/nvim-gdb'
-  use 'karb94/neoscroll.nvim'
-  use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
+" Plug 'dstein64/vim-startuptime'
 
-  -- colors/tabs formatting
-  use { "ellisonleao/gruvbox.nvim", requires = {"rktjmp/lush.nvim"} }
-  use { 'nvim-lualine/lualine.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true} }
-  use { 'akinsho/nvim-bufferline.lua', requires = 'kyazdani42/nvim-web-devicons' }
+" On-demand loading
+" The undo history visualizer for VIM  {{{
+" Plug 'mbbill/undotree',   { 'on': 'UndotreeToggle' }  " Show Undo tree. :help undotree-intro
+" nnoremap <F5> :UndotreeToggle<CR>
+" }}}
 
-  -- telescope
-  use { 'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
-  use { 'nvim-telescope/telescope-file-browser.nvim' }
+" LSP alternative for preservim {{{
+Plug 'liuchengxu/vista.vim'
+nnoremap <F8> :Vista!!<CR>
+let g:vista#finders = ['fzf']
+let g:vista_echo_cursor_strategy = 'floating_win'
+let g:vista_fzf_preview = ['right:30%']
+let g:vista_sidebar_width = 40
+" }}}
 
-  use 'hrsh7th/cmp-path'
-  use 'L3MON4D3/LuaSnip' -- snippet-engine
-  use 'hrsh7th/nvim-cmp' -- A completion engine plugin for neovim written in Lua. Completion sources are installed from external repositories
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-cmdline'
-  use 'hrsh7th/cmp-nvim-lsp'
-  -- use 'kkonghao/snippet-dog'
-  use 'neovim/nvim-lspconfig' -- Extensions to built-in LSP, for example, providing type inlay hints
-  use 'saadparwaiz1/cmp_luasnip' -- luasnip completion source for nvim-cmp
-  use 'rafamadriz/friendly-snippets'
-  use 'nvim-lua/lsp_extensions.nvim'
-  use 'lukas-reineke/cmp-under-comparator'
-  use 'hrsh7th/cmp-nvim-lsp-signature-help'
+set tags=$VIM_TAG_FILE
+" set tags=$VIM_TAG_FILE2
+nnoremap <leader>st :call SwitchTagsFile()<CR>
 
-  use 'surmish/lua-style-snippets'
+function! SwitchTagsFile()
+  if &tags == $VIM_ALT_TAG_FILE
+    set tags=$VIM_TAG_FILE
+  else
+    set tags=$VIM_ALT_TAG_FILE
+  endif
+  echo &tags
+endfunction
 
-  use 'simrat39/rust-tools.nvim'
+" Plugin to provide additional text objects: E.g. change inside brackets and
+" parenthesis
+Plug 'wellle/targets.vim'
 
-  use {'kevinhwang91/nvim-bqf', ft = 'qf'}
+" Show function context {{{
+Plug 'wellle/context.vim',   { 'on': 'ContextToggle' }  " Show context.
+nnoremap <F4> :ContextToggle<CR>
+" }}}
 
-  use 'ggandor/leap.nvim'
+if !has('nvim')
+" Airline status bar {{{
+  Plug 'vim-airline/vim-airline'         " Status line :help airline
+  Plug 'vim-airline/vim-airline-themes'
 
-  use({
-    "aserowy/tmux.nvim",
-    config = function()
-      require("tmux").setup({
-        -- overwrite default configuration
-        -- here, e.g. to enable default bindings
-        navigation = {
-          -- enables default keybindings (C-hjkl) for normal mode
-          enable_default_keybindings = false,
-        },
-        resize = {
-          -- enables default keybindings (A-hjkl) for normal mode
-          enable_default_keybindings = false,
-        }
-      })
-    end
-  })
+  " let g:airline_section_a=''
+  " let g:airline_section_b='%-0.90{getcwd()}'
+  let g:airline_section_b=''
+  let g:airline_section_c='%t'
+  " let g:airline_section_x=''
+  let g:airline_section_y=''
+  let g:airline_section_error=''
+  let g:airline_section_warning=''
+  let g:airline_powerline_fonts=1
+  " remove separators for empty sections
+  let g:airline_skip_empty_sections=1
 
-end)
+  " Disable tagbar integration, enable vista integration
+  " let g:airline#extensions#tagbar#flags   = 'f'
+  " let g:airline#extensions#tagbar#enabled = 1
+  let g:airline#extensions#vista#enabled = 1
 
-vim.o.completeopt= "menu,menuone,noselect"
+  " let g:airline#extensions#tabline#show_splits      = 1 " enable/disable displaying open splits per tab (only when tabs are opened). >
+  let g:airline#extensions#tabline#show_buffers     = 1 " enable/disable displaying buffers with a single tab
+  let g:airline#extensions#tabline#tab_nr_type      = 1 " tab number
+  let g:airline#extensions#tabline#buffer_idx_mode  = 1 " show buffer numbers
+  let g:airline#extensions#tabline#enabled          = 1 " Enable the list of buffers
+  let g:airline#extensions#tabline#fnamemod         = ':t' " Show just the filename
 
--- Setup nvim-cmp.
-local cmp = require'cmp'
-local types = require'cmp.types'
-cmp.setup({
-  snippet = {
-    -- REQUIRED - you must specify a snippet engine
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-    end,
-  },
-  mapping = {
-    ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-    ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-    ['<C-p>'] = cmp.mapping.select_prev_item(), 
-    ['<C-n>'] = cmp.mapping.select_next_item(), 
-    ['<C-e']  = cmp.mapping.close(), 
-    ['<Shift-Space>'] = cmp.mapping.complete(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-  },
-  sorting = {
-    comparators = {
-      cmp.config.compare.offset,
-      cmp.config.compare.exact,
-      cmp.config.compare.score,
-      require("cmp-under-comparator").under,
-      -- Same as cmp.config.compare.kind, but with the addition of preferring Variables over Text.
-      function(entry1, entry2)
-        local kind1 = entry1:get_kind()
-        kind1 = kind1 == types.lsp.CompletionItemKind.Text and 100 or kind1
-        kind1 = kind1 == types.lsp.CompletionItemKind.Variable and 1 or kind1
-        local kind2 = entry2:get_kind()
-        kind2 = kind2 == types.lsp.CompletionItemKind.Text and 100 or kind2
-        kind2 = kind2 == types.lsp.CompletionItemKind.Variable and 1 or kind2
-        if kind1 ~= kind2 then
-          if kind1 == types.lsp.CompletionItemKind.Snippet then
-            return true
-          end
-          if kind2 == types.lsp.CompletionItemKind.Snippet then
-            return false
-          end
-          local diff = kind1 - kind2
-          if diff < 0 then
-            return true
-          elseif diff > 0 then
-            return false
-          end
-        end
-      end,
-      cmp.config.compare.sort_text,
-      cmp.config.compare.length,
-      cmp.config.compare.order,
-    },
-    priority_weight = 100,
-  },
-  sources = cmp.config.sources({
-  { name = "path", priority_weight = 105 },
-  { name = "cmdline", priority_weight = 105 },
-  { name = "luasnip", max_item_count = 20, priority_weight = 103 },
-  { name = "nvim_lsp", max_item_count = 20, priority_weight = 100 },
-  { name = "nvim_lsp_signature_help", max_item_count = 20, priority_weight = 99 },
-  },{
-    { name = "buffer", max_item_count = 5, priority_weight = 70 },
-    }),
-})
--- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline('/', {
-  sources = {
-  { name = 'buffer' }
-  }
-})
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(':', {
-  sources = cmp.config.sources({
-  { name = 'path' }
-  }, {
-    { name = 'cmdline' }
-    })
-})
+  let g:airline#extensions#wordcount#enabled = 0
 
-require('yode-nvim').setup({})
+  let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 
--- Setup lspconfig.
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-capabilities.textDocument.completion.completionItem.snippetSupport = true
+  " AirLine colorscheme
+  " let g:airline_theme="ayu_dark"
+  " let g:airline_theme="base16"
+  " let g:airline_theme="base16_bright"
+  let g:airline_theme="base16_chalk"
+  " let g:airline_theme="molokai"
+  " let g:airline_theme="papercolor"
+  " let g:airline_theme="light"
+  " let g:airline_theme="onedark"
+  "
+" }}}
 
-local on_attach = function(client)
-  require'completion'.on_attach(client)
-  require('vim.lsp.protocol').CompletionItemKind = {
-    '';   -- Text          = 1;
-    '';   -- Method        = 2;
-    'ƒ';   -- Function      = 3;
-    '';   -- Constructor   = 4;
-    '識';  -- Field         = 5;
-    '';   -- Variable      = 6;
-    '';   -- Class         = 7;
-    'ﰮ';   -- Interface     = 8;
-    '';   -- Module        = 9;
-    '';   -- Property      = 10;
-    '';   -- Unit          = 11;
-    '';   -- Value         = 12;
-    '了';  -- Enum          = 13;
-    '';   -- Keyword       = 14;
-    '﬌';   -- Snippet       = 15;
-    '';   -- Color         = 16;
-    '';   -- File          = 17;
-    '渚';  -- Reference     = 18;
-    '';   -- Folder        = 19;
-    '';   -- EnumMember    = 20;
-    '';   -- Constant      = 21;
-    '';   -- Struct        = 22;
-    '鬒';  -- Event         = 23;
-    'Ψ';   -- Operator      = 24;
-    '';   -- TypeParameter = 25;
-  }
-end
+" Retro groove color scheme for Vim {{{
+  Plug 'sainnhe/gruvbox-material'
+" }}}
 
-require'lspconfig'.pyright.setup{
-  capabilities = capabilities
-}
-require'lspconfig'.clangd.setup {
-  default_config = { 
-    capabilities = capabilities; 
-    cmd = { "clangd", "--background-index","--all-scopes-completion", "--pch-storage=memory", "--clang-tidy", "--suggest-missing-includes", "--cross-file-rename" }, 
-    filetypes = {"c", "cpp"}, 
-    init_options = { 
-      clangdFileStatus     = true,
-      usePlaceholders      = true,
-      completeUnimported   = true,
-      semanticHighlighting = false
-    }, 
-    root_dir = require'lspconfig'.util.root_pattern("compile_flags.txt") 
-    -- root_dir = require'lspconfig'.util.root_pattern("compile_flags.txt","apbld","compile_commands.json") 
-  }, 
-  on_attach = on_attach_common 
-}
+" Dim inactive windows {{{
+  Plug 'blueyed/vim-diminactive'
+" }}}
 
-require'lspconfig'.rust_analyzer.setup({
-  on_attach=on_attach,
-  capabilities = capabilities,
-  settings = {
-    ["rust-analyzer"] = {
-      assist = {
-        importGranularity = "module",
-        importPrefix = "by_self",
-      },
-      cargo = {
-        loadOutDirsFromCheck = true
-      },
-      procMacro = {
-        enable = true
-      },
-    }
-  }
-})
+" Plug 'markonm/traces.vim'
 
-require('lualine').setup {
-  options = {
-  -- theme = 'gruvbox-flat'
-  -- theme = 'gruvbox'
-  -- theme = 'everforest'
-  theme = 'dracula'
-  }
-}
+" Code completion engine {{{
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  let g:coc_global_extensions = [
+        \'coc-dictionary',
+        \'coc-marketplace',
+        \'coc-tag',
+        \'coc-highlight',
+        \'coc-pyright',
+        \'coc-yank',
+        \'coc-snippets',
+        \'coc-json',
+        \'coc-xml',
+        \'coc-clangd'
+        \]
+  let g:coc_user_config = {
+        \ "diagnostic.errorSign"  : '✘',
+        \ "diagnostic.warningSign": '⚠',
+        \ "diagnostic.infoSign"   : '',
+        \ "diagnostic.hintSign"   : '➤',
+        \ }
+  " \ "diagnostic.signOffset" : 9999,
+" }}}
 
-local ls      = require "luasnip"
-local lstypes = require "luasnip.util.types"
-require'luasnip'.config.set_config {
-  -- This tells LuaSnip to remember to keep around the last snippet.
-  -- You can jump back into it even if you move outside of the selection
-  history = true,
+" Snippet insertion engine and collection {{{
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
+  let g:UltiSnipsExpandTrigger="<C-j>"
+  " }}}
 
-  -- This one is cool cause if you have dynamic snippets, it updates as you type!
-  updateevents = "TextChanged,TextChangedI",
+  Plug 'jackguo380/vim-lsp-cxx-highlight'
 
-  -- Autosnippets:
-  enable_autosnippets = true,
+" Smooth scrolling plugin in vimscript
+if has('patch4746')
+  Plug 'psliwka/vim-smoothie'
+endif
 
-  -- Crazy highlights!!
-  -- #vid3
-  -- ext_opts = nil,
-  ext_opts = {
-    [lstypes.choiceNode] = {
-      active = {
-        virt_text = { { "<-", "Error" } },
-      },
-    },
-  },
-}
+  " easy way to search and navigate the current file {{{
+  " f,F,t,T smarter find/till char commands
+  Plug 'rhysd/clever-f.vim'
+  " }}}
 
--- <c-k> is my expansion key
--- this will expand the current item or jump to the next item within the snippet.
-vim.keymap.set({ "i", "s" }, "<c-k>", function()
-  if ls.jumpable(1) then
-    ls.jump(1)
-  end
-end, { silent = true })
+  " Easy navigation around the burrent buffer.
+  Plug 'easymotion/vim-easymotion'
 
--- <c-j> is my jump backwards key.
--- this always moves to the previous item within the snippet
-vim.keymap.set({ "i", "s" }, "<c-j>", function()
-  if ls.jumpable(-1) then
-    ls.jump(-1)
-  end
-end, { silent = true })
+  " incsearch {{{
+  Plug 'haya14busa/incsearch.vim'
+  Plug 'haya14busa/incsearch-fuzzy.vim'
+  " map z/ <Plug>(incsearch-fuzzy-/)
+  " map z? <Plug>(incsearch-fuzzy-?)
+  " map zg/ <Plug>(incsearch-fuzzy-stay)
 
--- <c-l> is selecting within a list of options.
--- This is useful for choice nodes (introduced in the forthcoming episode 2)
-vim.keymap.set("i", "<c-l>", function()
-  if ls.choice_active() then
-    ls.change_choice(1)
-  end
-end)
+  map z/ <Plug>(incsearch-fuzzyspell-/)
+  map z? <Plug>(incsearch-fuzzyspell-?)
+  map zg/ <Plug>(incsearch-fuzzyspell-stay)
 
-require("luasnip.loaders.from_vscode").lazy_load()
+  Plug 'haya14busa/incsearch-easymotion.vim'
+  Plug 'kana/vim-operator-user'
+  Plug 'haya14busa/vim-operator-flashy'
+  map y <Plug>(operator-flashy)
+  nmap Y <Plug>(operator-flashy)$
+  Plug 'haya14busa/vim-easyoperator-line'
+  Plug 'haya14busa/vim-easyoperator-phrase'
+  " }}}
+endif
 
-require("zen-mode").setup {
-  window = {
-    backdrop = 0.75, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
-    -- height and width can be:
-    -- * an absolute number of cells when > 1
-    -- * a percentage of the width / height of the editor when <= 1
-    width = 0.8, -- width of the Zen window
-    height = 0.8, -- height of the Zen window
-    -- by default, no options are changed for the Zen window
-    -- uncomment any of the options below, or add other vim.wo options you want to apply
-    options = {
-      signcolumn = "no", -- disable signcolumn
-      number = false, -- disable number column
-      relativenumber = false, -- disable relative numbers
-      -- cursorline = false, -- disable cursorline
-      -- cursorcolumn = false, -- disable cursor column
-      -- foldcolumn = "0", -- disable fold column
-      -- list = false, -- disable whitespace characters
-    },
-  },
-  plugins = { 
-    tmux = { enabled = true },
-  }
-}
+" Fuzzy file finder {{{
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+nnoremap <silent> <leader><C-p> :Files<CR>
+nnoremap <silent> <leader><C-l> :Buffers<CR>
+" let g:fzf_layout = { 'down': "~60%" }
+" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+" --column: Show column number
+" --line-number: Show line number
+" --no-heading: Do not show file headings in results
+" --fixed-strings: Search term as a literal string
+" --ignore-case: Case insensitive search
+" --no-ignore: Do not respect .gitignore, etc...
+" --hidden: Search hidden files and folders
+" --follow: Follow symlinks
+" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+" --color: Search color options
+command! -bang -nargs=* AFind call fzf#vim#grep('rg $VIM_RG_ARGS '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Rg call fzf#vim#grep( 'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+let $FZF_DEFAULT_OPTS = $FZF_DEFAULT_OPTS . ' --no-reverse'
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+let g:fzf_buffers_jump = 1
+imap <c-x><c-w> <plug>(fzf-complete-word)
+imap <c-x><c-p> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+" inoremap <expr> <c-x><c-p> fzf#vim#complete#path('fd')
+" inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+" inoremap <expr> <c-x><c-w> fzf#vim#complete#word({'window': { 'width': 0.5, 'height': 0.8, 'xoffset': 1 }})
+" Enter date
+" }}}
 
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = {"c","cpp","rust","python","lua","commonlisp","verilog","bash","json","vim"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  -- ignore_install = { "javascript" }, -- List of parsers to ignore installing
-  highlight = {
-    enable  = true, -- false will disable the whole extension
-    disable = {},   -- list of language that will be disabled
-  },
-  indent = {
-    enable = true
-  },
-  rainbow = {
-    enable = true
-  },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      scope_incremental = "grc",
-      node_decremental = "grm",
-    },
-  },
-  -- playground = {
-  -- 	enable = true,
-  -- 	disable = {},
-  -- 	updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-  -- 	persist_queries = false, -- Whether the query persists across vim sessions
-  -- 	keybindings = {
-  -- 		toggle_query_editor = 'o',
-  -- 		toggle_hl_groups = 'i',
-  -- 		toggle_injected_languages = 't',
-  -- 		toggle_anonymous_nodes = 'a',
-  -- 		toggle_language_display = 'I',
-  -- 		focus_language = 'f',
-  -- 		unfocus_language = 'F',
-  -- 		update = 'R',
-  -- 		goto_node = '<cr>',
-  -- 		show_help = '?',
-  -- 	},
-  -- },
-  textobjects = {
-    select = {
-      enable = true,
-      -- Automatically jump forward to textobj, similar to targets.vim 
-      lookahead = true,
-      keymaps = {
-        -- You can use the capture groups defined in textobjects.scm
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ac"] = "@class.outer",
-        ["ic"] = "@class.inner",
-      },
-    },
-    swap = {
-      enable = true,
-      swap_next = {
-        ["<leader>a"] = "@parameter.inner",
-      },
-      swap_previous = {
-        ["<leader>A"] = "@parameter.inner",
-      },
-    },
-    move = {
-      enable = true,
-      set_jumps = true, -- whether to set jumps in the jumplist
-      goto_next_start = {
-        ["]m"] = "@function.outer",
-        ["]]"] = "@class.outer",
-      },
-      goto_next_end = {
-        ["]M"] = "@function.outer",
-        ["]["] = "@class.outer",
-      },
-      goto_previous_start = {
-        ["[m"] = "@function.outer",
-        ["[["] = "@class.outer",
-      },
-      goto_previous_end = {
-        ["[M"] = "@function.outer",
-        ["[]"] = "@class.outer",
-      },
-    },
-  },
-  refactor = {
-    highlight_current_scope = { enable = false },
-    smart_rename = {
-      enable = true,
-      keymaps = {
-        smart_rename = "grr",
-      },
-    },
-    navigation = {
-      enable = true,
-      keymaps = {
-        goto_definition = "gnd",
-        list_definitions = "gnD",
-        list_definitions_toc = "gO",
-        goto_next_usage = "<a-*>",
-        goto_previous_usage = "<a-#>",
-      },
-    },
-  },
-  endwise = {
-    enable = true,
-  },
-}
+" Rainbow plugin {{{
+Plug 'junegunn/rainbow_parentheses.vim'
+let g:rainbow#max_level = 16 
+let g:rainbow#blacklist = [175]
+let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+highlight MatchParen cterm=bold
+" }}}
 
--- require('neoscroll').setup()
+" Align plugin {{{
+Plug 'junegunn/vim-easy-align'
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+" }}}
 
-require('bufferline').setup {
-  options = {
-    numbers = "buffer_id" ,
-    -- number_style = { "none", "superscript" }, -- buffer_id at index 1, ordinal at index 2
-    -- mappings = true ,
-    persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
-    -- can also be a table containing 2 custom separators
-    -- [focused and unfocused]. eg: { '|', '|' }
-    --   close_command = "bdelete! %d",       -- can be a string | function, see "Mouse actions"
-    --   right_mouse_command = "bdelete! %d", -- can be a string | function, see "Mouse actions"
-    --   left_mouse_command = "buffer %d",    -- can be a string | function, see "Mouse actions"
-    --   middle_mouse_command = nil,          -- can be a string | function, see "Mouse actions"
-    --   -- NOTE: this plugin is designed with this icon in mind,
-    --   -- and so changing this is NOT recommended, this is intended
-    --   -- as an escape hatch for people who cannot bear it for whatever reason
-    indicator_icon = '▎',
-    buffer_close_icon = '',
-    modified_icon = '●',
-    close_icon = '',
-    left_trunc_marker = '',
-    right_trunc_marker = '',
-    --   --- name_formatter can be used to change the buffer's label in the bufferline.
-    --   --- Please note some names can/will break the
-    --   --- bufferline so use this at your discretion knowing that it has
-    --   --- some limitations that will *NOT* be fixed.
-    --   name_formatter = function(buf)  -- buf contains a "name", "path" and "bufnr"
-    --     -- remove extension from markdown files for example
-    --     if buf.name:match('%.md') then
-    --       return vim.fn.fnamemodify(buf.name, ':t:r')
-    --     end
-    --   end,
-    --   max_name_length = 18,
-    --   max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
-    --   tab_size = 18,
-    diagnostics = false,
-    -- diagnostics_indicator = function(count, level, diagnostics_dict, context)
-    --   return "("..count..")"
-    -- end,
-    --   -- NOTE: this will be called a lot so don't do any heavy processing here
-    --   custom_filter = function(buf_number)
-    --     -- filter out filetypes you don't want to see
-    --     if vim.bo[buf_number].filetype ~= "<i-dont-want-to-see-this>" then
-    --       return true
-    --     end
-    --     -- filter out by buffer name
-    --     if vim.fn.bufname(buf_number) ~= "<buffer-name-I-dont-want>" then
-    --       return true
-    --     end
-    --     -- filter out based on arbitrary rules
-    --     -- e.g. filter out vim wiki buffer from tabline in your work repo
-    --     if vim.fn.getcwd() == "<work-repo>" and vim.bo[buf_number].filetype ~= "wiki" then
-    --       return true
-    --     end
-    --   end,
-    --   offsets = {{filetype = "NvimTree", text = "File Explorer", text_align = "left" | "center" | "right"}},
-    show_buffer_icons = true, -- disable filetype icons for buffers
-    show_buffer_close_icons = true,
-    show_close_icon = true,
-    show_tab_indicators = true,
-    --   persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
-    --   -- can also be a table containing 2 custom separators
-    --   -- [focused and unfocused]. eg: { '|', '|' }
-    separator_style = "slant",
-    --   enforce_regular_tabs = false | true,
-    --   always_show_bufferline = true | false,
-    --   sort_by = 'id' | 'extension' | 'relative_directory' | 'directory' | function(buffer_a, buffer_b)
-    --     -- add custom logic
-    --     return buffer_a.modified > buffer_b.modified
-    --   end
-  }
-}
 
-require('rust-tools').setup {
-  tools = { 
-    -- rust-tools options
-    -- automatically set inlay hints (type hints)
-    -- There is an issue due to which the hints are not applied on the first
-    -- opened file. For now, write to the file to trigger a reapplication of
-    -- the hints or just run :RustSetInlayHints.
-    -- default: true
-    autoSetHints = true,
-    -- whether to show hover actions inside the hover window
-    -- this overrides the default hover handler
-    -- default: true
-    hover_with_actions = true,
-    runnables = {
-      -- whether to use telescope for selection menu or not
-      -- default: true
-      use_telescope = true
-      -- rest of the opts are forwarded to telescope
-    },
-    inlay_hints = {
-      -- wheter to show parameter hints with the inlay hints or not
-      -- default: true
-      show_parameter_hints = true,
-      -- prefix for parameter hints
-      -- default: "<-"
-      parameter_hints_prefix = "<-",
-      -- prefix for all the other hints (type, chaining)
-      -- default: "=>"
-      other_hints_prefix  = "=>",
-      -- whether to align to the lenght of the longest line in the file
-      max_len_align = false,
-      -- padding from the left if max_len_align is true
-      max_len_align_padding = 1,
-      -- whether to align to the extreme right or not
-      right_align = false,
-      -- padding from the right if right_align is true
-      right_align_padding = 7,
-    },
-    hover_actions = {
-      -- the border that is used for the hover window
-      -- see vim.api.nvim_open_win()
-      border = {
-      {"╭", "FloatBorder"},
-      {"─", "FloatBorder"},
-      {"╮", "FloatBorder"},
-      {"│", "FloatBorder"},
-      {"╯", "FloatBorder"},
-      {"─", "FloatBorder"},
-      {"╰", "FloatBorder"},
-      {"│", "FloatBorder"}
-      },
-    },
-  },
-  -- all the opts to send to nvim-lspconfig
-  -- these override the defaults set by rust-tools.nvim
-  -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
-  server = {}, -- rust-analyzer options
-}
+Plug 'vim-scripts/DoxygenToolkit.vim'
+let g:DoxygenToolkit_authorName = $USER
 
--- -- You don't need to set any of these options.
--- -- IMPORTANT!: this is only a showcase of how you can set default options!
--- require("telescope").setup {
---   extensions = {
---     file_browser = {
---       theme = "ivy",
---       mappings = {
---         ["i"] = {
---           -- your custom insert mode mappings
---         },
---         ["n"] = {
---           -- your custom normal mode mappings
---         },
---       },
---     },
---   },
--- }
--- -- To get telescope-file-browser loaded and working with telescope,
--- -- you need to call load_extension, somewhere after setup function:
-require("telescope").load_extension "file_browser"
+Plug 'scrooloose/nerdcommenter'
 
-require('leap').set_default_keymaps()
+" Directory diff in vim
+Plug 'will133/vim-dirdiff'
 
-vim.cmd [[
-set laststatus=3
-highlight WinSeperator guibg=None
-set clipboard+=unnamedplus
-let g:gruvbox_italic_keywords   = 0
-let g:gruvbox_italic_comments   = 0
-let g:gruvbox_italic_functions  = 0
-let g:gruvbox_italic_variables  = 0
-set termguicolors
-set background = "dark"
-colorscheme gruvbox
-" colorscheme kanagawa
-imap <silent><expr> <Tab>   luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'
-imap <silent><expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev': '<S-Tab>'
-snoremap <silent> <Tab>   <cmd>lua require'luasnip'.jump(1)<Cr>
-snoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
-nnoremap <leader>fb :Telescope file_browser<Cr>
+" Perforce integration
+Plug 'nfvs/vim-perforce'
 
-" Yoda setup
-map  <Leader>yc :YodeCreateSeditorFloating<CR>
-map  <Leader>yr :YodeCreateSeditorReplace<CR>
-nmap <Leader>bd :YodeBufferDelete<cr>
-nmap <Leader>bd <esc>:YodeBufferDelete<cr>
-" these commands fall back to overwritten keys when cursor is in split window
-map <C-W>r :YodeLayoutShiftWinDown<CR>
-map <C-W>R :YodeLayoutShiftWinUp<CR>
-map <C-W>J :YodeLayoutShiftWinBottom<CR>
-map <C-W>K :YodeLayoutShiftWinTop<CR>
-" at the moment this is needed to have no gap for floating windows
-set showtabline=2
-augroup highlight_yank
-autocmd!
-au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=200})
+Plug 'rhysd/vim-clang-format'
+let g:clang_format#style_options = {
+      \ "AccessModifierOffset" : 2,
+      \ "AllowShortIfStatementsOnASingleLine" : "true",
+      \ "AlwaysBreakTemplateDeclarations" : "true",
+      \ "BinPackArguments" : "false",
+      \ "BinPackParameters" : "false",
+      \ "Standard" : "C++11",
+      \ "ColumnLimit": 120}
+
+" Plug 'wfxr/minimap.vim'
+
+" directory browser {{{
+" Disable netrw (file explorer) plugins
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+if !has('nvim')
+  Plug 'preservim/nerdtree'
+  nnoremap <F7> :NERDTreeToggle<CR>
+endif
+" }}}
+
+Plug 'ryanoasis/vim-devicons'
+
+" Plug 'mhinz/vim-startify'
+Plug 'edkolev/tmuxline.vim'
+
+call plug#end()
+
+filetype indent plugin on
+set mouse+=a
+if !has('nvim')
+  set ttymouse=xterm2
+endif
+set autoindent
+set lazyredraw
+set ttyfast
+set hidden
+set nomodeline
+set nocompatible
+set foldmethod=syntax
+set path+=**
+set wildmenu
+
+runtime macros/matchit.vim
+
+set dictionary+=/usr/share/dict/words
+
+" Allow backspacing over autoindent, line breaks and start of insert
+set backspace=indent,eol,start
+" Use spaces instead of tab
+set expandtab
+" Specify tab size
+set tabstop=2
+" Indent size
+set shiftwidth=2
+
+nnoremap <leader>w :update!<CR>
+" Exit if file not modified
+nnoremap <leader>q :q<CR>
+" Force exit irrespective of changes
+nnoremap <leader>Q :q!<CR>
+" Close current buffer 
+nnoremap <leader>x :x<CR>
+
+" disable Ex mode
+noremap Q <Nop>
+
+" moving around with jkl; {{{
+" moving around the current buffer
+nnoremap ; <Right>
+nnoremap l <Up>
+nnoremap k <Down>
+nnoremap j <Left>
+" move between windows
+nmap <silent> <C-w>j :wincmd h<CR>
+nmap <silent> <C-w>k :wincmd j<CR>
+nmap <silent> <C-w>l :wincmd k<CR>
+nmap <silent> <C-w>; :wincmd l<CR>
+" move windows
+nmap <silent> <C-w>J :wincmd H<CR>
+nmap <silent> <C-w>K :wincmd J<CR>
+nmap <silent> <C-w>L :wincmd K<CR>
+nmap <silent> <C-w>: :wincmd L<CR>
+" visual mode
+xnoremap ; <Right>
+xnoremap l <Up>
+xnoremap k <Down>
+xnoremap j <Left>
+" operator pending
+onoremap ; <Right>
+onoremap l <Up>
+onoremap k <Down>
+onoremap j <Left>
+" capitalized 
+nnoremap K k
+xnoremap K k
+onoremap K k
+" }}}
+
+" Display line numbers by default {{{
+set number relativenumber
+nnoremap <leader>nu :set nonumber! relativenumber!<CR>
+nnoremap <leader>si :call ToggleSignColumn()<CR>
+
+function! ToggleSignColumn()
+  if &signcolumn == 'no'
+    set signcolumn=yes
+  else
+    set signcolumn=no
+  endif
+endfunction
+
+augroup numbertoggle
+  autocmd!
+  " autocmd BufEnter,FocusGained,InsertLeave * set relativenumber number
+  " autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+  autocmd BufEnter,FocusGained * set relativenumber number
+  autocmd BufLeave,FocusLost   * set norelativenumber
 augroup END
-]]
+" }}}
+
+let &scrolloff = 18
+nnoremap <leader>so :let &scrolloff = 18 - &scrolloff<CR>
+
+" do not wrap around long lines
+set  nowrap
+" Toggle wrap around long lines
+nmap <leader><C-h> <ESC>:set wrap!<CR>
+
+" visually select the entire buffer
+nnoremap <leader>av ggvG$
+" yank all lines of the file and return to current position
+nnoremap <leader>ay maggvG$y'a
+" yank into/paste from clipboard register
+nnoremap <leader>y "+y
+nnoremap <leader>p "+p
+
+" disable help via F1 key
+nmap <F1> <>
+
+" Map enter in normal mode to :
+nnoremap <expr> <CR> &buftype ==# 'nofile' ? "\<CR>" : ':'
+
+" ignore = in filename completion
+set isfname-==
+
+" search settings {{{
+" search highlighting
+set  hlsearch
+nmap <leader>sh <ESC>:set hlsearch!<CR>
+" live search while typing, cursor returns to original position on no match or pressing ESC
+set incsearch
+" }}}
+
+" ignore case while searching {{{
+set ignorecase
+" Toggle ignorecase while searching
+nmap <leader>ic <ESC>:set ignorecase!<CR>
+" }}}
+
+" left/right to step through buffers 
+nnoremap <leader><tab>   :bnext<CR>
+nnoremap <leader><S-tab> :bprevious<CR>
+
+" Move to next tag
+nmap <leader>t <ESC>:tn<CR>
+" Move to previous tag
+nmap <leader>p <ESC>:tp<CR>
+
+if has("autocmd")
+  autocmd BufNewFile,BufRead *.pro set filetype=make
+  autocmd BufNewFile,BufRead *.zsh set filetype=bash
+  autocmd BufNewFile,BufRead *.C set filetype=cpp
+  autocmd BufNewFile,BufRead *.vs,*.sv,*.v,*.vh set filetype=verilog
+  autocmd BufNewFile,BufRead *.tm,*.pcx,*.setup,*.inc set filetype=tcl
+  autocmd BufNewFile,BufRead *.setup.urmish set filetype=tcl
+  autocmd BufNewFile,BufRead *.make set filetype=make
+  autocmd BufReadPost *.lisp,*.scm,*.rkt,*.tktl set filetype=lisp
+  autocmd BufReadPost *.gdbinit.urmish set filetype=gdb
+  autocmd filetype racket set lisp
+  autocmd filetype racket set autoindent
+  autocmd filetype racket,lisp,scheme,commonlisp setlocal equalprg=scmindent
+  autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
+  " Activation based on file type
+  if !has("nvim")
+    autocmd FileType c,cpp,lua,lisp,clojure,scheme,rust,python RainbowParentheses
+  endif
+endif
+
+" Use gs to toggle whitespace ignore in vimdiff
+if &diff
+  syntax off
+  map <leader>ds :call IwhiteToggle()<CR>
+  function! IwhiteToggle()
+    if &diffopt =~ 'iwhite'
+      set diffopt-=iwhite
+    else
+      set diffopt+=iwhite
+    endif
+  endfunction
+endif
+
+" Highlight cursor row and column background in current window
+augroup Cursor
+  au!
+  au VimEnter,WinEnter,BufWinEnter * setlocal cursorline cursorcolumn
+  au WinLeave * setlocal nocursorline nocursorcolumn
+augroup END
+
+nnoremap <leader>edate i <C-r>=strftime('%F')<CR><ESC>
+
+" Colorscheme settings {{{
+set background=dark
+let g:gruvbox_material_background='medium'
+let g:gruvbox_material_disable_italic_comment = 1
+if !has('nvim')
+  colorscheme gruvbox-material
+endif
+highlight CursorLine    ctermbg=236 guibg=#444444 cterm=none gui=none
+highlight CursorColumn  ctermbg=236 guibg=#444444
+highlight CursorLineNr  cterm=none  gui=none 
+" }}}
