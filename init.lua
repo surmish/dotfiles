@@ -15,7 +15,11 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 require('packer').startup(function()
+
   use 'wbthomason/packer.nvim'
+
+  use 'lewis6991/impatient.nvim'
+  require('impatient')
 
   -- Treesitter
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
@@ -23,21 +27,110 @@ require('packer').startup(function()
   use 'nvim-treesitter/nvim-treesitter-refactor'
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'RRethy/nvim-treesitter-endwise'
-  use 'nathom/filetype.nvim'
-  use 'folke/zen-mode.nvim'
-  use { 'hoschi/yode-nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
-  use 'sakhnik/nvim-gdb'
-  use 'karb94/neoscroll.nvim'
-  use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
+
+  -- Load only when require
+  use { "nvim-lua/plenary.nvim", module = "plenary" }
+
+  -- Better icons
+  use {
+    "kyazdani42/nvim-web-devicons",
+    module = "nvim-web-devicons",
+    config = function()
+      require("nvim-web-devicons").setup { default = true }
+    end,
+  }
+
+  use { 
+    'folke/zen-mode.nvim', 
+    opt = true, 
+    cmd = "ZenMode",
+    config = function()
+      require("zen-mode").setup {
+        window = {
+          backdrop = 0.75, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
+          -- height and width can be:
+          -- * an absolute number of cells when > 1
+          -- * a percentage of the width / height of the editor when <= 1
+          width = 0.8, -- width of the Zen window
+          height = 0.8, -- height of the Zen window
+          -- by default, no options are changed for the Zen window
+          -- uncomment any of the options below, or add other vim.wo options you want to apply
+          options = {
+            signcolumn = "no", -- disable signcolumn
+            number = false, -- disable number column
+            relativenumber = false, -- disable relative numbers
+            -- cursorline = false, -- disable cursorline
+            -- cursorcolumn = false, -- disable cursor column
+            -- foldcolumn = "0", -- disable fold column
+            -- list = false, -- disable whitespace characters
+          },
+        },
+        plugins = { 
+          tmux = { enabled = true },
+        }
+      }
+    end,
+  }
+
+  use {
+    "hoschi/yode-nvim",
+    opt = true,
+    cmd = { "YodeCreateSeditorFloating", "YodeFloatToMainWindow", "YodeCloneCurrentIntoFloat" },
+    config = function()
+      require("yode-nvim").setup {}
+    end,
+    requires = {
+      {'nvim-lua/popup.nvim'},
+      {'nvim-lua/plenary.nvim'}
+    }
+  }
+
+  use { 
+    'sakhnik/nvim-gdb',
+    cmd = { "GdbStart", "GdbStartLLDB" },
+    opt = true,
+  }
+
+  use { 
+    'kyazdani42/nvim-tree.lua',
+    cmd = "NvimTreeToggle",
+    opt = true,
+    config = function()
+      -- empty setup using defaults
+      require("nvim-tree").setup {
+        disable_netrw = false,
+        hijack_cursor = false,
+        view = {
+          width = 50,
+        },
+      }
+    end,
+    requires = {
+      'kyazdani42/nvim-web-devicons'
+    }
+  }
 
   -- colors/tabs formatting
   use { "ellisonleao/gruvbox.nvim", requires = {"rktjmp/lush.nvim"} }
-  use { 'nvim-lualine/lualine.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true} }
+  use { 'nvim-lualine/lualine.nvim', requires = {'kyazdani42/nvim-web-devicons'} }
   use { 'akinsho/nvim-bufferline.lua', requires = 'kyazdani42/nvim-web-devicons' }
 
+  -- use { 
+  --   'nvim-telescope/telescope-file-browser.nvim',
+  --   requires = {
+  --     {'nvim-lua/plenary.nvim'}
+  --   },
+  -- }
   -- telescope
-  use { 'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}}
-  use { 'nvim-telescope/telescope-file-browser.nvim' }
+	use {
+		'nvim-telescope/telescope.nvim', 
+		opt = true,
+		cmd = "Telescope",
+		requires = {
+			{'nvim-lua/popup.nvim'}, 
+			{'nvim-lua/plenary.nvim'}
+		},
+	}
 
   use 'hrsh7th/cmp-path'
   use 'L3MON4D3/LuaSnip' -- snippet-engine
@@ -55,7 +148,73 @@ require('packer').startup(function()
 
   use 'surmish/lua-style-snippets'
 
-  use 'simrat39/rust-tools.nvim'
+  use { 
+    'simrat39/rust-tools.nvim' , 
+    opt = true, 
+    ft = {
+      "rust",
+    },
+    config = function ()
+      require('rust-tools').setup {
+        tools = { 
+          -- rust-tools options
+          -- automatically set inlay hints (type hints)
+          -- There is an issue due to which the hints are not applied on the first
+          -- opened file. For now, write to the file to trigger a reapplication of
+          -- the hints or just run :RustSetInlayHints.
+          -- default: true
+          autoSetHints = true,
+          -- whether to show hover actions inside the hover window
+          -- this overrides the default hover handler
+          -- default: true
+          hover_with_actions = true,
+          runnables = {
+            -- whether to use telescope for selection menu or not
+            -- default: true
+            use_telescope = true
+            -- rest of the opts are forwarded to telescope
+          },
+          inlay_hints = {
+            -- wheter to show parameter hints with the inlay hints or not
+            -- default: true
+            show_parameter_hints = true,
+            -- prefix for parameter hints
+            -- default: "<-"
+            parameter_hints_prefix = "<-",
+            -- prefix for all the other hints (type, chaining)
+            -- default: "=>"
+            other_hints_prefix  = "=>",
+            -- whether to align to the lenght of the longest line in the file
+            max_len_align = false,
+            -- padding from the left if max_len_align is true
+            max_len_align_padding = 1,
+            -- whether to align to the extreme right or not
+            right_align = false,
+            -- padding from the right if right_align is true
+            right_align_padding = 7,
+          },
+          hover_actions = {
+            -- the border that is used for the hover window
+            -- see vim.api.nvim_open_win()
+            border = {
+              {"╭", "FloatBorder"},
+              {"─", "FloatBorder"},
+              {"╮", "FloatBorder"},
+              {"│", "FloatBorder"},
+              {"╯", "FloatBorder"},
+              {"─", "FloatBorder"},
+              {"╰", "FloatBorder"},
+              {"│", "FloatBorder"}
+            },
+          },
+        },
+        -- all the opts to send to nvim-lspconfig
+        -- these override the defaults set by rust-tools.nvim
+        -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+        server = {}, -- rust-analyzer options
+      }
+    end,
+  }
 
   use {'kevinhwang91/nvim-bqf', ft = 'qf'}
 
@@ -82,6 +241,7 @@ require('packer').startup(function()
 end)
 
 vim.o.completeopt= "menu,menuone,noselect"
+
 
 -- Setup nvim-cmp.
 local cmp = require'cmp'
@@ -161,8 +321,6 @@ cmp.setup.cmdline(':', {
     { name = 'cmdline' }
     })
 })
-
-require('yode-nvim').setup({})
 
 -- Setup lspconfig.
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -299,31 +457,6 @@ end)
 
 require("luasnip.loaders.from_vscode").lazy_load()
 
-require("zen-mode").setup {
-  window = {
-    backdrop = 0.75, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
-    -- height and width can be:
-    -- * an absolute number of cells when > 1
-    -- * a percentage of the width / height of the editor when <= 1
-    width = 0.8, -- width of the Zen window
-    height = 0.8, -- height of the Zen window
-    -- by default, no options are changed for the Zen window
-    -- uncomment any of the options below, or add other vim.wo options you want to apply
-    options = {
-      signcolumn = "no", -- disable signcolumn
-      number = false, -- disable number column
-      relativenumber = false, -- disable relative numbers
-      -- cursorline = false, -- disable cursorline
-      -- cursorcolumn = false, -- disable cursor column
-      -- foldcolumn = "0", -- disable fold column
-      -- list = false, -- disable whitespace characters
-    },
-  },
-  plugins = { 
-    tmux = { enabled = true },
-  }
-}
-
 require'nvim-treesitter.configs'.setup {
   ensure_installed = {"c","cpp","rust","python","lua","commonlisp","verilog","bash","json","vim"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   -- ignore_install = { "javascript" }, -- List of parsers to ignore installing
@@ -431,8 +564,6 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
--- require('neoscroll').setup()
-
 require('bufferline').setup {
   options = {
     numbers = "buffer_id" ,
@@ -505,89 +636,11 @@ require('bufferline').setup {
   }
 }
 
-require('rust-tools').setup {
-  tools = { 
-    -- rust-tools options
-    -- automatically set inlay hints (type hints)
-    -- There is an issue due to which the hints are not applied on the first
-    -- opened file. For now, write to the file to trigger a reapplication of
-    -- the hints or just run :RustSetInlayHints.
-    -- default: true
-    autoSetHints = true,
-    -- whether to show hover actions inside the hover window
-    -- this overrides the default hover handler
-    -- default: true
-    hover_with_actions = true,
-    runnables = {
-      -- whether to use telescope for selection menu or not
-      -- default: true
-      use_telescope = true
-      -- rest of the opts are forwarded to telescope
-    },
-    inlay_hints = {
-      -- wheter to show parameter hints with the inlay hints or not
-      -- default: true
-      show_parameter_hints = true,
-      -- prefix for parameter hints
-      -- default: "<-"
-      parameter_hints_prefix = "<-",
-      -- prefix for all the other hints (type, chaining)
-      -- default: "=>"
-      other_hints_prefix  = "=>",
-      -- whether to align to the lenght of the longest line in the file
-      max_len_align = false,
-      -- padding from the left if max_len_align is true
-      max_len_align_padding = 1,
-      -- whether to align to the extreme right or not
-      right_align = false,
-      -- padding from the right if right_align is true
-      right_align_padding = 7,
-    },
-    hover_actions = {
-      -- the border that is used for the hover window
-      -- see vim.api.nvim_open_win()
-      border = {
-      {"╭", "FloatBorder"},
-      {"─", "FloatBorder"},
-      {"╮", "FloatBorder"},
-      {"│", "FloatBorder"},
-      {"╯", "FloatBorder"},
-      {"─", "FloatBorder"},
-      {"╰", "FloatBorder"},
-      {"│", "FloatBorder"}
-      },
-    },
-  },
-  -- all the opts to send to nvim-lspconfig
-  -- these override the defaults set by rust-tools.nvim
-  -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
-  server = {}, -- rust-analyzer options
-}
-
--- -- You don't need to set any of these options.
--- -- IMPORTANT!: this is only a showcase of how you can set default options!
--- require("telescope").setup {
---   extensions = {
---     file_browser = {
---       theme = "ivy",
---       mappings = {
---         ["i"] = {
---           -- your custom insert mode mappings
---         },
---         ["n"] = {
---           -- your custom normal mode mappings
---         },
---       },
---     },
---   },
--- }
--- -- To get telescope-file-browser loaded and working with telescope,
--- -- you need to call load_extension, somewhere after setup function:
-require("telescope").load_extension "file_browser"
 
 require('leap').set_default_keymaps()
 
 vim.cmd [[
+nnoremap <F7> :NvimTreeToggle<CR>
 set laststatus=3
 highlight WinSeperator guibg=None
 set clipboard+=unnamedplus
@@ -603,7 +656,7 @@ imap <silent><expr> <Tab>   luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand
 imap <silent><expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev': '<S-Tab>'
 snoremap <silent> <Tab>   <cmd>lua require'luasnip'.jump(1)<Cr>
 snoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
-nnoremap <leader>fb :Telescope file_browser<Cr>
+" nnoremap <leader>fb :Telescope file_browser<Cr>
 
 " Yoda setup
 map  <Leader>yc :YodeCreateSeditorFloating<CR>
@@ -617,8 +670,12 @@ map <C-W>J :YodeLayoutShiftWinBottom<CR>
 map <C-W>K :YodeLayoutShiftWinTop<CR>
 " at the moment this is needed to have no gap for floating windows
 set showtabline=2
+if has("autocmd")
+  autocmd FileType c,cpp setlocal formatprg=clang-format\ -style=file:$HOME/.clang-format
+  autocmd FileType rust  setlocal formatprg=rustfmt\ --emit=stdout
+endif
 augroup highlight_yank
-autocmd!
-au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=200})
+  autocmd!
+  au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=200})
 augroup END
 ]]
