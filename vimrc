@@ -162,12 +162,14 @@ endif
   map zg/ <Plug>(incsearch-fuzzyspell-stay)
 
   Plug 'haya14busa/incsearch-easymotion.vim'
-  Plug 'kana/vim-operator-user'
-  Plug 'haya14busa/vim-operator-flashy'
-  map y <Plug>(operator-flashy)
-  nmap Y <Plug>(operator-flashy)$
-  Plug 'haya14busa/vim-easyoperator-line'
-  Plug 'haya14busa/vim-easyoperator-phrase'
+  Plug 'machakann/vim-highlightedyank'
+  if !exists('##TextYankPost')
+    nmap y <Plug>(highlightedyank)
+    xmap y <Plug>(highlightedyank)
+    omap y <Plug>(highlightedyank)
+  endif
+  let g:highlightedyank_highlight_duration = 200
+  let g:highlightedyank_highlight_in_visual = 0
   " }}}
 endif
 
@@ -218,7 +220,6 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 " }}}
 
-
 Plug 'vim-scripts/DoxygenToolkit.vim'
 let g:DoxygenToolkit_authorName = $USER
 
@@ -229,16 +230,6 @@ Plug 'will133/vim-dirdiff'
 
 " Perforce integration
 Plug 'nfvs/vim-perforce'
-
-Plug 'rhysd/vim-clang-format'
-let g:clang_format#style_options = {
-      \ "AccessModifierOffset" : 2,
-      \ "AllowShortIfStatementsOnASingleLine" : "true",
-      \ "AlwaysBreakTemplateDeclarations" : "true",
-      \ "BinPackArguments" : "false",
-      \ "BinPackParameters" : "false",
-      \ "Standard" : "C++11",
-      \ "ColumnLimit": 120}
 
 " Plug 'wfxr/minimap.vim'
 
@@ -252,10 +243,11 @@ if !has('nvim')
 endif
 " }}}
 
-Plug 'ryanoasis/vim-devicons'
-
-" Plug 'mhinz/vim-startify'
-Plug 'edkolev/tmuxline.vim'
+if !has('nvim')
+  Plug 'ryanoasis/vim-devicons'
+  " Plug 'mhinz/vim-startify'
+  Plug 'edkolev/tmuxline.vim'
+endif
 
 call plug#end()
 
@@ -413,8 +405,9 @@ if has("autocmd")
   autocmd filetype racket set lisp
   autocmd filetype racket set autoindent
   autocmd filetype racket,lisp,scheme,commonlisp setlocal equalprg=scmindent
-  autocmd FileType c,cpp map <buffer> = <Plug>(operator-clang-format)
   " Activation based on file type
+  autocmd FileType c,cpp setlocal formatprg=clang-format\ -style=file:$HOME/.clang-format
+  autocmd FileType rust  setlocal formatprg=rustfmt\ --emit=stdout
   if !has("nvim")
     autocmd FileType c,cpp,lua,lisp,clojure,scheme,rust,python RainbowParentheses
   endif
