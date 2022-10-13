@@ -6,7 +6,9 @@ let mapleader="\<Space>"
 " Write the changes
 call plug#begin('~/.vim/plugged')
 
-Plug 'tpope/vim-surround'     " Manipulate parenthesis :help surround
+if !has('nvim')
+  Plug 'tpope/vim-surround'     " Manipulate parenthesis :help surround
+endif
 Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
 "" Plug 'tmsvg/pear-tree'        " Vim auto-pair plugin.
 
@@ -31,16 +33,16 @@ let g:vista_sidebar_width = 40
 
 set tags=$VIM_TAG_FILE
 " set tags=$VIM_TAG_FILE2
-nnoremap <leader>st :call SwitchTagsFile()<CR>
+" nnoremap <leader>st :call SwitchTagsFile()<CR>
 
-function! SwitchTagsFile()
-  if &tags == $VIM_ALT_TAG_FILE
-    set tags=$VIM_TAG_FILE
-  else
-    set tags=$VIM_ALT_TAG_FILE
-  endif
-  echo &tags
-endfunction
+" function! SwitchTagsFile()
+"   if &tags == $VIM_ALT_TAG_FILE
+"     set tags=$VIM_TAG_FILE
+"   else
+"     set tags=$VIM_ALT_TAG_FILE
+"   endif
+"   echo &tags
+" endfunction
 
 " Plugin to provide additional text objects: E.g. change inside brackets and
 " parenthesis
@@ -108,6 +110,7 @@ if !has('nvim')
 
 " Code completion engine {{{
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  let g:coc_disable_startup_warning = 1
   let g:coc_global_extensions = [
         \'coc-dictionary',
         \'coc-marketplace',
@@ -252,8 +255,8 @@ endif
 call plug#end()
 
 filetype indent plugin on
-set mouse+=a
 if !has('nvim')
+  set mouse+=a
   set ttymouse=xterm2
 endif
 set autoindent
@@ -437,12 +440,12 @@ nnoremap <leader>edate i <C-r>=strftime('%F')<CR><ESC>
 
 " Colorscheme settings {{{
 set background=dark
-let g:gruvbox_material_background='medium'
+let g:gruvbox_material_background='hard'
 let g:gruvbox_material_disable_italic_comment = 1
 if !has('nvim')
   colorscheme gruvbox-material
+  highlight CursorLine    ctermbg=236 guibg=#444444 cterm=none gui=none
+  highlight CursorColumn  ctermbg=236 guibg=#444444
+  highlight CursorLineNr  cterm=none  gui=none 
 endif
-highlight CursorLine    ctermbg=236 guibg=#444444 cterm=none gui=none
-highlight CursorColumn  ctermbg=236 guibg=#444444
-highlight CursorLineNr  cterm=none  gui=none 
 " }}}
