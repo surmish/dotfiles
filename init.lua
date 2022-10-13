@@ -1,4 +1,21 @@
-vim.cmd[[
+local g = vim.g
+local cmd = vim.cmd
+
+-- Disable some built-in plugins we don't want
+local disabled_built_ins = {
+  'gzip',
+  'man',
+  'matchit',
+  'matchparen',
+  'shada_plugin',
+  'tarPlugin',
+  'tar',
+  'zipPlugin',
+  'zip',
+  'netrwPlugin',
+}
+
+cmd[[
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath=&runtimepath
 source ~/.vimrc
@@ -14,9 +31,22 @@ if fn.empty(fn.glob(install_path)) > 0 then
   execute 'packadd packer.nvim'
 end
 
+for i = 1, 10 do
+  g['loaded_' .. disabled_built_ins[i]] = 1
+end
+
 require('packer').startup(function()
 
   use 'wbthomason/packer.nvim'
+
+  use {
+    "kylechui/nvim-surround",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  }
 
   use 'lewis6991/impatient.nvim'
   require('impatient')
@@ -39,6 +69,8 @@ require('packer').startup(function()
       require("nvim-web-devicons").setup { default = true }
     end,
   }
+
+  use 'David-Kunz/markid'
 
   use { 
     'folke/zen-mode.nvim', 
@@ -91,28 +123,25 @@ require('packer').startup(function()
     opt = true,
   }
 
-  use { 
-    'kyazdani42/nvim-tree.lua',
-    cmd = "NvimTreeToggle",
-    opt = true,
-    config = function()
-      -- empty setup using defaults
-      require("nvim-tree").setup {
-        disable_netrw = false,
-        hijack_cursor = false,
-        view = {
-          width = 50,
-        },
-      }
-    end,
-    requires = {
-      'kyazdani42/nvim-web-devicons'
-    }
+  use { 'kyazdani42/nvim-tree.lua' , requires = {'kyazdani42/nvim-web-devicons'} }
+  require("nvim-tree").setup {
+    disable_netrw = true,
+    hijack_cursor = true,
+    open_on_setup = true,
+    view = {
+      width = 50,
+    },
   }
 
   -- colors/tabs formatting
   use { "ellisonleao/gruvbox.nvim", requires = {"rktjmp/lush.nvim"} }
-  use { 'nvim-lualine/lualine.nvim', requires = {'kyazdani42/nvim-web-devicons'} }
+  use { 'luisiacc/gruvbox-baby' }
+  local colors = require("gruvbox-baby.colors").config()
+  vim.g.gruvbox_baby_highlights = {
+    Visual = {bg = colors.medium_gray},
+    Normal = {fg = colors.milk, bg = colors.dark},
+  }
+  use { 'nvim-lualine/lualine.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true} }
   use { 'akinsho/nvim-bufferline.lua', requires = 'kyazdani42/nvim-web-devicons' }
 
   -- use { 
@@ -220,23 +249,23 @@ require('packer').startup(function()
 
   use 'ggandor/leap.nvim'
 
-  use({
-    "aserowy/tmux.nvim",
-    config = function()
-      require("tmux").setup({
-        -- overwrite default configuration
-        -- here, e.g. to enable default bindings
-        navigation = {
-          -- enables default keybindings (C-hjkl) for normal mode
-          enable_default_keybindings = false,
-        },
-        resize = {
-          -- enables default keybindings (A-hjkl) for normal mode
-          enable_default_keybindings = false,
-        }
-      })
-    end
-  })
+  -- use({
+  --   "aserowy/tmux.nvim",
+  --   config = function()
+  --     require("tmux").setup({
+  --       -- overwrite default configuration
+  --       -- here, e.g. to enable default bindings
+  --       navigation = {
+  --         -- enables default keybindings (C-hjkl) for normal mode
+  --         enable_default_keybindings = false,
+  --       },
+  --       resize = {
+  --         -- enables default keybindings (A-hjkl) for normal mode
+  --         enable_default_keybindings = false,
+  --       }
+  --     })
+  --   end
+  -- })
 
 end)
 
@@ -361,6 +390,7 @@ end
 require'lspconfig'.pyright.setup{
   capabilities = capabilities
 }
+
 require'lspconfig'.clangd.setup {
   default_config = { 
     capabilities = capabilities; 
@@ -399,11 +429,13 @@ require'lspconfig'.rust_analyzer.setup({
 
 require('lualine').setup {
   options = {
-  -- theme = 'gruvbox-flat'
-  -- theme = 'gruvbox'
-  -- theme = 'everforest'
-  theme = 'dracula'
-  }
+    globalstatus = true,
+    -- theme = 'gruvbox-flat'
+    -- theme = 'gruvbox'
+    -- theme = 'everforest'
+    -- theme = 'dracula'
+    theme = 'gruvbox-baby'
+  },
 }
 
 local ls      = require "luasnip"
@@ -463,6 +495,9 @@ require'nvim-treesitter.configs'.setup {
   highlight = {
     enable  = true, -- false will disable the whole extension
     disable = {},   -- list of language that will be disabled
+  },
+  markid = {
+    enable = false,
   },
   indent = {
     enable = true
@@ -579,7 +614,10 @@ require('bufferline').setup {
     --   -- NOTE: this plugin is designed with this icon in mind,
     --   -- and so changing this is NOT recommended, this is intended
     --   -- as an escape hatch for people who cannot bear it for whatever reason
-    indicator_icon = '▎',
+    indicator = {
+      style = 'icon',
+      icon = '|',
+    },
     buffer_close_icon = '',
     modified_icon = '●',
     close_icon = '',
@@ -636,22 +674,19 @@ require('bufferline').setup {
   }
 }
 
-
 require('leap').set_default_keymaps()
 
-vim.cmd [[
+cmd [[
 nnoremap <F7> :NvimTreeToggle<CR>
 set laststatus=3
+set splitkeep=cursor
 highlight WinSeperator guibg=None
 set clipboard+=unnamedplus
-let g:gruvbox_italic_keywords   = 0
-let g:gruvbox_italic_comments   = 0
-let g:gruvbox_italic_functions  = 0
-let g:gruvbox_italic_variables  = 0
+" let g:gruvbox_italic_keywords   = 0
+" let g:gruvbox_italic_comments   = 0
+" let g:gruvbox_italic_functions  = 0
+" let g:gruvbox_italic_variables  = 0
 set termguicolors
-set background = "dark"
-colorscheme gruvbox
-" colorscheme kanagawa
 imap <silent><expr> <Tab>   luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'
 imap <silent><expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev': '<S-Tab>'
 snoremap <silent> <Tab>   <cmd>lua require'luasnip'.jump(1)<Cr>
@@ -660,17 +695,12 @@ snoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
 
 " Yoda setup
 map  <Leader>yc :YodeCreateSeditorFloating<CR>
-map  <Leader>yr :YodeCreateSeditorReplace<CR>
 nmap <Leader>bd :YodeBufferDelete<cr>
-nmap <Leader>bd <esc>:YodeBufferDelete<cr>
-" these commands fall back to overwritten keys when cursor is in split window
-map <C-W>r :YodeLayoutShiftWinDown<CR>
-map <C-W>R :YodeLayoutShiftWinUp<CR>
-map <C-W>J :YodeLayoutShiftWinBottom<CR>
-map <C-W>K :YodeLayoutShiftWinTop<CR>
 " at the moment this is needed to have no gap for floating windows
 set showtabline=2
+
 if has("autocmd")
+  " gq is the format key.
   autocmd FileType c,cpp setlocal formatprg=clang-format\ -style=file:$HOME/.clang-format
   autocmd FileType rust  setlocal formatprg=rustfmt\ --emit=stdout
 endif
@@ -678,4 +708,9 @@ augroup highlight_yank
   autocmd!
   au TextYankPost * silent! lua vim.highlight.on_yank({higroup="Visual", timeout=200})
 augroup END
+
+set background = "dark"
+" colorscheme gruvbox
+" colorscheme kanagawa
+colorscheme gruvbox-baby
 ]]
