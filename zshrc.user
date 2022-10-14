@@ -144,7 +144,7 @@ function compile_ag() {
 }
 
 function compile_nvim() {
-  make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=/u/urmish/usr/local USE_BUNDLED=OFF LIBLUV_LIBRARY=/u/urmish/usr/local/lib/libluv.so LIBLUV_INCLUDE_DIR=/u/urmish/usr/local/include/luv -j2
+  make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=$local_dir USE_BUNDLED=OFF LIBLUV_LIBRARY=$local_dir/lib/libluv.so LIBLUV_INCLUDE_DIR=$local_dir/include/luv -j16 install
 }
 
 function compile_vim () { 
