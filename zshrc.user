@@ -163,7 +163,7 @@ function pip_upgrade_all {
 }
 
 function compile_gcc () { 
-    ./configure --prefix=$local_dir --disable-multilib --disable-nls --with-gmp=$local_dir --with-mpfr=$local_dir --with-mpc=$local_dir
+  ./configure --prefix=$local_dir --disable-multilib --disable-nls --with-gmp=$local_dir --with-mpfr=$local_dir --with-mpc=$local_dir
 }
 
 # FZF settings: Plugin must be installed/maintained via vim
