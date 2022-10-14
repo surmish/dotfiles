@@ -387,6 +387,8 @@ local on_attach = function(client)
   }
 end
 
+require'lspconfig'.racket_langserver.setup{}
+
 require'lspconfig'.pyright.setup{
   capabilities = capabilities
 }
