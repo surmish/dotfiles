@@ -14,6 +14,9 @@ Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
 
 Plug 'wlangstroth/vim-racket'
 
+" A Vim Plugin for Lively Previewing LaTeX PDF Output
+Plug 'lervag/vimtex'
+
 " Plug 'dstein64/vim-startuptime'
 
 " On-demand loading
@@ -403,10 +406,7 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.tm,*.pcx,*.setup,*.inc set filetype=tcl
   autocmd BufNewFile,BufRead *.setup.urmish set filetype=tcl
   autocmd BufNewFile,BufRead *.make set filetype=make
-  autocmd BufReadPost *.lisp,*.scm,*.rkt,*.tktl set filetype=lisp
-  autocmd BufReadPost *.gdbinit.urmish set filetype=gdb
-  autocmd filetype racket set lisp
-  autocmd filetype racket set autoindent
+  autocmd BufNewFile,BufRead *.gdbinit.urmish set filetype=gdb
   autocmd filetype racket,lisp,scheme,commonlisp setlocal equalprg=scmindent
   " Activation based on file type
   autocmd FileType c,cpp setlocal formatprg=clang-format\ -style=file:$HOME/.clang-format
