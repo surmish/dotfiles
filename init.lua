@@ -271,26 +271,55 @@ end)
 
 vim.o.completeopt= "menu,menuone,noselect"
 
-
 -- Setup nvim-cmp.
 local cmp = require'cmp'
 local types = require'cmp.types'
+local luasnip_ok, luasnip = pcall(require, 'luasnip')
 cmp.setup({
-  snippet = {
-    -- REQUIRED - you must specify a snippet engine
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-    end,
-  },
-  mapping = {
-    ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-    ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-    ['<C-p>'] = cmp.mapping.select_prev_item(), 
-    ['<C-n>'] = cmp.mapping.select_next_item(), 
-    ['<C-e']  = cmp.mapping.close(), 
-    ['<Shift-Space>'] = cmp.mapping.complete(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-  },
+	snippet = {
+		expand = function(args)
+			if luasnip_ok then
+				luasnip.lsp_expand(args.body)
+			else
+				return
+			end
+		end,
+	},
+	window = {
+		completion = {
+			border = 'rounded',
+			winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
+		},
+		documentation = {
+			border = 'rounded',
+			winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
+		},
+	},
+	mapping = {
+		['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4)),
+		['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4)),
+		['<C-Space>'] = cmp.mapping(cmp.mapping.complete()),
+		['<C-e>'] = cmp.mapping.abort(),
+		['<C-j>'] = cmp.mapping.confirm({ select = true }),
+		['<C-n>'] = function(fallback)
+			if cmp.visible() then
+				cmp.select_next_item()
+			elseif luasnip.expand_or_jumpable() then
+				luasnip.expand_or_jump()
+			else
+				fallback()
+			end
+		end,
+		['<C-p>'] = function(fallback)
+			if cmp.visible() then
+				cmp.select_prev_item()
+			elseif luasnip.jumpable(-1) then
+				luasnip.jump(-1)
+			else
+				fallback()
+			end
+		end,
+	},
   sorting = {
     comparators = {
       cmp.config.compare.offset,
@@ -329,9 +358,9 @@ cmp.setup({
   sources = cmp.config.sources({
   { name = "path", priority_weight = 105 },
   { name = "cmdline", priority_weight = 105 },
-  { name = "luasnip", max_item_count = 20, priority_weight = 103 },
-  { name = "nvim_lsp", max_item_count = 20, priority_weight = 100 },
-  { name = "nvim_lsp_signature_help", max_item_count = 20, priority_weight = 99 },
+  { name = "luasnip", max_item_count = 8, priority_weight = 103 },
+  { name = "nvim_lsp", max_item_count = 5, priority_weight = 100 },
+  { name = "nvim_lsp_signature_help", max_item_count = 5, priority_weight = 99 },
   },{
     { name = "buffer", max_item_count = 5, priority_weight = 70 },
     }),
@@ -464,30 +493,6 @@ require'luasnip'.config.set_config {
     },
   },
 }
-
--- <c-k> is my expansion key
--- this will expand the current item or jump to the next item within the snippet.
-vim.keymap.set({ "i", "s" }, "<c-k>", function()
-  if ls.jumpable(1) then
-    ls.jump(1)
-  end
-end, { silent = true })
-
--- <c-j> is my jump backwards key.
--- this always moves to the previous item within the snippet
-vim.keymap.set({ "i", "s" }, "<c-j>", function()
-  if ls.jumpable(-1) then
-    ls.jump(-1)
-  end
-end, { silent = true })
-
--- <c-l> is selecting within a list of options.
--- This is useful for choice nodes (introduced in the forthcoming episode 2)
-vim.keymap.set("i", "<c-l>", function()
-  if ls.choice_active() then
-    ls.change_choice(1)
-  end
-end)
 
 require("luasnip.loaders.from_vscode").lazy_load()
 
@@ -689,8 +694,6 @@ set clipboard+=unnamedplus
 " let g:gruvbox_italic_functions  = 0
 " let g:gruvbox_italic_variables  = 0
 set termguicolors
-imap <silent><expr> <Tab>   luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'
-imap <silent><expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev': '<S-Tab>'
 snoremap <silent> <Tab>   <cmd>lua require'luasnip'.jump(1)<Cr>
 snoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
 " nnoremap <leader>fb :Telescope file_browser<Cr>
