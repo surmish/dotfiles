@@ -1,0 +1,9 @@
+{
+  "yank.highlight.enable": false,
+  "yank.list.maxsize": 20,
+  "coc.preferences.enableFloatHighlight": false,
+  "clangd.semanticHighlighting": true,
+  "clangd.compilationDatabasePath": "/u/urmish/.clang_compilation_dir",
+  "clangd.path": "/u/urmish/usr/local/bin/clangd",
+  "snippets.ultisnips.pythonPrompt": false
+}
