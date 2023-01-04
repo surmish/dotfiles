@@ -35,7 +35,8 @@ vim.opt.splitkeep = "screen"
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.opt.autowrite = true -- enable auto write
-vim.opt.clipboard = "unnamed,unnamedplus" -- sync with system clipboard
+vim.opt.clipboard = "unnamedplus" -- sync with system clipboard
+-- vim.opt.concealcursor = "nc" -- Hide * markup for bold and italic
 vim.opt.conceallevel = 3 -- Hide * markup for bold and italic
 vim.opt.confirm = true -- confirm to save changes before exiting modified buffer
 vim.opt.cursorline = true -- Enable highlighting of the current line
@@ -71,30 +72,34 @@ vim.opt.splitright = true -- Put new windows right of current
 vim.opt.tabstop = indent -- Number of spaces tabs count for
 vim.opt.termguicolors = true -- True color support
 vim.opt.undofile = true
-vim.opt.undodir = os.getenv("HOME") .. "/.local/state/nvim_undodir"
-vim.opt.undolevels = 20
+vim.opt.undolevels = 10000
 vim.opt.updatetime = 200 -- save swap file and trigger CursorHold
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
 vim.opt.completeopt = "menu,menuone,noselect"
 vim.opt.wrap = false -- Disable line wrap
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize" }
 vim.opt.fillchars = {
+  --   horiz = "━",
+  --   horizup = "┻",
+  --   horizdown = "┳",
+  --   vert = "┃",
+  --   vertleft = "┫",
+  --   vertright = "┣",
+  --   verthoriz = "╋",im.o.fillchars = [[eob: ,
+  -- fold = " ",
   foldopen = "",
+  -- foldsep = " ",
   foldclose = "",
 }
 -- vim.o.shortmess = "IToOlxfitn"
 -- vim.opt.shortmess:get()
-if vim.fn.has("nvim-0.9") == 1 then
-  vim.o.shortmess = "filnxtToOFWIcC"
-end
+vim.o.shortmess = "filnxtToOFWIcC"
 
 -- don't load the plugins below
 local builtins = {
   "gzip",
-  "zip",
   "zipPlugin",
   "fzf",
-  "tar",
   "tarPlugin",
   "getscript",
   "getscriptPlugin",
@@ -179,48 +184,3 @@ opt.scrolloff = 18
 opt.tags=os.getenv("VIM_TAG_FILE")
 
 opt.laststatus = 3
-
--- disable some builtin vim plugins
-local default_plugins = {
-  "2html_plugin",
-  "getscript",
-  "getscriptPlugin",
-  -- "gzip",
-  "logipat",
-  "netrw",
-  "netrwPlugin",
-  "netrwSettings",
-  "netrwFileHandlers",
-  "matchit",
-  -- "tar",
-  "tarPlugin",
-  "rrhelper",
-  "spellfile_plugin",
-  "vimball",
-  "vimballPlugin",
-  -- "zip",
-  "zipPlugin",
-  "tutor",
-  "rplugin",
-  "syntax",
-  "synmenu",
-  "optwin",
-  "compiler",
-  "bugreport",
-  "ftplugin",
-}
-
-for _, plugin in pairs(default_plugins) do
-  g["loaded_" .. plugin] = 1
-end
-
-local default_providers = {
-  "node",
-  "perl",
-  "python3",
-  "ruby",
-}
-
-for _, provider in ipairs(default_providers) do
-  g["loaded_" .. provider .. "_provider"] = 0
-end

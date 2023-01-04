@@ -1,6 +1,6 @@
 local M = {
   "nvim-lualine/lualine.nvim",
-  event = "User VeryLazy",
+  event = "VeryLazy",
 }
 
 local function clock()
@@ -8,9 +8,13 @@ local function clock()
 end
 
 function M.config()
+  if vim.g.started_by_firenvim then
+    return
+  end
+
   require("lualine").setup({
     options = {
-      theme = "everforest",
+      theme = "auto",
       section_separators = { left = "", right = "" },
       component_separators = { left = "", right = "" },
       icons_enabled = true,
@@ -25,7 +29,7 @@ function M.config()
         { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
         { "filename", path = 1, symbols = { modified = "  ", readonly = "", unnamed = "" } },
       },
-      lualine_x = { "filetype" },
+      lualine_x = {},
       lualine_y = { "location" },
       lualine_z = { { clock, separator = { right = "" } } },
     },
@@ -37,6 +41,23 @@ function M.config()
       lualine_y = {},
       lualine_z = {},
     },
+    -- winbar = {
+    --   lualine_a = {},
+    --   lualine_b = {},
+    --   lualine_c = { "filename" },
+    --   lualine_x = {},
+    --   lualine_y = {},
+    --   lualine_z = {},
+    -- },
+    --
+    -- inactive_winbar = {
+    --   lualine_a = {},
+    --   lualine_b = {},
+    --   lualine_c = { "filename" },
+    --   lualine_x = {},
+    --   lualine_y = {},
+    --   lualine_z = {},
+    -- },
     extensions = { "nvim-tree" },
   })
 end

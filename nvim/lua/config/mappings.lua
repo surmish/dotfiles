@@ -1,5 +1,19 @@
 ---@diagnostic disable: missing-parameter
 
+local util = require("util")
+
+vim.o.timeoutlen = 300
+
+-- Clear search with <esc>
+vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>")
+vim.keymap.set("n", "gw", "*N")
+vim.keymap.set("x", "gw", "*N")
+
+-- save in insert mode
+vim.keymap.set("i", "<C-s>", "<cmd>:w<cr><esc>")
+vim.keymap.set("n", "<C-s>", "<cmd>:w<cr><esc>")
+vim.keymap.set("n", "<C-c>", "<cmd>normal ciw<cr>a")
+
 vim.keymap.set('n', '<leader>so', function()
   vim.o.scrolloff = 18 - vim.o.scrolloff
 end, { desc = '[so] Toggle scrolloff' })
