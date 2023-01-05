@@ -14,8 +14,8 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 require("lazy").setup({
   spec = "lazyvim.plugins",
   defaults = { lazy = true, version = "*" },
-  install = { colorscheme = { "rose-pine", "habamax" } },
-  checker = { enabled = true },
+  install = { missing = false, colorscheme = { "rose-pine", "habamax" } },
+  checker = { enabled = false },
   performance = {
     rtp = {
       disabled_plugins = {
