@@ -7,14 +7,13 @@ return {
       { "folke/neoconf.nvim", cmd = "Neoconf", config = true },
       { "folke/neodev.nvim", config = true },
       "mason.nvim",
-      { "williamboman/mason-lspconfig.nvim", config = { automatic_installation = true } },
+      { "williamboman/mason-lspconfig.nvim", config = { automatic_installation = false } },
       "hrsh7th/cmp-nvim-lsp",
     },
     ---@type lspconfig.options
     servers = nil,
     config = function(plugin)
       -- setup formatting and keymaps
-      require("lazyvim.plugins.lsp.diagnostics").setup()
       require("lazyvim.util").on_attach(function(client, buffer)
         require("lazyvim.plugins.lsp.format").on_attach(client, buffer)
         require("lazyvim.plugins.lsp.keymaps").on_attach(client, buffer)
@@ -41,6 +40,48 @@ return {
         opts.capabilities = capabilities
         require("lspconfig")[server].setup(opts)
       end
+			require("lspconfig").clangd.setup {
+				default_config = { 
+					capabilities = capabilities; 
+					cmd = { "clangd", "--background-index","--all-scopes-completion", "--pch-storage=memory", "--clang-tidy", "--suggest-missing-includes", "--cross-file-rename" }, 
+					filetypes = {"c", "cpp"}, 
+					init_options = { 
+						clangdFileStatus     = true,
+						usePlaceholders      = true,
+						completeUnimported   = true,
+						semanticHighlighting = false
+					}, 
+					root_dir = require'lspconfig'.util.root_pattern("compile_flags.txt") 
+					-- root_dir = require'lspconfig'.util.root_pattern("compile_flags.txt","apbld","compile_commands.json") 
+				}, 
+				on_attach = on_attach_common 
+			}
+				--   require'lspconfig'.sumneko_lua.setup {
+				-- default_config = { 
+				-- 	cmd = {"lua-language-server"},
+				-- 	filetypes = {"lua"}, 
+				--     },
+				--     settings = {
+				--       Lua = {
+				--         runtime = {
+				--           -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+				--           version = 'LuaJIT',
+				--         },
+				--         diagnostics = {
+				--           -- Get the language server to recognize the `vim` global
+				--           globals = {'vim'},
+				--         },
+				--         workspace = {
+				--           -- Make the server aware of Neovim runtime files
+				--           library = vim.api.nvim_get_runtime_file("", true),
+				--         },
+				--         -- Do not send telemetry data containing a randomized but unique identifier
+				--         telemetry = {
+				--           enable = false,
+				--         },
+				--       },
+				--     },
+				--   }
     end,
   },
 
@@ -53,8 +94,6 @@ return {
       local nls = require("null-ls")
       nls.setup({
         sources = {
-          -- nls.builtins.formatting.prettierd,
-          nls.builtins.formatting.stylua,
           nls.builtins.diagnostics.flake8,
         },
       })
@@ -68,7 +107,6 @@ return {
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     ensure_installed = {
-      "stylua",
       "shellcheck",
       "shfmt",
       "flake8",
