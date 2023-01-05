@@ -4,8 +4,8 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.opt.autowrite = false -- enable auto write
-vim.opt.cmdheight = 1
 vim.opt.clipboard = "unnamed,unnamedplus"
+vim.opt.cmdheight = 1
 vim.opt.completeopt = "menu,menuone,noselect"
 vim.opt.conceallevel = 3 -- Hide * markup for bold and italic
 vim.opt.confirm = true -- confirm to save changes before exiting modified buffer
@@ -46,8 +46,11 @@ vim.opt.undolevels = 100
 vim.opt.updatetime = 200 -- save swap file and trigger CursorHold
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
 vim.opt.wrap = false -- Disable line wrap
-vim.opt.splitkeep = "screen"
-vim.opt.shortmess = "filnxtToOFWIcC"
+
+if vim.fn.has("nvim-0.9.0") == 1 then
+  vim.opt.splitkeep = "screen"
+  vim.o.shortmess = "filnxtToOFWIcC"
+end
 
 -- fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
@@ -58,6 +61,6 @@ vim.opt.breakindent = true
 -- disable nvim intro
 -- vim.opt.shortmess:append("sI")
 
-vim.opt.tags = os.getenv("VIM_TAG_FILE")
+vim.opt.tags = os.getenv("TAGSFILE")
 
 vim.opt.laststatus = 3
