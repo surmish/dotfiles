@@ -12,8 +12,9 @@ return {
         function()
           require("neo-tree.command").execute({ toggle = true, dir = require("lazyvim.util").get_root() })
         end,
-        desc = "NeoTree",
+        desc = "NeoTree (root dir)",
       },
+      { "<leader>fT", "<cmd>Neotree toggle<cmd>", desc = "NeoTree (cwd)" },
     },
     init = function()
       vim.g.neo_tree_remove_legacy_commands = 1
@@ -29,14 +30,9 @@ return {
   -- search/replace in multiple files
   {
     "windwp/nvim-spectre",
+    -- stylua: ignore
     keys = {
-      {
-        "<leader>sr",
-        function()
-          require("spectre").open()
-        end,
-        desc = "Replace in files (Spectre)",
-      },
+      { "<leader>sr", function() require("spectre").open() end, desc = "Replace in files (Spectre)" },
     },
   },
 
@@ -46,9 +42,10 @@ return {
     cmd = "Telescope",
     keys = {
       { "<leader>/", util.telescope("live_grep"), desc = "Find in Files (Grep)" },
-      { "<leader><space>", util.telescope("find_files"), desc = "Find Files" },
+      { "<leader><space>", util.telescope("find_files"), desc = "Find Files (root dir)" },
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
-      { "<leader>ff", util.telescope("find_files"), desc = "Find Files" },
+      { "<leader>ff", util.telescope("find_files"), desc = "Find Files (root dir)" },
+      { "<leader>fF", util.telescope("find_files", { cwd = false }), desc = "Find Files (cwd)" },
       { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
       { "<leader>gc", "<Cmd>Telescope git_commits<CR>", desc = "commits" },
       { "<leader>gs", "<Cmd>Telescope git_status<CR>", desc = "status" },
@@ -63,7 +60,8 @@ return {
       { "<leader>ht", "<cmd>Telescope builtin<cr>", desc = "Telescope" },
       { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer" },
       { "<leader>sc", "<cmd>Telescope command_history<cr>", desc = "Command History" },
-      { "<leader>sg", util.telescope("live_grep"), desc = "Grep" },
+      { "<leader>sg", util.telescope("live_grep"), desc = "Grep (root dir)" },
+      { "<leader>sG", util.telescope("live_grep", { cwd = false }), desc = "Grep (cwd)" },
       { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Jump to Mark" },
       { "<leader>,", "<cmd>Telescope buffers show_all_buffers=true<cr>", desc = "Switch Buffer" },
       { "<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History" },
@@ -86,16 +84,38 @@ return {
         desc = "Goto Symbol",
       },
     },
-    config = true,
+    config = {
+      defaults = {
+        prompt_prefix = " ",
+        selection_caret = " ",
+        mappings = {
+          i = {
+            ["<c-t>"] = function(...)
+              return require("trouble.providers.telescope").open_with_trouble(...)
+            end,
+            ["<C-i>"] = function()
+              util.telescope("find_files", { no_ignore = true })()
+            end,
+            ["<C-h>"] = function()
+              util.telescope("find_files", { hidden = true })()
+            end,
+            ["<C-Down>"] = function(...)
+              return require("telescope.actions").cycle_history_next(...)
+            end,
+            ["<C-Up>"] = function(...)
+              return require("telescope.actions").cycle_history_prev(...)
+            end,
+          },
+        },
+      },
+    },
   },
 
   -- easily jump to any location and enhanced f/t motions for Leap
   {
     "ggandor/leap.nvim",
     event = "VeryLazy",
-    dependencies = {
-      { "ggandor/flit.nvim", config = { labeled_modes = "nv" } },
-    },
+    dependencies = { { "ggandor/flit.nvim", config = { labeled_modes = "nv" } } },
     config = function()
       require("leap").add_default_mappings(true)
     end,
@@ -108,7 +128,6 @@ return {
     config = function()
       local wk = require("which-key")
       wk.setup({
-        show_help = false,
         plugins = { spelling = true },
         key_labels = { ["<leader>"] = "SPC" },
       })
@@ -122,7 +141,10 @@ return {
         ["<leader>f"] = { name = "+file" },
         ["<leader>g"] = { name = "+git" },
         ["<leader>h"] = { name = "+help" },
-        ["<leader>x"] = { name = "+diagnostics" },
+        ["<leader>n"] = { name = "+noice" },
+        ["<leader>q"] = { name = "+quit/session" },
+        ["<leader>s"] = { name = "+search" },
+        ["<leader>x"] = { name = "+diagnostics/quickfix" },
       })
     end,
   },
@@ -150,42 +172,47 @@ return {
     config = function()
       require("illuminate").configure({ delay = 200 })
     end,
+    -- stylua: ignore
     keys = {
-      {
-        "]]",
-        function()
-          require("illuminate").goto_next_reference(false)
-        end,
-        desc = "Next Reference",
-      },
-      {
-        "[[",
-        function()
-          require("illuminate").goto_prev_reference(false)
-        end,
-        desc = "Prev Reference",
-      },
+      { "]]", function() require("illuminate").goto_next_reference(false) end, desc = "Next Reference", },
+      { "[[", function() require("illuminate").goto_prev_reference(false) end, desc = "Prev Reference" },
     },
   },
 
   -- buffer remove
   {
     "echasnovski/mini.bufremove",
+    -- stylua: ignore
     keys = {
-      {
-        "<leader>bd",
-        function()
-          require("mini.bufremove").delete(0, false)
-        end,
-        desc = "Delete Buffer",
-      },
-      {
-        "<leader>bD",
-        function()
-          require("mini.bufremove").delete(0, true)
-        end,
-        desc = "Delete Buffer (Force)",
-      },
+      { "<leader>bd", function() require("mini.bufremove").delete(0, false) end, desc = "Delete Buffer" },
+      { "<leader>bD", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
+    },
+  },
+
+  -- better diagnostics list and others
+  {
+    "folke/trouble.nvim",
+    cmd = { "TroubleToggle", "Trouble" },
+    config = { use_diagnostic_signs = true },
+    keys = {
+      { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
+      { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
+    },
+  },
+
+  -- todo comments
+  {
+    "folke/todo-comments.nvim",
+    cmd = { "TodoTrouble", "TodoTelescope" },
+    event = "BufReadPost",
+    config = true,
+    -- stylua: ignore
+    keys = {
+      { "]t", function() require("todo-comments").jump_next() end, desc = "Next todo comment" },
+      { "[t", function() require("todo-comments").jump_prev() end, desc = "Previous todo comment" },
+      { "<leader>xt", "<cmd>TodoTrouble<cr>", desc = "Todo Trouble" },
+      { "<leader>xtt", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>", desc = "Todo Trouble" },
+      { "<leader>xT", "<cmd>TodoTelescope<cr>", desc = "Todo Telescope" },
     },
   },
 }
