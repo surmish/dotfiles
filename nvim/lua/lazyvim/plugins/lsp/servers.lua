@@ -2,25 +2,23 @@
 ---@type lspconfig.options
 local servers = {
   bashls = {},
-  clangd = {},
-  cssls = {},
-  tsserver = {},
-  html = {},
+  -- clangd = {},
   jsonls = {},
   pyright = {},
   yamlls = {},
-  sumneko_lua = {
-    settings = {
-      Lua = {
-        workspace = {
-          checkThirdParty = false,
-        },
-        completion = {
-          callSnippet = "Replace",
-        },
-      },
-    },
-  },
+  svlangserver = {},
+  -- sumneko_lua = {
+  --   settings = {
+  --     Lua = {
+  --       workspace = {
+  --         checkThirdParty = false,
+  --       },
+  --       completion = {
+  --         callSnippet = "Replace",
+  --       },
+  --     },
+  --   },
+  -- },
 }
 
 return servers
