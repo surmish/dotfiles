@@ -4,7 +4,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.opt.autowrite = false -- enable auto write
-vim.opt.clipboard = "unnamed,unnamedplus"
+vim.opt.clipboard = "unnamed,unnamedplus" -- sync with system clipboard
 vim.opt.cmdheight = 1
 vim.opt.completeopt = "menu,menuone,noselect"
 vim.opt.conceallevel = 3 -- Hide * markup for bold and italic

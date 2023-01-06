@@ -69,37 +69,35 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    config = {
-      options = {
-        theme = "auto",
-        section_separators = { left = "", right = "" },
-        component_separators = { left = "", right = "" },
-        icons_enabled = true,
-        globalstatus = true,
-        disabled_filetypes = { statusline = { "dashboard" } },
-      },
-      sections = {
-        lualine_a = { { "mode", separator = { left = "" } } },
-        lualine_b = { "branch" },
-        lualine_c = {
-          { "diagnostics", sources = { "nvim_diagnostic" } },
-          { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-          { "filename", path = 1, symbols = { modified = "  ", readonly = "", unnamed = "" } },
+    config = function()
+      local navic = require("nvim-navic")
+      local lualine = require("lualine")
+      local symbols = require("lazyvim.config.settings")
+      lualine.setup({
+        options = {
+          globalstatus = true,
+          disabled_filetypes = { statusline = { "lazy", "alpha" } },
         },
-        lualine_x = {},
-        lualine_y = { "location" },
-        lualine_z = { { clock, separator = { right = "" } } },
-      },
-      inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = {},
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = {},
-      },
-      extensions = { "nvim-tree" },
-    },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = {
+            { "branch" },
+            {
+              "diff",
+              symbols = { added = symbols.icons.git.added, modified = symbols.icons.git.modified, removed = symbols.icons.git.removed }, -- changes diff symbols
+            },
+          },
+          lualine_c = {
+            {
+              "diagnostics",
+              symbols = { error = symbols.icons.diagnostics.Error, warn = symbols.icons.diagnostics.Warn, info = symbols.icons.diagnostics.Info, hint = symbols.icons.diagnostics.Hint }
+            },
+            { "filename", padding = { left = 1, right = 1 } },
+            { navic.get_location, cond = navic.is_available }
+          },
+        }
+      })
+    end
   },
 
   -- indent guides for Neovim
@@ -118,10 +116,11 @@ return {
   -- active indent guide and indent text objects
   {
     "echasnovski/mini.indentscope",
+    version = false, -- wait till new 0.7.0 release to put it back on semver
     event = "BufReadPre",
     config = function()
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
+        pattern = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy", "mason" },
         callback = function()
           vim.b.miniindentscope_disable = true
         end,
@@ -160,6 +159,72 @@ return {
       { "<c-f>", function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end, silent = true, expr = true },
       { "<c-b>", function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true },
     },
+  },
+
+  -- start screen
+  {
+    "echasnovski/mini.starter",
+    enabled = false,
+    version = false, -- wait till new 0.7.0 release to put it back on semver
+    event = "VimEnter",
+    config = function()
+      local logo = table.concat({
+        "██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z",
+        "██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z",
+        "██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z",
+        "██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z",
+        "███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║",
+        "╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝",
+      }, "\n")
+      local pad = string.rep(" ", 22)
+      local new_section = function(name, action, section)
+        return { name = name, action = action, section = pad .. section }
+      end
+
+      local starter = require("mini.starter")
+      --stylua: ignore
+      local config = {
+        evaluate_single = true,
+        header = logo,
+        items = {
+          new_section("Find file",    "Telescope find_files", "Telescope"),
+          new_section("Recent files", "Telescope oldfiles",   "Telescope"),
+          new_section("Grep text",    "Telescope live_grep",  "Telescope"),
+          new_section("init.lua",     "e $MYVIMRC",           "Config"),
+          new_section("Lazy",         "Lazy",                 "Config"),
+          new_section("New file",     "ene | startinsert",    "Built-in"),
+          new_section("Quit",         "qa",                   "Built-in"),
+        },
+        content_hooks = {
+          starter.gen_hook.adding_bullet(pad .. "░ ", false),
+          starter.gen_hook.aligning("center", "center"),
+        },
+      }
+
+      -- close Lazy and re-open when starter is ready
+      if vim.o.filetype == "lazy" then
+        vim.cmd.close()
+        vim.api.nvim_create_autocmd("User", {
+          pattern = "MiniStarterOpened",
+          callback = function()
+            require("lazy").show()
+          end,
+        })
+      end
+
+      starter.setup(config)
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "LazyVimStarted",
+        callback = function()
+          local stats = require("lazy").stats()
+          local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+          local pad_footer = string.rep(" ", 8)
+          MiniStarter.config.footer = pad_footer .. "⚡ Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
+          pcall(MiniStarter.refresh)
+        end,
+      })
+    end,
   },
 
   -- dashboard

@@ -14,7 +14,7 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 require("lazy").setup({
   spec = "lazyvim.plugins",
   defaults = { lazy = true, version = "*" },
-  install = { missing = false, colorscheme = { "rose-pine", "habamax" } },
+  install = { colorscheme = { "catppuccin" } },
   checker = { enabled = false },
   performance = {
     rtp = {
@@ -26,12 +26,6 @@ require("lazy").setup({
         "tohtml",
         "tutor",
         "zipPlugin",
-        "logiPat",
-        "rrhelper",
-        "netrw",
-        "netrwPlugin",
-        "netrwSettings",
-        "netrwFileHandlers",
       },
     },
   },

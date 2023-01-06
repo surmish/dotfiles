@@ -7,8 +7,9 @@ return {
       { "folke/neoconf.nvim", cmd = "Neoconf", config = true },
       { "folke/neodev.nvim", config = true },
       "mason.nvim",
-      { "williamboman/mason-lspconfig.nvim", config = { automatic_installation = false } },
+      "williamboman/mason-lspconfig.nvim",
       "hrsh7th/cmp-nvim-lsp",
+      "SmiteshP/nvim-navic",
     },
     ---@type lspconfig.options
     servers = nil,
@@ -17,6 +18,9 @@ return {
       require("lazyvim.util").on_attach(function(client, buffer)
         require("lazyvim.plugins.lsp.format").on_attach(client, buffer)
         require("lazyvim.plugins.lsp.keymaps").on_attach(client, buffer)
+        if client.server_capabilities.documentSymbolProvider then
+          require("nvim-navic").attach(client, buffer)
+        end
       end)
 
       -- diagnostics
@@ -32,14 +36,17 @@ return {
       })
 
       -- lspconfig
+      local servers = plugin.servers or require("lazyvim.plugins.lsp.servers")
       local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-      ---@type lspconfig.options
-      local servers = plugin.servers or require("lazyvim.plugins.lsp.servers")
-      for server, opts in pairs(servers) do
-        opts.capabilities = capabilities
-        require("lspconfig")[server].setup(opts)
-      end
+      require("mason-lspconfig").setup({ ensure_installed = vim.tbl_keys(servers) })
+      require("mason-lspconfig").setup_handlers({
+        function(server)
+          local opts = servers[server] or {}
+          opts.capabilities = capabilities
+          require("lspconfig")[server].setup(opts)
+        end,
+      })
 			require("lspconfig").clangd.setup {
 				default_config = { 
 					capabilities = capabilities; 

@@ -13,15 +13,18 @@ return {
       history = true,
       delete_check_events = "TextChanged",
     },
-    init = function()
-      local function jump(key, dir)
-        vim.keymap.set({ "i", "s" }, key, function()
-          return require("luasnip").jump(dir) or key
-        end, { expr = true })
-      end
-      jump("<tab>", 1)
-      jump("<s-tab>", -1)
-    end,
+    -- stylua: ignore
+    keys = {
+      {
+        "<tab>",
+        function()
+          return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
+        end,
+        expr = true, remap = true, silent = true, mode = "i",
+      },
+      { "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
+      { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
+    },
   },
 
   -- auto completion
@@ -33,8 +36,6 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-emoji",
-      "hrsh7th/cmp-cmdline",
-      "dmitmel/cmp-cmdline-history",
       "saadparwaiz1/cmp_luasnip",
     },
     config = function()
@@ -74,29 +75,6 @@ return {
         experimental = {
           ghost_text = {
             hl_group = "LspCodeLens",
-          },
-        },
-        sorting = {
-          comparators = {
-            cmp.config.compare.sort_text,
-            cmp.config.compare.offset,
-            -- cmp.config.compare.exact,
-            cmp.config.compare.score,
-            -- cmp.config.compare.kind,
-            -- cmp.config.compare.length,
-            cmp.config.compare.order,
-          },
-        },
-        cmdline = {
-          ":",
-          {
-            mapping = cmp.mapping.preset.cmdline(),
-            sources = cmp.config.sources({
-              -- { name = "noice_popupmenu" },
-              { name = "path" },
-              { name = "cmdline" },
-              -- { name = "cmdline_history" },
-            }),
           },
         },
       })

@@ -2,13 +2,23 @@
 
 local util = require("lazyvim.util")
 
+-- Move to window using the <meta> movement keys
+vim.keymap.set("n", "<A-left>", "<C-w>h")
+vim.keymap.set("n", "<A-down>", "<C-w>j")
+vim.keymap.set("n", "<A-up>", "<C-w>k")
+vim.keymap.set("n", "<A-right>", "<C-w>l")
+
+-- Resize window using <shift> arrow keys
+vim.keymap.set("n", "<S-Up>", "<cmd>resize +2<CR>")
+vim.keymap.set("n", "<S-Down>", "<cmd>resize -2<CR>")
+vim.keymap.set("n", "<S-Left>", "<cmd>vertical resize -2<CR>")
+vim.keymap.set("n", "<S-Right>", "<cmd>vertical resize +2<CR>")
+
 -- navigate command keymaps
 vim.keymap.set({ "n", "v", "x", "o" }, ";", "<Right>", { noremap = true, desc = "Move to the right" })
-vim.keymap.set({ "n", "v", "x", "o" }, "l", "<Up>", { noremap = true, desc = "Move up" })
-vim.keymap.set({ "n", "v", "x", "o" }, "k", "<Down>", { noremap = true, desc = "Move down" })
+vim.keymap.set({ "n", "v", "x", "o" }, "l", "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true, desc = "Move down during line wrap"})
+vim.keymap.set({ "n", "v", "x", "o" }, "k", "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent = true, desc = "Move up during line wrap"})
 vim.keymap.set({ "n", "v", "x", "o" }, "j", "<Left>", { noremap = true, desc = "Move to the left" })
-vim.keymap.set({ "n", "v", "x", "o" }, "gk", "gj", { noremap = true, desc = "Move down during line wrap" })
-vim.keymap.set({ "n", "v", "x", "o" }, "gl", "gk", { noremap = true, desc = "Move up during line wrap" })
 
 vim.keymap.set("n", "<C-w>;", ":wincmd l<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-w>l", ":wincmd k<CR>", { noremap = true, silent = true })
@@ -48,11 +58,6 @@ vim.keymap.set("n", "<leader>sc", function()
     vim.o.signcolumn = "yes"
   end
 end, { noremap = true, desc = "[sc] Toggle sign column" })
-
--- Remap for dealing with word wrap
--- jk -> kl for me
-vim.keymap.set("n", "k", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-vim.keymap.set("n", "l", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 
 -- vim.keymap.set("n", "<leader>q", ":q<CR>", { noremap = true, desc = "Exit if file not modified" })
 vim.keymap.set("n", "<leader>Q", ":q!<CR>", { noremap = true, desc = "Force exit irrespective of changes" })
@@ -108,17 +113,20 @@ vim.api.nvim_create_autocmd("WinLeave", {
 -- vim.keymap.set("n", "<S-Left>", "<cmd>vertical resize -2<CR>")
 -- vim.keymap.set("n", "<S-Right>", "<cmd>vertical resize +2<CR>")
 
--- Move Lines
-vim.keymap.set("n", "<A-k>", ":m .+1<CR>==")
-vim.keymap.set("v", "<A-k>", ":m '>+1<CR>gv=gv")
-vim.keymap.set("i", "<A-k>", "<Esc>:m .+1<CR>==gi")
-vim.keymap.set("n", "<A-l>", ":m .-2<CR>==")
-vim.keymap.set("v", "<A-l>", ":m '<-2<CR>gv=gv")
-vim.keymap.set("i", "<A-l>", "<Esc>:m .-2<CR>==gi")
+-- change current word
+vim.keymap.set("n", "<C-c>", "<cmd>normal ciw<cr>a")
 
--- -- Switch buffers with <ctrl>
--- vim.keymap.set("n", "<C-Left>", "<cmd>bprevious<cr>")
--- vim.keymap.set("n", "<C-Right>", "<cmd>bnext<cr>")
+-- Move Lines
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv")
+vim.keymap.set("i", "<A-j>", "<Esc>:m .+1<CR>==gi")
+vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv")
+vim.keymap.set("i", "<A-k>", "<Esc>:m .-2<CR>==gi")
+
+-- Switch buffers with <ctrl>
+vim.keymap.set("n", "<C-Left>", "<cmd>bprevious<cr>")
+vim.keymap.set("n", "<C-Right>", "<cmd>bnext<cr>")
 
 -- Easier pasting
 vim.keymap.set("n", "[p", ":pu!<cr>")
@@ -143,11 +151,7 @@ vim.keymap.set("i", ".", ".<c-g>u")
 vim.keymap.set("i", ";", ";<c-g>u")
 
 -- save in insert mode
-vim.keymap.set("i", "<C-s>", "<cmd>:update<cr><esc>")
-vim.keymap.set("n", "<C-s>", "<cmd>:update<cr><esc>")
-
--- change current word
-vim.keymap.set("n", "<C-c>", "<cmd>normal ciw<cr>a")
+vim.keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>")
 
 -- better indenting
 vim.keymap.set("v", "<", "<gv")
@@ -181,6 +185,11 @@ vim.keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 if vim.fn.has("nvim-0.9.0") == 1 then
   vim.keymap.set("n", "<leader>hl", vim.show_pos, { desc = "Highlight Groups at cursor" })
 end
+
+-- floating terminal
+vim.keymap.set("n", "<leader>ot", function() util.float_term(nil, { cwd = util.get_root() }) end, { desc = "Terminal (root dir)" })
+vim.keymap.set("n", "<leader>oT", function() require("lazyvim.util").float_term() end, { desc = "Terminal (cwd)" })
+vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>", {desc = "Enter Normal Mode"})
 
 -- windows
 vim.keymap.set("n", "<leader>ww", "<C-W>p", { desc = "other-window" })

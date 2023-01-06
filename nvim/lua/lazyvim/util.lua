@@ -60,17 +60,14 @@ function M.telescope(builtin, opts)
   end
 end
 
+-- Opens a floating terminal (interactive by default)
+---@param cmd? string[]|string
+---@param opts? LazyCmdOptions|{interactive?:boolean}
 function M.float_term(cmd, opts)
   opts = vim.tbl_deep_extend("force", {
-    terminal = true,
-    close_on_exit = true,
-    enter = true,
-    float = {
-      size = { width = 0.9, height = 0.9 },
-      margin = { top = 0, right = 0, bottom = 0, left = 0 },
-    },
+    size = { width = 0.9, height = 0.9 },
   }, opts or {})
-  require("lazy.util").open_cmd(cmd, opts)
+  require("lazy.util").float_term(cmd, opts)
 end
 
 ---@param silent boolean?
@@ -78,7 +75,7 @@ function M.toggle(option, silent)
   vim.opt_local[option] = not vim.opt_local[option]:get()
   if not silent then
     vim.notify(
-      (vim.opt_local[option]:get() and "Enabled" or "Disabled") .. option,
+      (vim.opt_local[option]:get() and "Enabled" or "Disabled") .. " " .. option,
       vim.log.levels.INFO,
       { title = "Option" }
     )
