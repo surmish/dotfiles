@@ -6,8 +6,6 @@
 [[ -d "/home/.local/bin" ]] && [[ ":$PATH:" != *":/home/.local/bin:"* ]] && export PATH=/home/.local/bin:$PATH
 [[ -d "/home/.cargo/bin" ]] && [[ ":$PATH:" != *":/home/.cargo/bin:"* ]] && export PATH=/home/.cargo/bin:$PATH
 
-export MANPAGER='vim +Man!'
-
 if [[ $0 =~ "zsh" ]]
 then
   [ -f ~/.zshrc.$USER.work ] && source ~/.zshrc.$USER.work
@@ -18,14 +16,13 @@ then
   alias -s C="nvim "
   alias -s h="nvim "
   alias -s log="nvim "
-  # alias -s py="nvim "
+  alias -s py="nvim "
   alias -s tcl="nvim "
   alias -s txt="nvim "
   alias -s v="nvim "
   alias -s sv="nvim "
   alias -s vh="nvim "
   alias -s svh="nvim "
-  alias vim='nvim'
 
 fi
 
@@ -35,6 +32,12 @@ export P4DIFF="nvim -d"
 
 if [[ $0 =~ "bash" ]]
 then
+  export EDITOR=/u/urmish/usr/local/bin/vim
+  export P4EDITOR=$EDITOR
+  export P4DIFF="$EDITOR -d"
+
+  function nvim () { /u/urmish/usr/local/bin/vim $@ ; }
+
   alias ealias="vim ~/.bashrc.$USER"
   alias salias="source ~/.bashrc.$USER"
   [ -f ~/usr/local/share/z/z.sh ] && source ~/usr/local/share/z/z.sh
@@ -76,22 +79,19 @@ alias lc="wc -l"
 alias lg="ls | rg"
 alias hig="history | rg"
 
-# alias e="vim"
-alias e-="vim -"
-alias vt="vim -t"
-alias r="vim -R"
-
 function g () { rg $@ ; }
 
-function e  () { vim $@ ; }
-function eo () { vim -o $@ ; }
-function eO () { vim -O $@ ; }
-function r  () { vim -R $@ ; }
-function vt () { vim -t $@ ; }
-function vd () { vim -d $@ ; }
-function evim  () { vim ~/.vimrc ; }
-function einit () { vim ~/.config/nvim/init.lua ; }
-function etmux () { vim ~/.tmux.conf ; }
+alias e-="nvim -"
+function e  () { nvim $@ ; }
+function eo () { e -o $@ ; }
+function eO () { e -O $@ ; }
+function r  () { e -R $@ ; }
+alias vt="nvim -t"
+# function vt () { e -t $@ ; }
+function vd () { e -d $@ ; }
+function evim  () { e ~/.vimrc ; }
+function einit () { e ~/.config/nvim/init.lua ; }
+function etmux () { e ~/.tmux.conf ; }
 
 function update () { sudo apt update -y ; }
 function upgrade () { sudo apt upgrade -y ; }
