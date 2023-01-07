@@ -14,9 +14,6 @@ Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
 
 Plug 'wlangstroth/vim-racket'
 
-" A Vim Plugin for Lively Previewing LaTeX PDF Output
-Plug 'lervag/vimtex'
-
 " Plug 'dstein64/vim-startuptime'
 
 " On-demand loading
@@ -34,7 +31,7 @@ let g:vista_fzf_preview = ['right:30%']
 let g:vista_sidebar_width = 40
 " }}}
 
-set tags=$VIM_TAG_FILE
+set tags=$TAGSFILE
 " set tags=$VIM_TAG_FILE2
 " nnoremap <leader>st :call SwitchTagsFile()<CR>
 
@@ -101,9 +98,7 @@ if !has('nvim')
   "
 " }}}
 
-" Retro groove color scheme for Vim {{{
-  Plug 'sainnhe/gruvbox-material'
-" }}}
+  Plug 'morhetz/gruvbox'
 
 " Dim inactive windows {{{
   Plug 'blueyed/vim-diminactive'
@@ -139,6 +134,8 @@ if !has('nvim')
   Plug 'SirVer/ultisnips'
   Plug 'honza/vim-snippets'
   let g:UltiSnipsExpandTrigger="<C-j>"
+  let g:UltiSnipsJumpForwardTrigger="<c-b"
+  let g:UltiSnipsJumpBackwardTrigger="<c-z>"
   " }}}
 
   Plug 'jackguo380/vim-lsp-cxx-highlight'
@@ -229,7 +226,7 @@ nmap ga <Plug>(EasyAlign)
 Plug 'vim-scripts/DoxygenToolkit.vim'
 let g:DoxygenToolkit_authorName = $USER
 
-Plug 'scrooloose/nerdcommenter'
+Plug 'preservim/nerdcommenter'
 
 " Directory diff in vim
 Plug 'will133/vim-dirdiff'
@@ -252,7 +249,7 @@ endif
 if !has('nvim')
   Plug 'ryanoasis/vim-devicons'
   " Plug 'mhinz/vim-startify'
-  Plug 'edkolev/tmuxline.vim'
+  " Plug 'edkolev/tmuxline.vim'
 endif
 
 call plug#end()
@@ -263,7 +260,6 @@ if !has('nvim')
   set ttymouse=xterm2
 endif
 set autoindent
-set lazyredraw
 set ttyfast
 set hidden
 set nomodeline
@@ -285,9 +281,11 @@ set tabstop=2
 " Indent size
 set shiftwidth=2
 
-nnoremap <leader>w :update!<CR>
+noremap  <C-s>  :update<CR>
+vnoremap <C-s> <C-C>:update<CR>
+inoremap <C-s> <C-O>:update<CR>
 " Exit if file not modified
-nnoremap <leader>q :q<CR>
+nnoremap <leader>qq :q<CR>
 " Force exit irrespective of changes
 nnoremap <leader>Q :q!<CR>
 " Close current buffer 
@@ -406,7 +404,10 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.tm,*.pcx,*.setup,*.inc set filetype=tcl
   autocmd BufNewFile,BufRead *.setup.urmish set filetype=tcl
   autocmd BufNewFile,BufRead *.make set filetype=make
-  autocmd BufNewFile,BufRead *.gdbinit.urmish set filetype=gdb
+  autocmd BufReadPost *.lisp,*.scm,*.rkt,*.tktl set filetype=lisp
+  autocmd BufReadPost *.gdbinit.urmish set filetype=gdb
+  autocmd filetype racket set lisp
+  autocmd filetype racket set autoindent
   autocmd filetype racket,lisp,scheme,commonlisp setlocal equalprg=scmindent
   " Activation based on file type
   autocmd FileType c,cpp setlocal formatprg=clang-format\ -style=file:$HOME/.clang-format
@@ -440,12 +441,12 @@ nnoremap <leader>edate i <C-r>=strftime('%F')<CR><ESC>
 
 " Colorscheme settings {{{
 set background=dark
-let g:gruvbox_material_background='hard'
-let g:gruvbox_material_disable_italic_comment = 1
+let g:gruvbox_contrast_dark='hard'
+let g:gruvbox_contrast_light='hard'
 if !has('nvim')
-  colorscheme gruvbox-material
-  highlight CursorLine    ctermbg=236 guibg=#444444 cterm=none gui=none
-  highlight CursorColumn  ctermbg=236 guibg=#444444
-  highlight CursorLineNr  cterm=none  gui=none 
+  colorscheme gruvbox
+  " highlight CursorLine    ctermbg=236 guibg=#444444 cterm=none gui=none
+  " highlight CursorColumn  ctermbg=236 guibg=#444444
+  " highlight CursorLineNr  cterm=none  gui=none 
 endif
 " }}}
