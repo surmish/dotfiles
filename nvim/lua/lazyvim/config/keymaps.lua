@@ -2,24 +2,13 @@
 
 local util = require("lazyvim.util")
 
--- Move to window using the <ctrl> hjkl keys
-vim.keymap.set("n", "<C-j>", "<C-w>h")
-vim.keymap.set("n", "<C-k>", "<C-w>j")
-vim.keymap.set("n", "<C-l>", "<C-w>k")
-vim.keymap.set("n", "<C-;>", "<C-w>l")
-
--- Resize window using <ctrl> arrow keys
-vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<CR>")
-vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<CR>")
-vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<CR>")
-vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<CR>")
-
--- navigate command keymaps
+-- better up/down
 vim.keymap.set({ "n", "v", "x", "o" }, ";", "<Right>", { noremap = true, desc = "Move to the right" })
 vim.keymap.set({ "n", "v", "x", "o" }, "l", "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true, desc = "Move down during line wrap"})
 vim.keymap.set({ "n", "v", "x", "o" }, "k", "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent = true, desc = "Move up during line wrap"})
 vim.keymap.set({ "n", "v", "x", "o" }, "j", "<Left>", { noremap = true, desc = "Move to the left" })
 
+-- Move to window using the <ctrl> hjkl keys
 vim.keymap.set("n", "<C-w>;", ":wincmd l<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-w>l", ":wincmd k<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-w>k", ":wincmd j<CR>", { noremap = true, silent = true })
@@ -29,6 +18,12 @@ vim.keymap.set("n", "<C-w>:", ":wincmd L<CR>", { noremap = true, silent = true }
 vim.keymap.set("n", "<C-w>L", ":wincmd K<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-w>K", ":wincmd J<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-w>J", ":wincmd H<CR>", { noremap = true, silent = true })
+
+-- Resize window using <ctrl> arrow keys
+vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<CR>")
+vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<CR>")
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<CR>")
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<CR>")
 
 vim.keymap.set(
   "n",
@@ -150,8 +145,8 @@ vim.keymap.set("i", ",", ",<c-g>u")
 vim.keymap.set("i", ".", ".<c-g>u")
 vim.keymap.set("i", ";", ";<c-g>u")
 
--- save in insert mode
-vim.keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>")
+-- save in all modes
+vim.keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>update<cr><esc>")
 
 -- better indenting
 vim.keymap.set("v", "<", "<gv")
