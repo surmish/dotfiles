@@ -1,23 +1,53 @@
-*LazyVim.txt*         For Neovim >= 0.8.0         Last change: 2023 January 06
+*LazyVim.txt*         For Neovim >= 0.8.0         Last change: 2023 January 07
 
 ==============================================================================
 Table of Contents                                  *LazyVim-table-of-contents*
 
 1. LazyVim                                                   |LazyVim-lazyvim|
+  - Getting Started                                  |LazyVim-getting-started|
   - Todo                                                        |LazyVim-todo|
-  - File Structure                                    |LazyVim-file-structure|
   - Plugins                                                  |LazyVim-plugins|
 
 ==============================================================================
 1. LazyVim                                                   *LazyVim-lazyvim*
 
-A starter template for Neovim using lazy.nvim
-<https://github.com/folke/lazy.nvim>
+Neovim config for the lazy powered by lazy.nvim
+<https://github.com/folke/lazy.nvim>.
+
+Can’t decide between building a config from scratch or using one of the
+existing Neovim **_distros_**?
+
+With **LazyVim** you don’t have to. Configuring **LazyVim** is **exactly the
+same** as you would configure a config from scratch. You can easily add new
+plugins, change the config for existing ones or disable plugins.
 
 <div class="figure">
 <img src="https://user-images.githubusercontent.com/292349/210136312-c211f781-6d51-46b0-a265-6098bdbb364d.png" title="fig:"/>
 <p class="caption">image</p>
 </div>
+
+GETTING STARTED                                      *LazyVim-getting-started*
+
+You can find a starter template for **LazyVim** here
+<https://github.com/LazyVim/starter>
+
+**TLDR:**
+
+>lua
+    require("lazy").setup({
+      spec = {
+        -- import LazyVim plugins
+        { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+        -- import/override with your plugins
+        { import = "plugins" },
+      },
+      defaults = {
+        lazy = true, -- every plugin is lazy-loaded by default
+        version = "", -- try installing the latest stable version for plugins that support semver
+      },
+    })
+<
+
 
 TODO                                                            *LazyVim-todo*
 
@@ -27,39 +57,6 @@ TODO                                                            *LazyVim-todo*
 - list all plugins in readme
 - test all-the-things
 
-
-FILE STRUCTURE                                        *LazyVim-file-structure*
-
-<pre>
-~/.config/nvim
- lua
-    lazyvim
-        config
-           autocmds.lua
-           keymaps.lua
-           lazy.lua
-           options.lua
-           settings.lua
-        plugins
-           lsp
-              format.lua
-              init.lua
-              keymaps.lua
-              servers.lua
-           coding.lua
-           colorscheme.lua
-           config.lua
-           editor.lua
-           treesitter.lua
-           ui.lua
-           util.lua
-        util.lua
- init.lua
- lazy-lock.json
- LICENSE
- README.md
- stylua.toml
-</pre>
 
 PLUGINS                                                      *LazyVim-plugins*
 
@@ -77,6 +74,7 @@ PLUGINS                                                      *LazyVim-plugins*
 - gitsigns.nvim <https://github.com/lewis6991/gitsigns.nvim>
 - indent-blankline.nvim <https://github.com/lukas-reineke/indent-blankline.nvim>
 - lazy.nvim <https://github.com/folke/lazy.nvim>
+- LazyVim <https://github.com/LazyVim/LazyVim>
 - leap.nvim <https://github.com/ggandor/leap.nvim>
 - lualine.nvim <https://github.com/nvim-lualine/lualine.nvim>
 - LuaSnip <https://github.com/L3MON4D3/LuaSnip>
@@ -97,6 +95,7 @@ PLUGINS                                                      *LazyVim-plugins*
 - nvim-bufferline.lua <https://github.com/akinsho/nvim-bufferline.lua>
 - nvim-cmp <https://github.com/hrsh7th/nvim-cmp>
 - nvim-lspconfig <https://github.com/neovim/nvim-lspconfig>
+- nvim-navic <https://github.com/SmiteshP/nvim-navic>
 - nvim-notify <https://github.com/rcarriga/nvim-notify>
 - nvim-spectre <https://github.com/windwp/nvim-spectre>
 - nvim-treesitter <https://github.com/nvim-treesitter/nvim-treesitter>

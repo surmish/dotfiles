@@ -7,18 +7,18 @@ local servers = {
   pyright = {},
   yamlls = {},
   svlangserver = {},
-  -- sumneko_lua = {
-  --   settings = {
-  --     Lua = {
-  --       workspace = {
-  --         checkThirdParty = false,
-  --       },
-  --       completion = {
-  --         callSnippet = "Replace",
-  --       },
-  --     },
-  --   },
-  -- },
+  sumneko_lua = {
+    settings = {
+      Lua = {
+        workspace = {
+          checkThirdParty = false,
+        },
+        completion = {
+          callSnippet = "Replace",
+        },
+      },
+    },
+  },
 }
 
 return servers

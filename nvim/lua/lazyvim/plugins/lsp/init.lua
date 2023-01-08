@@ -11,7 +11,28 @@ return {
       "hrsh7th/cmp-nvim-lsp",
     },
     ---@type lspconfig.options
-    servers = nil,
+    servers = {
+      jsonls = {},
+      sumneko_lua = {
+        settings = {
+          Lua = {
+            workspace = {
+              checkThirdParty = false,
+            },
+            completion = {
+              callSnippet = "Replace",
+            },
+          },
+        },
+      },
+    },
+    -- you can do any additional lsp server setup here
+    -- return true if you don't want this server to be setup with lspconfig
+    ---@param server string lsp server name
+    ---@param opts _.lspconfig.options any options set for the server
+    setup_server = function(server, opts)
+      return false
+    end,
     config = function(plugin)
       -- setup formatting and keymaps
       require("lazyvim.util").on_attach(function(client, buffer)
@@ -31,8 +52,8 @@ return {
         severity_sort = true,
       })
 
-      -- lspconfig
-      local servers = plugin.servers or require("lazyvim.plugins.lsp.servers")
+      ---@type lspconfig.options
+      local servers = plugin.servers or {}
       local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
       require("mason-lspconfig").setup({ ensure_installed = vim.tbl_keys(servers) })
@@ -40,51 +61,11 @@ return {
         function(server)
           local opts = servers[server] or {}
           opts.capabilities = capabilities
-          require("lspconfig")[server].setup(opts)
+          if not plugin.setup_server(server, opts) then
+            require("lspconfig")[server].setup(opts)
+          end
         end,
       })
-			require("lspconfig").clangd.setup {
-				default_config = { 
-					capabilities = capabilities; 
-					cmd = { "clangd", "--background-index","--all-scopes-completion", "--pch-storage=memory", "--clang-tidy", "--suggest-missing-includes", "--cross-file-rename" }, 
-					filetypes = {"c", "cpp"}, 
-					init_options = { 
-						clangdFileStatus     = true,
-						usePlaceholders      = true,
-						completeUnimported   = true,
-						semanticHighlighting = false
-					}, 
-					root_dir = require'lspconfig'.util.root_pattern("compile_flags.txt") 
-					-- root_dir = require'lspconfig'.util.root_pattern("compile_flags.txt","apbld","compile_commands.json") 
-				}, 
-				on_attach = on_attach_common 
-			}
-				--   require'lspconfig'.sumneko_lua.setup {
-				-- default_config = { 
-				-- 	cmd = {"lua-language-server"},
-				-- 	filetypes = {"lua"}, 
-				--     },
-				--     settings = {
-				--       Lua = {
-				--         runtime = {
-				--           -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-				--           version = 'LuaJIT',
-				--         },
-				--         diagnostics = {
-				--           -- Get the language server to recognize the `vim` global
-				--           globals = {'vim'},
-				--         },
-				--         workspace = {
-				--           -- Make the server aware of Neovim runtime files
-				--           library = vim.api.nvim_get_runtime_file("", true),
-				--         },
-				--         -- Do not send telemetry data containing a randomized but unique identifier
-				--         telemetry = {
-				--           enable = false,
-				--         },
-				--       },
-				--     },
-				--   }
     end,
   },
 

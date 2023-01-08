@@ -41,8 +41,8 @@ vim.opt.splitright = true -- Put new windows right of current
 vim.opt.tabstop = 2 -- Number of spaces tabs count for
 vim.opt.termguicolors = true -- True color support
 vim.opt.timeoutlen = 300
-vim.opt.undofile = true -- Save undo history
-vim.opt.undolevels = 100
+vim.opt.undofile = true
+vim.opt.undolevels = 10000
 vim.opt.updatetime = 200 -- save swap file and trigger CursorHold
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
 vim.go.winminwidth = 5 -- minimum window width
@@ -55,13 +55,4 @@ end
 
 -- fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
-
--- Enable break indent
-vim.opt.breakindent = true
-
--- disable nvim intro
--- vim.opt.shortmess:append("sI")
-
 vim.opt.tags = os.getenv("TAGSFILE")
-
-vim.opt.laststatus = 3
