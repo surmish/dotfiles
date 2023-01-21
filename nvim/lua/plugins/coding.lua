@@ -1,4 +1,4 @@
-eturn {
+return {
   -- scopes
   {
     "tiagovla/scope.nvim",
