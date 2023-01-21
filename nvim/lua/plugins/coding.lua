@@ -1,10 +1,12 @@
-return {
+eturn {
   -- scopes
   {
     "tiagovla/scope.nvim",
     event = "VeryLazy",
     config = true,
   },
+
+  { "folke/neodev.nvim", enabled = false },
 
   {
     "nvim-treesitter/nvim-treesitter",
