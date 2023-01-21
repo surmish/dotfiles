@@ -1,4 +1,4 @@
-return {
+{
   -- disable tokyonight
   { "folke/tokyonight.nvim", enabled = false },
 
@@ -20,8 +20,19 @@ return {
   },
 
   {
-    "ellisonleao/gruvbox.nvim",
+    "savq/melange-nvim",
     lazy = false,
+    version = false,
+    config = function()
+      -- vim.cmd("colorscheme melange")
+      vim.cmd("highlight Normal cterm=NONE ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021")
+    end,
+  },
+
+  {
+    "ellisonleao/gruvbox.nvim",
+    lazy = true,
+    enabled = false,
     version = false,
     config = function()
       require("gruvbox").setup({
@@ -36,7 +47,7 @@ return {
     {
       "LazyVim/LazyVim",
       opts = {
-        colorscheme = "gruvbox",
+        colorscheme = "melange",
       },
     },
   },
