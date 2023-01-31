@@ -1,45 +1,84 @@
-{
+return {
   -- disable tokyonight
-  { "folke/tokyonight.nvim", enabled = false },
+  { "folke/tokyonight.nvim", lazy = true },
 
   -- disable catppuccin
-  { "catppuccin/nvim", name = "catppuccin", enabled = false },
+  { "catppuccin/nvim", name = "catppuccin", lazy = true },
+
+  {
+    "EdenEast/nightfox.nvim",
+    version = false,
+    priority = 1000,
+    config = function()
+      require("nightfox").setup({
+        -- options = {
+        --   styles = {
+        --     keywords = "bold",
+        --     types = "bold",
+        --   },
+        --   palettes = {
+        --     nightfox = { green = "#00ff00" },
+        --     terafox = { green = "#00ff00" },
+        --   },
+        --   specs = { all = { syntax = { operator = "orange" } } },
+        -- },
+      })
+      require("nightfox").load()
+    end,
+  },
 
   {
     "rose-pine/neovim",
-    enabled = false,
-    lazy = true,
     version = false,
+    priority = 1000,
     name = "rose-pine",
     config = function()
       require("rose-pine").setup({
         dark_variant = "main",
       })
-      vim.cmd("colorscheme rose-pine")
+    end,
+  },
+
+  { "savq/melange-nvim", version = false },
+
+  {
+    "uloco/bluloco.nvim",
+    priority = 1000,
+    dependencies = { "rktjmp/lush.nvim" },
+    config = function()
+      -- your optional config goes here, see below.
+      require("bluloco").setup({
+        style = "dark", -- "auto" | "dark" | "light"
+        transparent = false,
+        italics = false,
+      })
     end,
   },
 
   {
-    "savq/melange-nvim",
-    lazy = false,
+    "AlexvZyl/nordic.nvim",
     version = false,
+    priority = 1000,
     config = function()
-      -- vim.cmd("colorscheme melange")
-      vim.cmd("highlight Normal cterm=NONE ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021")
+      require("nordic").setup({
+        style = "flat",
+        telescope = {
+          style = "classic",
+        },
+      })
+      require("nordic").load()
     end,
   },
 
   {
     "ellisonleao/gruvbox.nvim",
-    lazy = true,
-    enabled = false,
     version = false,
+    priority = 1000,
     config = function()
       require("gruvbox").setup({
         undercurl = false,
         underline = false,
       })
-      vim.cmd("highlight Normal cterm=NONE ctermfg=223 ctermbg=234 guifg=#ebdbb2 guibg=#1d2021")
     end,
   },
 

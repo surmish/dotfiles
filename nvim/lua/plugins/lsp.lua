@@ -6,6 +6,7 @@ return {
     -- ---@class PluginLspOpts
     opts = {
       --   ---@type lspconfig.options
+      autoformat = false,
       servers = {
         svlangserver = {
           root_pattern = { ".git", ".svlangserver" },

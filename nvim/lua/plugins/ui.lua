@@ -21,4 +21,17 @@ return {
 
   { "lewis6991/gitsigns.nvim", enabled = false },
 
+  {
+    "gen740/SmoothCursor.nvim",
+    lazy = false,
+    config = function()
+      require("smoothcursor").setup({
+        autostart = true,
+        fancy = {
+          enable = true,        -- enable fancy mode
+        },
+      })
+    end,
+  },
+
 }

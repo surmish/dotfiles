@@ -26,4 +26,37 @@ return {
       },
     },
   },
+
+  {
+    "mfussenegger/nvim-dap",
+    version = false,
+  },
+
+  {
+    "jayp0521/mason-nvim-dap.nvim",
+    version = false,
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "williamboman/mason.nvim",
+    },
+    config = function()
+      require("mason-nvim-dap").setup()
+    end,
+  },
+
+  {
+    "theHamsta/nvim-dap-virtual-text",
+    version = false,
+    dependencies = {
+      "mfussenegger/nvim-dap",
+    },
+  },
+
+  {
+    "rcarriga/nvim-dap-ui",
+    version = false,
+    dependencies = {
+      "mfussenegger/nvim-dap",
+    },
+  },
 }

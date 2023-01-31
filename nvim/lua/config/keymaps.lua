@@ -28,6 +28,9 @@ vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Increa
 vim.keymap.set("n", "<CR>", '&buftype ==# "nofile" ? "<CR>" : ":"', { expr = true, desc = "Return key enters command mode" })
 -- stylua: ignore end
 
+-- save file
+vim.keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>update<cr><esc>", { noremap = true,  desc = "Save file" })
+
 vim.keymap.set("n", "<leader>so", function()
   vim.o.scrolloff = 25 - vim.o.scrolloff
 end, { desc = "[so] Toggle scrolloff" })
