@@ -6,7 +6,8 @@ return {
     config = true,
   },
 
-  { "folke/neodev.nvim", enabled = false },
+  -- { "folke/neodev.nvim", enabled = false },
+  { "folke/trouble.nvim", enabled = false },
 
   {
     "nvim-treesitter/nvim-treesitter",
@@ -39,9 +40,6 @@ return {
       "mfussenegger/nvim-dap",
       "williamboman/mason.nvim",
     },
-    config = function()
-      require("mason-nvim-dap").setup()
-    end,
   },
 
   {
@@ -59,4 +57,7 @@ return {
       "mfussenegger/nvim-dap",
     },
   },
+
+  { "junegunn/fzf", build = "./install --all" },
+  { "junegunn/fzf.vim" },
 }

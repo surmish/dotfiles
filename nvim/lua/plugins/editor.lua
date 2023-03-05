@@ -43,16 +43,43 @@ return {
   -- add zen-mode
   {
     "folke/zen-mode.nvim",
-    version = false,
-    config = true,
+    opts = {
+      window = {
+        backdrop = 1,
+        height = 0.9,
+        -- width = 140,
+        options = {
+          number = false,
+          relativenumber = false,
+          signcolumn = "no",
+          list = false,
+          cursorline = false,
+        },
+      },
+    },
     keys = {
       {
         "<leader>Z",
         function()
           require("zen-mode").toggle()
+          vim.cmd([[ set nonumber norelativenumber ]])
         end,
         desc = "Zen Mode",
       },
+    },
+    config = function()
+      require("twilight").setup({
+        context = 10,
+        treesitter = true,
+      })
+    end,
+  },
+
+  {
+    "folke/twilight.nvim",
+    opts = {
+      context = -1,
+      treesitter = true,
     },
   },
 }

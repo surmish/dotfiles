@@ -6,6 +6,7 @@ return {
   {
     "b0o/incline.nvim",
     version = false,
+    priority = 1000,
     event = "BufReadPre",
     config = function()
       require("incline").setup({
@@ -23,12 +24,14 @@ return {
 
   {
     "gen740/SmoothCursor.nvim",
+    priority = 1000,
+    version = false,
     lazy = false,
     config = function()
       require("smoothcursor").setup({
         autostart = true,
         fancy = {
-          enable = true,        -- enable fancy mode
+          enable = true, -- enable fancy mode
         },
       })
     end,
