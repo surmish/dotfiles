@@ -18,9 +18,4 @@ return {
       },
     },
   },
-
-  -- uncomment and add tools to ensure_installed below
-  {
-    "williamboman/mason.nvim",
-  },
 }

@@ -99,6 +99,14 @@ return {
     },
   },
 
+  {
+    "projekt0n/github-nvim-theme",
+    priority = 1000, -- make sure to load this before all the other start plugins
+    opts = {
+      dim_inactive = true,
+    },
+  },
+
   { "norcalli/nvim-colorizer.lua", { "norcalli/nvim-terminal.lua" } },
 
   {
@@ -106,6 +114,8 @@ return {
       "LazyVim/LazyVim",
       opts = {
         colorscheme = "moonbow",
+        -- colorscheme = "gruvbox",
+        -- vim.cmd([[ set background=light ]]),
         -- vim.cmd[[ highlight Normal ctermfg=green ctermbg=yellow ]]
       },
     },

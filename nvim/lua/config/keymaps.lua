@@ -29,7 +29,7 @@ vim.keymap.set("n", "<CR>", '&buftype ==# "nofile" ? "<CR>" : ":"', { expr = tru
 -- stylua: ignore end
 
 -- save file
-vim.keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>update<cr><esc>", { noremap = true,  desc = "Save file" })
+vim.keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>update<cr><esc>", { noremap = true, desc = "Save file" })
 
 vim.keymap.set("n", "<leader>so", function()
   vim.o.scrolloff = 25 - vim.o.scrolloff
@@ -88,3 +88,8 @@ vim.api.nvim_create_autocmd("WinLeave", {
     -- vim.opt_local.cursorcolumn = false
   end,
 })
+
+-- Auto indent on empty line.
+vim.keymap.set("n", "i", function()
+  return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or "i"
+end, { expr = true, noremap = true })

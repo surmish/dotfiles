@@ -7,17 +7,23 @@ return {
   },
 
   -- { "folke/neodev.nvim", enabled = false },
-  { "folke/trouble.nvim", enabled = false },
+  -- { "folke/trouble.nvim", enabled = false },
 
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
         "bash",
+        "c",
+        "cpp",
         "help",
         "html",
         "json",
+        "jsonc",
         "lua",
+        "luap",
+        "markdown",
+        "markdown_inline",
         "perl",
         "python",
         "regex",
@@ -25,20 +31,6 @@ return {
         "vim",
         "yaml",
       },
-    },
-  },
-
-  {
-    "mfussenegger/nvim-dap",
-    version = false,
-  },
-
-  {
-    "jayp0521/mason-nvim-dap.nvim",
-    version = false,
-    dependencies = {
-      "mfussenegger/nvim-dap",
-      "williamboman/mason.nvim",
     },
   },
 

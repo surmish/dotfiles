@@ -33,12 +33,12 @@ return {
   -- },
 
   -- add symbols-outline
-  -- {
-  --   "simrat39/symbols-outline.nvim",
-  --   cmd = "SymbolsOutline",
-  --   keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
-  --   config = true,
-  -- },
+  {
+    "simrat39/symbols-outline.nvim",
+    cmd = "SymbolsOutline",
+    keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
+    config = true,
+  },
 
   -- add zen-mode
   {
@@ -80,6 +80,60 @@ return {
     opts = {
       context = -1,
       treesitter = true,
+    },
+  },
+
+  {
+    "willothy/flatten.nvim",
+    config = true,
+    -- or pass configuration with
+    -- opts = {  }
+    -- Ensure that it runs first to minimize delay when opening file from terminal
+    lazy = false,
+    priority = 1001,
+  },
+
+  { "ggandor/leap.nvim", enabled = false },
+  { "ggandor/flit.nvim", enabled = false },
+
+  { "will133/vim-dirdiff", lazy = false },
+
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    ---@type Flash.Config
+    opts = {
+      modes = {
+        char = {
+          keys = { "f", "F", "t", "T" },
+        },
+      },
+    },
+    keys = {
+      {
+        "s",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash").jump()
+        end,
+        desc = "Flash",
+      },
+      {
+        "S",
+        mode = { "n", "o", "x" },
+        function()
+          require("flash").treesitter()
+        end,
+        desc = "Flash Treesitter",
+      },
+      {
+        "r",
+        mode = "o",
+        function()
+          require("flash").remote()
+        end,
+        desc = "Remote Flash",
+      },
     },
   },
 }
