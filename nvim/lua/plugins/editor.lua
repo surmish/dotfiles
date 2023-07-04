@@ -80,12 +80,21 @@ return {
   {
     "folke/flash.nvim",
     event = "VeryLazy",
-    vscode = true,
+    vscode = false,
     ---@type Flash.Config
     opts = {
       modes = {
         char = {
+          autohide = false,
           keys = { "f", "F", "t", "T", [";"] = "h", "," },
+          jump_labels = function(motion)
+            -- never show jump labels by default
+            -- return false
+            -- Always show jump labels for ftFT
+            -- return vim.v.count == 0 and motion:find("[ftFT]")
+            -- Show jump labels for ftFT in operator-pending mode
+            return vim.v.count == 0 and motion:find("[ftFT]") and vim.fn.mode(true):find("o")
+          end,
         },
       },
     },
