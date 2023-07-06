@@ -145,8 +145,5 @@ return {
     priority = 1001,
   },
 
-  { "ggandor/leap.nvim", enabled = false },
-  { "ggandor/flit.nvim", enabled = false },
-
   { "will133/vim-dirdiff", lazy = false },
 }
