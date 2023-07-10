@@ -6,9 +6,6 @@ return {
     config = true,
   },
 
-  -- { "folke/neodev.nvim", enabled = false },
-  -- { "folke/trouble.nvim", enabled = false },
-
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
@@ -31,22 +28,6 @@ return {
         "vim",
         "yaml",
       },
-    },
-  },
-
-  {
-    "theHamsta/nvim-dap-virtual-text",
-    version = false,
-    dependencies = {
-      "mfussenegger/nvim-dap",
-    },
-  },
-
-  {
-    "rcarriga/nvim-dap-ui",
-    version = false,
-    dependencies = {
-      "mfussenegger/nvim-dap",
     },
   },
 
