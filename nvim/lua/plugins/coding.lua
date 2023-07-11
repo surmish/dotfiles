@@ -33,4 +33,16 @@ return {
 
   { "junegunn/fzf", build = "./install --all" },
   { "junegunn/fzf.vim" },
+
+  {
+    "L3MON4D3/LuaSnip",
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+      config = function()
+        require("luasnip").filetype_extend("c", { "cdoc" })
+        require("luasnip").filetype_extend("cpp", { "cppdoc" })
+        require("luasnip.loaders.from_vscode").lazy_load()
+      end,
+    },
+  },
 }
