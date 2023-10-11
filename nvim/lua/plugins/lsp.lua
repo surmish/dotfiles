@@ -18,4 +18,18 @@ return {
       },
     },
   },
+  {
+    "nvim-telescope/telescope.nvim",
+    keys = {
+      { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
+      { "<leader>fF", false },
+    },
+  },
+  {
+    "ahmedkhalf/project.nvim",
+    opts = {
+      manual_mode = true,
+      detection_methods = { "pattern" },
+    },
+  },
 }

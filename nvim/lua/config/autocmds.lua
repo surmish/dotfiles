@@ -2,11 +2,22 @@
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 -- Add any additional autocmds here
 
--- Disable autoformat for lua files
+-- Enable autoformat for cpp files
 vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = { "cpp" },
   callback = function()
     vim.b.autoformat = true
+  end,
+})
+
+vim.api.nvim_create_autocmd({
+  "BufNewFile",
+  "BufRead",
+}, {
+  pattern = "*.tcl",
+  callback = function()
+    local buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_option(buf, "filetype", "tcsh")
   end,
 })
 
