@@ -3,6 +3,7 @@
   "LuaSnip": { "branch": "master", "commit": "0df29db3543837f8b41597f2640397c5ec792b7b" },
   "SchemaStore.nvim": { "branch": "main", "commit": "f3c4985093716c8ddf93731609ebfc1df7c5335d" },
   "SmoothCursor.nvim": { "branch": "main", "commit": "3cf9e26c2648cdfd8d4d79871ea6c4ca4aefa5eb" },
+  "aerial.nvim": { "branch": "master", "commit": "483d2c860aed1b857c48d6943e6d2b261653ebfb" },
   "barbar.nvim": { "branch": "master", "commit": "283bceab39f549c5e5228212661750704fcfcd9e" },
   "bluloco.nvim": { "branch": "main", "commit": "e4aad381d5ee432b2ba9feea58d0acd57877f365" },
   "bufresize.nvim": { "branch": "master", "commit": "3b19527ab936d6910484dcc20fb59bdb12322d8b" },
