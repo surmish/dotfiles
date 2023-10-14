@@ -20,7 +20,7 @@ require("lazy").setup({
     pills = false,
   },
   init = function()
-    require("lazyvim.util").get_root = vim.loop.cwd
+    vim.g.root_spec = { "cwd" }
   end,
 
   spec = {
@@ -31,7 +31,6 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.dap.core" },
     { import = "lazyvim.plugins.extras.dap.nlua" },
     { import = "lazyvim.plugins.extras.editor.mini-files" },
-    { import = "lazyvim.plugins.extras.formatting.conform" },
     { import = "lazyvim.plugins.extras.formatting.prettier" },
     { import = "lazyvim.plugins.extras.lang.json" },
     { import = "lazyvim.plugins.extras.lang.yaml" },

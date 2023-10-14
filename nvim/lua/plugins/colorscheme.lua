@@ -125,10 +125,10 @@ return {
     {
       "LazyVim/LazyVim",
       opts = {
-        colorscheme = "moonbow",
-        -- colorscheme = "gruvbox",
-        -- vim.cmd([[ set background=light ]]),
-        -- vim.cmd[[ highlight Normal ctermfg=green ctermbg=yellow ]]
+        -- colorscheme = "moonbow",
+        colorscheme = "gruvbox",
+        vim.cmd([[ set background=light ]]),
+        vim.cmd([[ highlight Normal ctermfg=green ctermbg=yellow ]]),
       },
     },
   },
