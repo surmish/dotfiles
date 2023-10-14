@@ -112,7 +112,7 @@ return {
       "rcarriga/nvim-notify",
     },
     opts = {
-      lang = "rust",
+      lang = "python",
       -- sql = "postgresql"
     },
     config = function(_, opts)
