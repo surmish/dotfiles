@@ -23,6 +23,10 @@ return {
         group_empty_dirs = true, -- when true, empty folders will be grouped together
         hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
       },
+      keys = {
+        { "<leader>e", false },
+        { "<leader>E", false },
+      },
     },
   },
 
@@ -32,12 +36,15 @@ return {
   --   opts = { use_diagnostic_signs = true },
   -- },
 
-  -- add symbols-outline
   {
-    "simrat39/symbols-outline.nvim",
-    cmd = "SymbolsOutline",
-    keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
-    config = true,
+    "stevearc/aerial.nvim",
+    opts = {
+      layout = {
+        max_width = { 80, 0.5 },
+        width = 80,
+        min_width = 80,
+      },
+    },
   },
 
   -- add zen-mode
@@ -95,6 +102,18 @@ return {
         },
       },
     },
+  },
+
+  {
+    "debugloop/telescope-undo.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
+    keys = { { "<leader>U", "<cmd>Telescope undo<cr>" } },
+    config = function()
+      require("telescope").load_extension("undo")
+    end,
   },
 
   {

@@ -7,6 +7,13 @@ return {
     opts = {
       --   ---@type lspconfig.options
       servers = {
+        lua_ls = {
+          settings = {
+            Lua = {
+              telemetry = { enable = false },
+            },
+          },
+        },
         svlangserver = {
           root_pattern = { ".git", ".svlangserver" },
           includeIndexing = "**/*.{sv,svh}",

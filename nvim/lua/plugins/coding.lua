@@ -7,24 +7,45 @@ return {
   },
 
   {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters = {
+        -- prettier = {
+        --   command = "prettier",
+        --   args = { "--config", ".prettierrc.json" },
+        -- },
+      },
+    },
+  },
+
+  {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    opts = {
+      config = {
+        cpp = "// %s",
+        verilog = "// %s",
+        systemverilog = "// %s",
+      },
+    },
+  },
+
+  {
     "nvim-treesitter/nvim-treesitter",
     dependencies = {
       "JoosepAlviste/nvim-ts-context-commentstring",
     },
     opts = {
-      context_commentstring = {
-        enable = true,
-        enable_autocmd = false,
-        config = {
-          cpp = "// %s",
-        },
+      ignore_install = {
+        "help",
       },
+      enable = true,
+      enable_autocmd = false,
       ensure_installed = {
         "bash",
         "c",
         "cpp",
+        "fish",
         "diff",
-        "help",
         "html",
         "json",
         "jsonc",
@@ -59,11 +80,16 @@ return {
         require("luasnip").filetype_extend("python", { "pydoc" })
         require("luasnip").filetype_extend("rust", { "rustdoc" })
         require("luasnip").filetype_extend("tcsh", { "tcl" })
+        -- for LuaSnip snippets
         require("luasnip.loaders.from_vscode").lazy_load()
+        -- for custom snippets in .config/nvim/snippets dir
+        require("luasnip.loaders.from_vscode").lazy_load({
+          paths = { vim.fn.stdpath("config") .. "/snippets" },
+        })
       end,
     },
   },
-  -- Modify nvim-cmp
+
   {
     "hrsh7th/nvim-cmp",
     opts = function(_, opts)
@@ -97,32 +123,6 @@ return {
       --   end
       -- end
       -- table.insert(opts.sorting.comparators, 1, prioritize_snippet)
-    end,
-  },
-
-  {
-    "kawre/leetcode.nvim",
-    build = ":TSUpdate html",
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim", -- required by telescope
-      "nvim-telescope/telescope.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "nvim-treesitter/nvim-treesitter",
-      "rcarriga/nvim-notify",
-    },
-    opts = {
-      lang = "python",
-      -- sql = "postgresql"
-    },
-    config = function(_, opts)
-      vim.keymap.set("n", "<leader>lq", "<cmd>LcQuestionTabs<cr>")
-      vim.keymap.set("n", "<leader>lm", "<cmd>LcMenu<cr>")
-      vim.keymap.set("n", "<leader>lc", "<cmd>LcConsole<cr>")
-      vim.keymap.set("n", "<leader>ll", "<cmd>LcLanguage<cr>")
-      vim.keymap.set("n", "<leader>ld", "<cmd>LcDescriptionToggle<cr>")
-
-      require("leetcode").setup(opts)
     end,
   },
 
@@ -170,13 +170,33 @@ return {
       },
     },
     keys = {
-      { "<leader>mm", ":lua require('neomarks').mark_file()<CR>", desc = "Mark file" },
-      { "<leader>mc", ":lua require('neomarks').menu_toggle()<CR>", desc = "Toggle the UI" },
-      { "<leader>1", ":lua require('neomarks').jump_to(1)<CR>", desc = "Jump to specific index" },
-      { "<leader>2", ":lua require('neomarks').jump_to(2)<CR>", desc = "Jump to specific index" },
-      { "<leader>3", ":lua require('neomarks').jump_to(3)<CR>", desc = "Jump to specific index" },
-      { "<leader>4", ":lua require('neomarks').jump_to(4)<CR>", desc = "Jump to specific index" },
-      { "<leader>5", ":lua require('neomarks').jump_to(5)<CR>", desc = "Jump to specific index" },
+      { "<leader>mm", ":lua require('neomarks').mark_file()<CR>", desc = "Neomark mark file" },
+      { "<leader>mc", ":lua require('neomarks').menu_toggle()<CR>", desc = "Neomark UI" },
+      { "<leader>1", ":lua require('neomarks').jump_to(1)<CR>", desc = "Neomark index 1" },
+      { "<leader>2", ":lua require('neomarks').jump_to(2)<CR>", desc = "Neomark index 2" },
+      { "<leader>3", ":lua require('neomarks').jump_to(3)<CR>", desc = "Neomark index 3" },
+      { "<leader>4", ":lua require('neomarks').jump_to(4)<CR>", desc = "Neomark index 4" },
+      { "<leader>5", ":lua require('neomarks').jump_to(5)<CR>", desc = "Neomark index 5" },
+      { "<leader>6", ":lua require('neomarks').jump_to(6)<CR>", desc = "Neomark index 6" },
+      { "<leader>7", ":lua require('neomarks').jump_to(7)<CR>", desc = "Neomark index 7" },
+      { "<leader>8", ":lua require('neomarks').jump_to(8)<CR>", desc = "Neomark index 8" },
+      { "<leader>9", ":lua require('neomarks').jump_to(9)<CR>", desc = "Neomark index 9" },
     },
+  },
+
+  {
+    "chrisgrieser/nvim-scissors",
+    dependencies = "nvim-telescope/telescope.nvim", -- optional
+    opts = {
+      snippetDir = vim.fn.stdpath("config") .. "/snippets",
+    },
+    keys = {
+      { "<leader>es", ":lua require('scissors').editSnippet()<CR>", mode = { "n" }, desc = "Edit Snippet" },
+      { "<leader>as", ":lua require('scissors').addNewSnippet()<CR>", mode = { "n", "x" }, desc = "Add New Snippet" },
+    },
+    telescope = {
+      alsoSearchSnippetBody = true,
+    },
+    jsonFormatter = "jq",
   },
 }
