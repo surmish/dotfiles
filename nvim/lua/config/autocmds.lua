@@ -1,5 +1,6 @@
 -- Autocmds are automatically loaded on the VeryLazy event
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
+
 -- Add any additional autocmds here
 
 -- Autoformat setting
@@ -45,3 +46,24 @@ vim.api.nvim_create_autocmd("VimEnter", {
   pattern = { "*", "diff" },
   command = "if &diff | colorscheme moonbow | endif",
 })
+
+-- local api = vim.api
+-- local fn = vim.fn
+-- api.nvim_create_user_command("StripTrailingWhitespace", "<line1>,<line2>s/\\s\\+$//e | noh | norm! ``", { range = "%" })
+-- local init = api.nvim_create_augroup("init", {})
+--
+-- -- Copy yanked text to system clipboard
+-- -- If we are connected over ssh also copy using OSC52
+-- api.nvim_create_autocmd("TextYankPost", {
+--   group = init,
+--   desc = "[osc52] Copy to clipboard/OSC52",
+--   callback = function()
+--     if vim.v.operator == "y" then
+--       local yank_data = fn.getreg(vim.v.event.regname)
+--       if fn.has("clipboard") == 1 then
+--         pcall(fn.setreg, "+", yank_data)
+--       end
+--       require("vim.ui.clipboard.osc52").copy({ yank_data })
+--     end
+--   end,
+-- })
