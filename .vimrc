@@ -14,6 +14,11 @@ Plug 'tpope/vim-commentary'   " Comment out lines      :help commentary
 
 Plug 'wlangstroth/vim-racket'
 
+Plug 'imsnif/kdl.vim'
+
+Plug 'ojroques/vim-oscyank'
+vmap <leader>t <Plug>OSCYankVisual
+
 " Plug 'dstein64/vim-startuptime'
 
 " On-demand loading
@@ -106,39 +111,13 @@ if !has('nvim')
 
 " Plug 'markonm/traces.vim'
 
-" Code completion engine {{{
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  let g:coc_disable_startup_warning = 1
-  let g:coc_global_extensions = [
-        \'coc-dictionary',
-        \'coc-marketplace',
-        \'coc-tag',
-        \'coc-highlight',
-        \'coc-pyright',
-        \'coc-yank',
-        \'coc-snippets',
-        \'coc-json',
-        \'coc-xml',
-        \'coc-clangd'
-        \]
-  let g:coc_user_config = {
-        \ "diagnostic.errorSign"  : '✘',
-        \ "diagnostic.warningSign": '⚠',
-        \ "diagnostic.infoSign"   : '',
-        \ "diagnostic.hintSign"   : '➤',
-        \ }
-  " \ "diagnostic.signOffset" : 9999,
-" }}}
-
-" Snippet insertion engine and collection {{{
-  Plug 'SirVer/ultisnips'
-  Plug 'honza/vim-snippets'
-  let g:UltiSnipsExpandTrigger="<C-j>"
-  let g:UltiSnipsJumpForwardTrigger="<c-b"
-  let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-  " }}}
-
-  Plug 'jackguo380/vim-lsp-cxx-highlight'
+" " Snippet insertion engine and collection {{{
+"   Plug 'SirVer/ultisnips'
+"   Plug 'honza/vim-snippets'
+"   let g:UltiSnipsExpandTrigger="<C-j>"
+"   let g:UltiSnipsJumpForwardTrigger="<c-b"
+"   let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"   " }}}
 
 " Smooth scrolling plugin in vimscript
 if has('patch4746')
@@ -256,8 +235,8 @@ call plug#end()
 
 filetype indent plugin on
 if !has('nvim')
-  set mouse+=a
-  set ttymouse=xterm2
+  set mouse=a
+  set ttymouse=sgr
 endif
 set autoindent
 set ttyfast
@@ -286,6 +265,8 @@ vnoremap <C-s> <C-C>:update<CR>
 inoremap <C-s> <C-O>:update<CR>
 " Exit if file not modified
 nnoremap <leader>qq :q<CR>
+" Close current window
+nnoremap <leader>wd :close<CR>
 " Force exit irrespective of changes
 nnoremap <leader>Q :q!<CR>
 " Close current buffer 
@@ -350,6 +331,7 @@ augroup END
 
 let &scrolloff = 18
 nnoremap <leader>so :let &scrolloff = 18 - &scrolloff<CR>
+set smoothscroll
 
 " do not wrap around long lines
 set  nowrap
@@ -361,6 +343,7 @@ nnoremap <leader>av ggvG$
 " yank all lines of the file and return to current position
 nnoremap <leader>ay maggvG$y'a
 " yank into/paste from clipboard register
+set clipboard=unnamed,unnamedplus
 nnoremap <leader>y "+y
 nnoremap <leader>p "+p
 
@@ -388,8 +371,8 @@ nmap <leader>ic <ESC>:set ignorecase!<CR>
 " }}}
 
 " left/right to step through buffers 
-nnoremap <leader><tab>   :bnext<CR>
-nnoremap <leader><S-tab> :bprevious<CR>
+nnoremap L :bnext<CR>
+nnoremap H :bprevious<CR>
 
 " Move to next tag
 nmap <leader>t <ESC>:tn<CR>
@@ -397,17 +380,16 @@ nmap <leader>t <ESC>:tn<CR>
 nmap <leader>p <ESC>:tp<CR>
 
 if has("autocmd")
-  autocmd BufNewFile,BufRead *.pro set filetype=make
+  autocmd BufNewFile,BufRead Make*,*.mk,*.make set filetype=make
+  autocmd BufNewFile,BufRead buildmap.config set filetype=confini
+  autocmd BufNewFile,BufRead buildip.config,ip*.config set filetype=yaml
   autocmd BufNewFile,BufRead *.zsh set filetype=bash
   autocmd BufNewFile,BufRead *.C set filetype=cpp
   autocmd BufNewFile,BufRead *.vs,*.sv,*.v,*.vh set filetype=verilog
-  autocmd BufNewFile,BufRead *.tm,*.pcx,*.setup,*.inc set filetype=tcl
-  autocmd BufNewFile,BufRead *.setup.urmish set filetype=tcl
-  autocmd BufNewFile,BufRead *.make set filetype=make
+  autocmd BufNewFile,BufRead *.tn set filetype=tcl
   autocmd BufReadPost *.lisp,*.scm,*.rkt,*.tktl set filetype=lisp
   autocmd BufReadPost *.gdbinit.urmish set filetype=gdb
-  autocmd filetype racket set lisp
-  autocmd filetype racket set autoindent
+  autocmd filetype racket set lisp autoindent
   autocmd filetype racket,lisp,scheme,commonlisp setlocal equalprg=scmindent
   " Activation based on file type
   autocmd FileType c,cpp setlocal formatprg=clang-format\ -style=file:$HOME/.clang-format
@@ -438,6 +420,8 @@ augroup Cursor
 augroup END
 
 nnoremap <leader>edate i <C-r>=strftime('%F')<CR><ESC>
+
+set termguicolors
 
 " Colorscheme settings {{{
 set background=dark
