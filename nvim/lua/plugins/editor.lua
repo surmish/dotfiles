@@ -135,4 +135,13 @@ return {
   },
 
   { "will133/vim-dirdiff", lazy = false },
+
+  {
+    "ojroques/vim-oscyank",
+    lazy = false,
+    config = function()
+      vim.keymap.set("v", "<leader>t", "<Plug>OSCYankVisual")
+    end,
+  },
+
 }
