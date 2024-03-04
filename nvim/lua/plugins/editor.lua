@@ -143,5 +143,4 @@ return {
       vim.keymap.set("v", "<leader>t", "<Plug>OSCYankVisual")
     end,
   },
-
 }
