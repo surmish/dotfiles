@@ -4,7 +4,7 @@
 
 vim.opt.scrolloff = 25
 vim.opt.cursorline = false
-vim.opt.clipboard = "unnamed,unnamedplus" -- sync with system clipboard
+vim.opt.clipboard = "unnamed,unnamedplus"
 vim.opt.undolevels = 200
 vim.opt.tags = os.getenv("TAGSFILE")
 vim.opt.tabstop = 4

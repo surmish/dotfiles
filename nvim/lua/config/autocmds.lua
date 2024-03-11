@@ -47,23 +47,37 @@ vim.api.nvim_create_autocmd("VimEnter", {
   command = "if &diff | colorscheme moonbow | endif",
 })
 
--- local api = vim.api
--- local fn = vim.fn
--- api.nvim_create_user_command("StripTrailingWhitespace", "<line1>,<line2>s/\\s\\+$//e | noh | norm! ``", { range = "%" })
--- local init = api.nvim_create_augroup("init", {})
---
--- -- Copy yanked text to system clipboard
--- -- If we are connected over ssh also copy using OSC52
--- api.nvim_create_autocmd("TextYankPost", {
---   group = init,
---   desc = "[osc52] Copy to clipboard/OSC52",
---   callback = function()
---     if vim.v.operator == "y" then
---       local yank_data = fn.getreg(vim.v.event.regname)
---       if fn.has("clipboard") == 1 then
---         pcall(fn.setreg, "+", yank_data)
---       end
---       require("vim.ui.clipboard.osc52").copy({ yank_data })
---     end
---   end,
--- })
+function OpenPerforceFileWithRevision(depotPath)
+  -- Strip the revision number from the depot path, if present
+  local strippedPath = string.gsub(depotPath, "#%d+$", "")
+
+  -- Run 'p4 where' command for the stripped path
+  local handle, err = io.popen("p4 where " .. strippedPath, "r")
+
+  if not handle then
+    print("Failed to execute 'p4 where': " .. err)
+    return
+  end
+
+  local result = handle:read("*a")
+  handle:close()
+
+  -- Extract the local file path from the 'p4 where' command output
+  local paths = {}
+  for path in string.gmatch(result, "%S+") do
+    table.insert(paths, path)
+  end
+  local localPath = paths[#paths]
+
+  -- Open the file in Neovim if the local path was successfully extracted
+  if localPath and #localPath > 0 then
+    vim.cmd("edit " .. localPath)
+  else
+    print("Could not find local path for " .. depotPath)
+  end
+end
+
+-- Example command binding to use the function
+vim.api.nvim_create_user_command("P4View", function(opts)
+  OpenPerforceFileWithRevision(opts.args)
+end, { nargs = 1 })

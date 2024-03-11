@@ -64,8 +64,6 @@ end, { noremap = true, desc = "[sc] Toggle sign column" })
 vim.keymap.set("n", "<leader>Q"     , ":q!<CR>"             , { noremap = true, desc = "Force exit irrespective of changes"     })
 vim.keymap.set("n", "<leader>x"     , ":x<CR>"              , { noremap = true, desc = "Close current buffer."                  })
 vim.keymap.set("n", "<leader><C-h>" , "<ESC>:set wrap!<CR>" , { noremap = true, desc = "Toggle wrap around long lines"          })
-vim.keymap.set("n", "<leader>av"    , "ggvG$"               , { noremap = true, desc = "visually select the entire buffer"      })
-vim.keymap.set("n", "<leader>ay"    , "maggvG$y'a"          , { noremap = true, desc = "yank all & return to current position"  })
 -- stylua: ignore end
 
 vim.keymap.set("n", "<leader>edate", 'i <C-r>=strftime("%F")<CR><ESC>', { noremap = true, desc = "" })
