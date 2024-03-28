@@ -1,19 +1,6 @@
 return {
-  {
-    "folke/tokyonight.nvim",
-    styles = {
-      -- Style to be applied to different syntax groups
-      -- Value is any valid attr-list value for `:help nvim_set_hl`
-      comments = { italic = true },
-      keywords = { italic = true },
-      functions = {},
-      variables = {},
-      -- Background styles. Can be "dark", "transparent" or "normal"
-      sidebars = "dark", -- style for sidebars, see below
-      floats = "dark", -- style for floating windows
-    },
-    lazy = true,
-  },
+  { "imsnif/kdl.vim", lazy = false },
+  { "folke/tokyonight.nvim", lazy = true },
   { "catppuccin/nvim", name = "catppuccin", lazy = true },
 
   {
@@ -149,6 +136,7 @@ return {
       -- colorscheme = "tokyonight",
       -- colorscheme = "gruvbox",
       colorscheme = "kanagawa",
+      -- colorscheme = "kanagawa-lotus",
       -- vim.cmd([[ set background=light ]]),
       -- vim.cmd([[ highlight Normal ctermfg=green ctermbg=yellow ]]),
     },

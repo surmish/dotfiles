@@ -15,6 +15,7 @@ end
 
 set_autoformat({ "cpp" }, true)
 set_autoformat({ "fish" }, false)
+set_autoformat({ "lua" }, false)
 
 -- File type setting
 local set_filetype = function(pattern, filetype)
@@ -81,3 +82,8 @@ end
 vim.api.nvim_create_user_command("P4View", function(opts)
   OpenPerforceFileWithRevision(opts.args)
 end, { nargs = 1 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "perl,tcl,tcsh,python",
+  command = "setlocal tabstop=4 shiftwidth=4",
+})

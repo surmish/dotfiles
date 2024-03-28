@@ -36,17 +36,6 @@ return {
   --   opts = { use_diagnostic_signs = true },
   -- },
 
-  {
-    "stevearc/aerial.nvim",
-    opts = {
-      layout = {
-        max_width = { 80, 0.5 },
-        width = 80,
-        min_width = 80,
-      },
-    },
-  },
-
   -- add zen-mode
   {
     "folke/zen-mode.nvim",
@@ -88,6 +77,9 @@ return {
     ---@type Flash.Config
     opts = {
       modes = {
+        search = {
+          enabled = false,
+        },
         char = {
           autohide = false,
           keys = { "f", "F", "t", "T", [";"] = "h", "," },

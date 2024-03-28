@@ -1,18 +1,12 @@
 return {
-
-  -- uncomment and add lsp servers with their config to servers below
   {
     "neovim/nvim-lspconfig",
     -- ---@class PluginLspOpts
     opts = {
-      --   ---@type lspconfig.options
       servers = {
         lua_ls = {
-          settings = {
-            Lua = {
-              telemetry = { enable = false },
-            },
-          },
+          enabled = false,
+          mason = false,
         },
         svlangserver = {
           root_pattern = { ".git", ".svlangserver" },
