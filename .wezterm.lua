@@ -19,11 +19,21 @@ config.font = wezterm.font("Iosevka Medium")
 -- config.font = wezterm.font("Iosevka", {weight="Regular", stretch="Normal", style="Oblique"})
 -- config.font = wezterm.font("FiraCode", {weight="Medium", stretch="Normal", style="Normal"})
 config.font_size = 10
+
+config.mouse_bindings = {
+  -- Disable mouse reporting
+  { event={Up={streak=1, button="Left"}},
+    mods="NONE",
+    action="Nop",
+  },
+}
+
 config.window_background_opacity = 1
 config.audible_bell = "Disabled"
 --config.color_scheme = "catppuccin-latte"
---config.color_scheme = 'Gruvbox light'
+--config.color_scheme = 'Gruvbox Light'
 config.color_scheme = 'Gruvbox Dark (Gogh)'
+--config.color_scheme = 'Gruvbox dark, medium (base16)'
 -- Tab Bar Options
 -- config.use_fancy_tab_bar = false
 -- config.enable_tab_bar = true
@@ -45,7 +55,11 @@ config.keys = {
 -- Padding
 config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
 
-config.default_prog = { 'ssh', 'urmishs@dc6-xterm-336' }
+if os.getenv("WEZTERM_MODE") == "ssh" then
+  config.default_prog = { 'ssh', 'urmishs@dc6-xterm-336', '-Y' }
+else
+  config.default_prog = { 'zellij', 'attach', 'personal', '-c' }
+end
 
 -- and finally, return the configuration to wezterm
 return config
