@@ -1,10 +1,16 @@
 # Aliases for simple command replacements
 alias e='nvim'
+alias eo='nvim -o'
+alias eO='nvim -O'
+alias r='nvim -R'
 alias p='pwd'
 
 alias vd='nvim -d'
 alias evim='nvim ~/.config/nvim'
 alias ezellij='nvim ~/.config/zellij/config.kdl' # Changed the name to avoid conflict
+
+alias rmf='rm -f'
+alias rmrf='rm -rf'
 
 # Directory navigation
 alias ..='cd ..'
@@ -50,6 +56,7 @@ alias psg='ps aux | rg'
 alias cls='clear; ls'
 alias path='echo $PATH | tr ":" "\n"'
 alias ldpath='echo $LD_LIBRARY_PATH | tr ":" "\n"'
+alias mkcd='mkdir -p "$1" && cd "$1"' # Adjusted to use function-like structure
 
 alias econfig='vim ~/.bashrc'
 alias sconfig='source ~/.config/bash/functions.sh && source ~/.config/bash/aliases.sh && source ~/.config/bash/custom.sh && source ~/.config/bash/work.sh'
