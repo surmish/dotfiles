@@ -16,6 +16,7 @@ if status is-interactive
   # export TERM=screen-256color
   export P4DIFF="nvim -d"
   export P4EDITOR=nvim
+  export EDITOR=nvim
   # export MANPAGER="sh -c 'col -bx | bat -l man -p'"
   export MANPAGER='nvim +Man!'
   export MANWIDTH=999
@@ -63,5 +64,7 @@ if status is-interactive
   test -f ~/.config/fish/bindings.fish; and source ~/.config/fish/bindings.fish
   test -f ~/.config/fish/aliases.fish; and source ~/.config/fish/aliases.fish
   test -f ~/.config/fish/work.fish; and source ~/.config/fish/work.fish
+
+  # starship init fish | source
 
 end

@@ -1,10 +1,11 @@
+set SCRATCH_VLSI "/home/scratch.urmishs_vlsi"
+
 # Navigation
 abbr ..    'cd ..'
 abbr ...   'cd ../..'
 abbr ....  'cd ../../..'
 abbr ..... 'cd ../../../..'
 abbr cdh   'cd ~'
-abbr clr   'clear'
 
 # perforce
 abbr p4e       'p4 edit'
@@ -39,47 +40,45 @@ abbr p4ck      'p4 counter'
 abbr p4lblsync 'p4 labelsync'
 
 # Editing
-abbr e   'nvim'
-abbr e-  'nvim -'
-abbr r   'nvim -R'
-abbr vid 'nvim -d'
-abbr p   'pwd'
-abbr eO  'e -O'
-abbr eo  'e -o'
-
-# neovim and ctags
-function et; nvim -t $argv[1]; end
+function e;  $EDITOR $argv; end
+function eo; $EDITOR -o $argv; end
+function eO; $EDITOR -O $argv; end
+function et; $EDITOR -t $argv[1]; end
+function r;  $EDITOR -R $argv; end
+function vd; $EDITOR -d $argv; end
+function vs; $SCRATCH_VLSI/tools/usr/bin/vd $argv; end
+abbr e- '$EDITOR -'
+abbr p  'pwd'
 
 # Listing and file management
-# abbr l  'eza -F'
-function v;   eza -l --sort=newest $argv; end
-function l;   ls --color=auto -CF; end
-function ll;  eza -l $argv; end
-function la;  eza -A $argv; end
+function v;  eza -l --sort=newest $argv; end
+function l;  ls --color=auto -CF; end
+function ll; eza -l $argv; end
+function la; eza -A $argv; end
 
 # Miscellaneous commands
-abbr rmf   'rm -f'
-abbr rmrf  'rm -rf'
-abbr g     'rg'
-abbr envg  'env | rg'
-abbr hig   'history | rg'
-abbr lg    'eza | rg '
-abbr tf    'tail -f'
-abbr rp    'realpath'
-abbr lc    'wc -l'
-abbr topu  'top -u $USER'
-function cds; cd /home/scratch.urmishs_vlsi; end
-function cdc; cd /home/scratch.urmishs_vlsi/clients; end
-function cdt; cd /home/scratch.urmishs_vlsi/tools; end
+function rmf;  rm -f  $argv; end
+function rmrf; rm -rf $argv; end
+function g;    rg $argv; end
+function envg; env | rg $argv; end
+function hig;  history | rg $argv; end
+function lg;   eza | rg $argv; end
+function tf;   tail -f $argv; end
+function rp;   realpath $argv; end
+function lc;   wc -l $argv; end
+function topu; top -u $USER; end
+function cds;  cd $SCRATCH_VLSI; end
+function cdc;  cd $SCRATCH_VLSI/clients; end
+function cdt;  cd $SCRATCH_VLSI/tools; end
 
 # System and process management
-abbr dfh 'df -h'
-abbr duh 'du -h'
-abbr dus 'du -hc --summarize'
-abbr psg 'ps aux | rg'
+function dfh; df -h $argv; end
+function duh; du -h $argv; end
+function dus; du -hc --summarize $argv; end
+function psg; ps aux | rg $argv; end
 
-abbr fdf 'fd --type=f'
-abbr fdd 'fd --type=d'
+function fdf; fd --type=f $argv; end
+function fdd; fd --type=d $argv; end
 
 function mkcd
     if mkdir -p $argv[1]
@@ -90,15 +89,14 @@ function mkcd
 end
 
 # Editing and Sourcing Configuration Files:
-function evim;    nvim ~/.vimrc; end
-function etmux;   nvim ~/.tmux.conf; end
-function ecsh;    nvim ~/.cshrc_custom; end
-function scsh;    source ~/.cshrc_custom; end
-function efish;   nvim ~/.config/fish/config.fish; end
-function sfish;   source ~/.config/fish/config.fish; end
-function ealias;  nvim ~/.config/fish/aliases.fish; end
-function salias;  source ~/.config/fish/aliases.fish; end
-function ezellij; nvim ~/.config/zellij/config.kdl; end
+function evim;    $EDITOR ~/.vimrc; end
+function ecsh;    $EDITOR ~/.cshrc_custom; end
+function scsh;    source  ~/.cshrc_custom; end
+function efish;   $EDITOR $__fish_config_dir/config.fish; end
+function sfish;   source  $__fish_config_dir/config.fish; end
+function ealias;  $EDITOR $__fish_config_dir/aliases.fish; end
+function salias;  source  $__fish_config_dir/aliases.fish; end
+function ezellij; $EDITOR ~/.config/zellij/config.kdl; end
 
 function cargo-update; cargo install $(cargo install --list | egrep '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' '); end
 
@@ -113,7 +111,7 @@ function extract
       case '*.tar.xz'
         tar xJf $argv[1]
       case '*.tar.lzma'
-        tar --lzma -xvf $argv[1]
+        tar --lzma -xf $argv[1]
       case '*.bz2'
         bunzip2 $argv[1]
       case '*.rar'

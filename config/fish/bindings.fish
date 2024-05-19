@@ -14,6 +14,8 @@ for mode in insert default visual
 end
 
 for mode in insert default
+  bind --erase \cv   # unbind ctrl + v
   bind --erase \e\cf # unbind ctrl + alt + f
   bind -M $mode \cf '_fzf_search_directory'
+  bind -M insert \cv 'fish_clipboard_paste'
 end
