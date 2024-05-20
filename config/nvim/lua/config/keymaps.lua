@@ -88,14 +88,4 @@ vim.keymap.set("n", "i", function()
   return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or "i"
 end, { expr = true, noremap = true })
 
--- vim.g.clipboard = {
---   name = 'OSC 52',
---   copy = {
---     ['+'] = require('vim.ui.clipboard.osc52').copy,
---     ['*'] = require('vim.ui.clipboard.osc52').copy,
---   },
---   paste = {
---     ['+'] = require('vim.ui.clipboard.osc52').paste,
---     ['*'] = require('vim.ui.clipboard.osc52').paste,
---   },
--- }
+vim.keymap.set('n', '<leader>h', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end)
