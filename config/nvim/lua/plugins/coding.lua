@@ -1,22 +1,4 @@
 return {
-  -- scopes
-  {
-    "tiagovla/scope.nvim",
-    event = "VeryLazy",
-    config = true,
-  },
-
-  {
-    "stevearc/conform.nvim",
-    opts = {
-      formatters = {
-        -- prettier = {
-        --   command = "prettier",
-        --   args = { "--config", ".prettierrc.json" },
-        -- },
-      },
-    },
-  },
 
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
