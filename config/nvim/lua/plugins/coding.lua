@@ -29,6 +29,8 @@ return {
     },
   },
 
+  { "windwp/nvim-ts-autotag", enabled = false, },
+
   {
     "nvim-treesitter/nvim-treesitter",
     dependencies = {
