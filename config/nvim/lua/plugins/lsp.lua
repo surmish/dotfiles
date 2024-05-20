@@ -1,12 +1,21 @@
+local is_personal = true
+if os.getenv("USER") == "urmishs" then
+  is_personal = false
+end
+
 return {
   {
     "neovim/nvim-lspconfig",
     -- ---@class PluginLspOpts
     opts = {
       servers = {
+        bashls = {
+          enabled = is_personal,
+          mason = is_personal,
+        },
         lua_ls = {
-          enabled = false,
-          mason = false,
+          enabled = is_personal,
+          mason = is_personal,
         },
         svlangserver = {
           root_pattern = { ".git", ".svlangserver" },
@@ -24,6 +33,13 @@ return {
     keys = {
       { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
       { "<leader>fF", false },
+    },
+    opts = {
+      defaults = {
+        path_display = {
+          filename_first = true,
+        },
+      },
     },
   },
   {

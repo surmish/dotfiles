@@ -32,8 +32,10 @@ end
 set_filetype({ "*.mk", "Make*" }, "make")
 set_filetype({ "buildmap.config", "tool_data.config" }, "confini")
 set_filetype({ "ip*.config", "*rtl.config", "*ip.config", "*.yml_old", "*.yml_new" }, "yaml")
+set_filetype({ "cluster*.clk.config" }, "perl")
 -- tcl as tcsh just for the colors
-set_filetype({ "*.tcl", "*.atelib", "*.tn" }, "tcsh")
+set_filetype({ "*.atelib", "*.tn" }, "tcl")
+set_filetype({ "*.v" }, "systemverilog")
 
 vim.api.nvim_create_autocmd("BufWritePost", {
   pattern = "*.tex",
@@ -94,3 +96,6 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   command = "highlight WinSeparator guifg=#556050",
 })
+
+-- vim.api.nvim_set_hl(0, "Comment", { fg = "#26A69A" })
+-- vim.api.nvim_set_hl(0, "@comment", { link = "Comment" })

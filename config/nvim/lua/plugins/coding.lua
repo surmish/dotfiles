@@ -68,27 +68,27 @@ return {
   { "junegunn/fzf", build = "./install --all" },
   { "junegunn/fzf.vim" },
 
-  {
-    "L3MON4D3/LuaSnip",
-    dependencies = {
-      "rafamadriz/friendly-snippets",
-      config = function()
-        require("luasnip").filetype_extend("sh", { "shelldoc" })
-        require("luasnip").filetype_extend("c", { "cdoc" })
-        require("luasnip").filetype_extend("cpp", { "cppdoc" })
-        require("luasnip").filetype_extend("lua", { "luadoc" })
-        require("luasnip").filetype_extend("python", { "pydoc" })
-        require("luasnip").filetype_extend("rust", { "rustdoc" })
-        require("luasnip").filetype_extend("tcsh", { "tcl" })
-        -- for LuaSnip snippets
-        require("luasnip.loaders.from_vscode").lazy_load()
-        -- for custom snippets in .config/nvim/snippets dir
-        require("luasnip.loaders.from_vscode").lazy_load({
-          paths = { vim.fn.stdpath("config") .. "/snippets" },
-        })
-      end,
-    },
-  },
+  -- {
+  --   "L3MON4D3/LuaSnip",
+  --   dependencies = {
+  --     "rafamadriz/friendly-snippets",
+  --     config = function()
+  --       require("luasnip").filetype_extend("sh", { "shelldoc" })
+  --       require("luasnip").filetype_extend("c", { "cdoc" })
+  --       require("luasnip").filetype_extend("cpp", { "cppdoc" })
+  --       require("luasnip").filetype_extend("lua", { "luadoc" })
+  --       require("luasnip").filetype_extend("python", { "pydoc" })
+  --       require("luasnip").filetype_extend("rust", { "rustdoc" })
+  --       require("luasnip").filetype_extend("tcsh", { "tcl" })
+  --       -- for LuaSnip snippets
+  --       require("luasnip.loaders.from_vscode").lazy_load()
+  --       -- for custom snippets in .config/nvim/snippets dir
+  --       require("luasnip.loaders.from_vscode").lazy_load({
+  --         paths = { vim.fn.stdpath("config") .. "/snippets" },
+  --       })
+  --     end,
+  --   },
+  -- },
 
   {
     "hrsh7th/nvim-cmp",

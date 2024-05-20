@@ -3,6 +3,8 @@ return {
   { "folke/tokyonight.nvim", lazy = true },
   { "catppuccin/nvim", name = "catppuccin", lazy = true },
 
+  { "luisiacc/gruvbox-baby", lazy = true },
+
   {
     "EdenEast/nightfox.nvim",
     priority = 1000,
@@ -36,39 +38,39 @@ return {
     },
   },
 
-  -- {
-  --   "rose-pine/neovim",
-  --   priority = 1000,
-  --   name = "rose-pine",
-  --   opts = {
-  --     dark_variant = "main",
-  --   },
-  -- },
+  {
+    "rose-pine/neovim",
+    priority = 1000,
+    name = "rose-pine",
+    opts = {
+      dark_variant = "main",
+    },
+  },
 
-  -- { "savq/melange-nvim" },
+  { "savq/melange-nvim" },
 
-  -- {
-  --   "uloco/bluloco.nvim",
-  --   priority = 1000,
-  --   dependencies = { "rktjmp/lush.nvim" },
-  --   opts = {
-  --     -- your optional config goes here, see below.
-  --     style = "dark", -- "auto" | "dark" | "light"
-  --     transparent = false,
-  --     italics = false,
-  --   },
-  -- },
+  {
+    "uloco/bluloco.nvim",
+    priority = 1000,
+    dependencies = { "rktjmp/lush.nvim" },
+    opts = {
+      -- your optional config goes here, see below.
+      style = "dark", -- "auto" | "dark" | "light"
+      transparent = false,
+      italics = false,
+    },
+  },
 
-  -- {
-  --   "AlexvZyl/nordic.nvim",
-  --   priority = 1000,
-  --   opts = {
-  --     style = "flat",
-  --     telescope = {
-  --       style = "classic",
-  --     },
-  --   },
-  -- },
+  {
+    "AlexvZyl/nordic.nvim",
+    priority = 1000,
+    opts = {
+      style = "flat",
+      telescope = {
+        style = "classic",
+      },
+    },
+  },
 
   {
     "arturgoms/moonbow.nvim",
@@ -85,25 +87,25 @@ return {
     },
   },
 
-  -- {
-  --   "loctvl842/monokai-pro.nvim",
-  --   priority = 1000,
-  --   opts = {
-  --     filter = "pro", -- classic | octagon | pro | machine | ristretto | spectrum
-  --   },
-  -- },
+  {
+    "loctvl842/monokai-pro.nvim",
+    priority = 1000,
+    opts = {
+      filter = "ristretto", -- classic | octagon | pro | machine | ristretto | spectrum
+    },
+  },
 
-  -- {
-  --   "projekt0n/caret.nvim",
-  --   -- lazy = true, -- make sure we load this during startup if it is your main colorscheme
-  --   priority = 1000, -- make sure to load this before all the other start plugins
-  --   config = function()
-  --     require("caret").setup({
-  --       -- ...
-  --     })
-  --     -- vim.cmd('colorscheme caret')
-  --   end,
-  -- },
+  {
+    "projekt0n/caret.nvim",
+    -- lazy = true, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      require("caret").setup({
+        -- ...
+      })
+      -- vim.cmd('colorscheme caret')
+    end,
+  },
 
   {
     "ellisonleao/gruvbox.nvim",
@@ -115,14 +117,14 @@ return {
     },
   },
 
-  -- {
-  --   -- github_nvim_dark
-  --   "projekt0n/github-nvim-theme",
-  --   priority = 1000, -- make sure to load this before all the other start plugins
-  --   opts = {
-  --     dim_inactive = true,
-  --   },
-  -- },
+  {
+    -- github_nvim_dark
+    "projekt0n/github-nvim-theme",
+    priority = 1000, -- make sure to load this before all the other start plugins
+    opts = {
+      dim_inactive = true,
+    },
+  },
 
   { "norcalli/nvim-colorizer.lua", { "norcalli/nvim-terminal.lua" } },
 
@@ -135,7 +137,11 @@ return {
       -- colorscheme = "terafox",
       -- colorscheme = "tokyonight",
       -- colorscheme = "gruvbox",
-      colorscheme = "kanagawa",
+      -- colorscheme = "rose-pine",
+      colorscheme = "kanagawa-wave",
+      -- colorscheme = "gruvbox-baby",
+      -- colorscheme = "monokai-pro",
+      -- colorscheme = "kanagawa-dragon",
       -- colorscheme = "kanagawa-lotus",
       -- vim.cmd([[ set background=light ]]),
       -- vim.cmd([[ highlight Normal ctermfg=green ctermbg=yellow ]]),
