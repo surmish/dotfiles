@@ -1,29 +1,10 @@
 return {
 
-  {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    opts = {
-      config = {
-        cpp = "// %s",
-        verilog = "// %s",
-        systemverilog = "// %s",
-      },
-    },
-  },
-
   { "windwp/nvim-ts-autotag", enabled = false, },
 
   {
     "nvim-treesitter/nvim-treesitter",
-    dependencies = {
-      "JoosepAlviste/nvim-ts-context-commentstring",
-    },
     opts = {
-      ignore_install = {
-        "help",
-      },
-      enable = true,
-      enable_autocmd = false,
       ensure_installed = {
         "bash",
         "c",
