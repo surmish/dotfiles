@@ -1,0 +1,10 @@
+frame = "none"
+no-multigrid = true
+title-hidden = true
+tabs = false
+
+[font]
+normal = [{ family = "Iosevka Medium Extended"} ]
+italic = [{ family = "Maple Mono" } ]
+bold = [{ family = "Maple Mono" } ]
+size = 11
