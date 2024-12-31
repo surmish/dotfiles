@@ -9,9 +9,21 @@ return {
     -- ---@class PluginLspOpts
     opts = {
       servers = {
-        bashls = {
-          enabled = is_personal,
-          mason = is_personal,
+        perlnavigator = {
+          settings = {
+            perlnavigator = {
+              perlPath = os.getenv("PERL_PATH"),
+              includePaths = {
+                os.getenv("PERL_LIB_PATH1"),
+                os.getenv("PERL_LIB_PATH2"),
+                os.getenv("PERL_LIB_PATH3"),
+                os.getenv("PERL_LIB_PATH4"),
+                os.getenv("PERL_LIB_PATH5"),
+                os.getenv("PERL_LIB_PATH6"),
+                os.getenv("PERL_LIB_PATH7")
+              },
+            },
+          },
         },
         lua_ls = {
           enabled = is_personal,
@@ -28,20 +40,7 @@ return {
       },
     },
   },
-  {
-    "nvim-telescope/telescope.nvim",
-    keys = {
-      { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
-      { "<leader>fF", false },
-    },
-    opts = {
-      defaults = {
-        path_display = {
-          filename_first = true,
-        },
-      },
-    },
-  },
+
   {
     "ahmedkhalf/project.nvim",
     opts = {

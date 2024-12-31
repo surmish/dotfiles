@@ -1,8 +1,6 @@
 -- Autocmds are automatically loaded on the VeryLazy event
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 
--- Add any additional autocmds here
-
 -- Autoformat setting
 local set_autoformat = function(pattern, bool_val)
   vim.api.nvim_create_autocmd({ "FileType" }, {
@@ -18,6 +16,7 @@ set_autoformat({ "fish" }, false)
 set_autoformat({ "lua" }, false)
 set_autoformat({ "perl" }, false)
 set_autoformat({ "yaml" }, false)
+set_autoformat({ "python" }, false)
 
 -- File type setting
 local set_filetype = function(pattern, filetype)
@@ -31,11 +30,10 @@ end
 
 set_filetype({ "*.mk", "Make*" }, "make")
 set_filetype({ "buildmap.config", "tool_data.config" }, "confini")
-set_filetype({ "ip*.config", "*rtl.config", "*ip.config", "*.yml_old", "*.yml_new" }, "yaml")
+set_filetype({ "buildip*.config", "ip*.config", "*rtl.config", "*ip.config", "*.yml_old", "*.yml_new" }, "yaml")
 set_filetype({ "cluster*.clk.config" }, "perl")
--- tcl as tcsh just for the colors
 set_filetype({ "*.atelib", "*.tn" }, "tcl")
-set_filetype({ "*.v" }, "systemverilog")
+set_filetype({ "*.v", "*.vh" }, "systemverilog")
 
 vim.api.nvim_create_autocmd("BufWritePost", {
   pattern = "*.tex",
@@ -88,7 +86,7 @@ vim.api.nvim_create_user_command("P4View", function(opts)
 end, { nargs = 1 })
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "perl,tcl,tcsh,python",
+  pattern = "make,perl,tcl,tcsh,python",
   command = "setlocal tabstop=4 shiftwidth=4",
 })
 

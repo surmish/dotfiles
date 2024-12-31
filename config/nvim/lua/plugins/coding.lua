@@ -1,7 +1,5 @@
 return {
 
-  { "windwp/nvim-ts-autotag", enabled = false, },
-
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
@@ -9,87 +7,31 @@ return {
         "bash",
         "c",
         "cpp",
-        "fish",
         "diff",
+        "fish",
         "html",
         "json",
         "jsonc",
         "lua",
-        "luap",
         "markdown",
         "markdown_inline",
         "perl",
         "python",
         "regex",
+        "tcl",
         "verilog",
         "vim",
         "vimdoc",
-        "xml",
-        "yaml",
+        "xml"
       },
     },
   },
 
+  { "pedrohdz/vim-yaml-folds", ft = { "yaml" }, },
+  { "mechatroner/rainbow_csv", ft = { "csv" }, },
+
   { "junegunn/fzf", build = "./install --all" },
-  { "junegunn/fzf.vim" },
-
-  -- {
-  --   "L3MON4D3/LuaSnip",
-  --   dependencies = {
-  --     "rafamadriz/friendly-snippets",
-  --     config = function()
-  --       require("luasnip").filetype_extend("sh", { "shelldoc" })
-  --       require("luasnip").filetype_extend("c", { "cdoc" })
-  --       require("luasnip").filetype_extend("cpp", { "cppdoc" })
-  --       require("luasnip").filetype_extend("lua", { "luadoc" })
-  --       require("luasnip").filetype_extend("python", { "pydoc" })
-  --       require("luasnip").filetype_extend("rust", { "rustdoc" })
-  --       require("luasnip").filetype_extend("tcsh", { "tcl" })
-  --       -- for LuaSnip snippets
-  --       require("luasnip.loaders.from_vscode").lazy_load()
-  --       -- for custom snippets in .config/nvim/snippets dir
-  --       require("luasnip.loaders.from_vscode").lazy_load({
-  --         paths = { vim.fn.stdpath("config") .. "/snippets" },
-  --       })
-  --     end,
-  --   },
-  -- },
-
-  {
-    "hrsh7th/nvim-cmp",
-    opts = function(_, opts)
-      local cmp = require("cmp")
-      opts.window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
-      }
-      opts.sorting.comparators = {
-        cmp.config.compare.offset,
-        cmp.config.compare.exact,
-        cmp.config.compare.score,
-        function(a1, a2)
-          if a1 == "Snippet" and a2 == "Variable" or a2 == "Function" then
-            return true
-          end
-          return false
-        end,
-        cmp.config.compare.sort_text,
-        cmp.config.compare.length,
-        cmp.config.compare.order,
-      }
-      -- local types = require("cmp.types")
-      -- -- Function to sort LSP snippets, so that they appear at the end of LSP suggestions
-      -- local function prioritize_snippet(entry1, entry2)
-      --   if entry1:get_kind() == types.lsp.CompletionItemKind.Snippet then
-      --     return true
-      --   end
-      --   if entry2:get_kind() == types.lsp.CompletionItemKind.Snippet then
-      --     return false
-      --   end
-      -- end
-      -- table.insert(opts.sorting.comparators, 1, prioritize_snippet)
-    end,
-  },
+  -- { "wellle/context.vim", lazy = false },
 
   -- {
   --   "ThePrimeagen/harpoon",
@@ -141,26 +83,17 @@ return {
       { "<leader>2", ":lua require('neomarks').jump_to(2)<CR>", desc = "Neomark index 2" },
       { "<leader>3", ":lua require('neomarks').jump_to(3)<CR>", desc = "Neomark index 3" },
       { "<leader>4", ":lua require('neomarks').jump_to(4)<CR>", desc = "Neomark index 4" },
-      { "<leader>5", ":lua require('neomarks').jump_to(5)<CR>", desc = "Neomark index 5" },
-      { "<leader>6", ":lua require('neomarks').jump_to(6)<CR>", desc = "Neomark index 6" },
-      { "<leader>7", ":lua require('neomarks').jump_to(7)<CR>", desc = "Neomark index 7" },
-      { "<leader>8", ":lua require('neomarks').jump_to(8)<CR>", desc = "Neomark index 8" },
-      { "<leader>9", ":lua require('neomarks').jump_to(9)<CR>", desc = "Neomark index 9" },
     },
   },
 
   {
     "chrisgrieser/nvim-scissors",
-    dependencies = "nvim-telescope/telescope.nvim", -- optional
     opts = {
       snippetDir = vim.fn.stdpath("config") .. "/snippets",
     },
     keys = {
       { "<leader>es", ":lua require('scissors').editSnippet()<CR>", mode = { "n" }, desc = "Edit Snippet" },
       { "<leader>as", ":lua require('scissors').addNewSnippet()<CR>", mode = { "n", "x" }, desc = "Add New Snippet" },
-    },
-    telescope = {
-      alsoSearchSnippetBody = true,
     },
     jsonFormatter = "jq",
   },

@@ -30,45 +30,35 @@ return {
     },
   },
 
-  -- change trouble config
-  -- {
-  --   "folke/trouble.nvim",
-  --   opts = { use_diagnostic_signs = true },
-  -- },
-
-  -- add zen-mode
+  -- lazy.nvim
   {
-    "folke/zen-mode.nvim",
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    --
     opts = {
-      window = {
-        backdrop = 1,
-        height = 0.9,
-        -- width = 140,
-        options = {
+      zen = {
+        toggles = {
+          dim = true,
+          git_signs = false,
+          mini_diff_signs = false,
           number = false,
-          relativenumber = false,
-          signcolumn = "no",
-          list = false,
-          cursorline = false,
+          -- diagnostics = false,
+          -- inlay_hints = false,
         },
+        -- window = {
+        --   backdrop = 1,
+        --   height = 0.9,
+        --   width = 160,
+        --   options = {
+        --     number = false,
+        --     relativenumber = false,
+        --     signcolumn = "no",
+        --     list = false,
+        --     cursorline = false,
+        --   },
+        -- },
       },
     },
-    keys = {
-      {
-        "<leader>Z",
-        function()
-          require("zen-mode").toggle()
-          vim.cmd([[ set nonumber norelativenumber ]])
-        end,
-        desc = "Zen Mode",
-      },
-    },
-    config = function()
-      require("twilight").setup({
-        context = 10,
-        treesitter = true,
-      })
-    end,
   },
 
   {
@@ -93,26 +83,6 @@ return {
           end,
         },
       },
-    },
-  },
-
-  {
-    "debugloop/telescope-undo.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-    },
-    keys = { { "<leader>U", "<cmd>Telescope undo<cr>" } },
-    config = function()
-      require("telescope").load_extension("undo")
-    end,
-  },
-
-  {
-    "folke/twilight.nvim",
-    opts = {
-      context = -1,
-      treesitter = true,
     },
   },
 

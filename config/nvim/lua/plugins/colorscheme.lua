@@ -1,33 +1,15 @@
 return {
-  { "imsnif/kdl.vim", lazy = false },
+
+  { "imsnif/kdl.vim", ft = { 'kdl' } },
   { "folke/tokyonight.nvim", lazy = true },
   { "catppuccin/nvim", name = "catppuccin", lazy = true },
-
   { "luisiacc/gruvbox-baby", lazy = true },
 
   {
     "EdenEast/nightfox.nvim",
+    lazy = true,
     priority = 1000,
     opts = {
-      options = {
-        -- colorblind = {
-        --   enable = true,
-        --   simulate_only = true,
-        --   severity = {
-        --     protan = 1,
-        --     -- duetan = 1,
-        --     -- tritan = 1,
-        --   },
-        -- },
-        --   styles = {
-        --     keywords = "bold",
-        --     types = "bold",
-        --   },
-      },
-      palettes = {
-        -- nightfox = { green = "#00ff00" },
-        -- terafox = { green = "#00ff00" },
-      },
       specs = { all = { syntax = { operator = "orange" } } },
       groups = {
         all = {
@@ -38,8 +20,36 @@ return {
     },
   },
 
+  -- issues with barbar
+  -- {
+  --   "f4z3r/gruvbox-material.nvim",
+  --   name = "gruvbox-material",
+  --   lazy = false,
+  --   priority = 1000,
+  --   opts = { contrast = "hard" },
+  -- },
+
+  {
+    "sainnhe/gruvbox-material",
+    lazy = true,
+    priority = 1000,
+    opts = {
+      vim.cmd([[ set background=dark ]]),
+      vim.cmd([[ let g:gruvbox_material_background='hard' ]]),
+      vim.cmd([[ let g:gruvbox_material_transparent_background=0 ]]),
+      vim.cmd([[ let g:gruvbox_material_diagnostic_line_highlight=1 ]]),
+      vim.cmd([[ let g:gruvbox_material_diagnostic_virtual_text='colored' ]]),
+      vim.cmd([[ let g:gruvbox_material_enable_bold=1 ]]),
+      vim.cmd([[ let g:gruvbox_material_enable_italic=1 ]]),
+      vim.api.nvim_set_hl(0, "NormalFloat",   { link = "Normal" }),
+      vim.api.nvim_set_hl(0, "FloatBorder",   { link = "Normal" }),
+      vim.api.nvim_set_hl(0, "LspInfoBorder", { link = "Normal" }),
+    },
+  },
+
   {
     "rose-pine/neovim",
+    lazy = true,
     priority = 1000,
     name = "rose-pine",
     opts = {
@@ -47,34 +57,20 @@ return {
     },
   },
 
-  { "savq/melange-nvim" },
-
-  {
-    "uloco/bluloco.nvim",
+  { "savq/melange-nvim",
+    lazy = true,
     priority = 1000,
-    dependencies = { "rktjmp/lush.nvim" },
-    opts = {
-      -- your optional config goes here, see below.
-      style = "dark", -- "auto" | "dark" | "light"
-      transparent = false,
-      italics = false,
-    },
-  },
-
-  {
-    "AlexvZyl/nordic.nvim",
-    priority = 1000,
-    opts = {
-      style = "flat",
-      telescope = {
-        style = "classic",
-      },
-    },
   },
 
   {
     "arturgoms/moonbow.nvim",
     lazy = false,
+    priority = 1000,
+  },
+
+  { 
+    "sho-87/kanagawa-paper.nvim",
+    lazy = true,
     priority = 1000,
   },
 
@@ -89,6 +85,7 @@ return {
 
   {
     "loctvl842/monokai-pro.nvim",
+    lazy = true,
     priority = 1000,
     opts = {
       filter = "ristretto", -- classic | octagon | pro | machine | ristretto | spectrum
@@ -96,20 +93,8 @@ return {
   },
 
   {
-    "projekt0n/caret.nvim",
-    -- lazy = true, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
-    config = function()
-      require("caret").setup({
-        -- ...
-      })
-      -- vim.cmd('colorscheme caret')
-    end,
-  },
-
-  {
     "ellisonleao/gruvbox.nvim",
-    -- lazy = false,
+    lazy = true,
     priority = 1000,
     opts = {
       undercurl = false,
@@ -117,16 +102,18 @@ return {
     },
   },
 
-  {
-    -- github_nvim_dark
-    "projekt0n/github-nvim-theme",
-    priority = 1000, -- make sure to load this before all the other start plugins
-    opts = {
-      dim_inactive = true,
-    },
+  { "norcalli/nvim-colorizer.lua", { "norcalli/nvim-terminal.lua" } },
+
+  { "ab-dx/ares.nvim", 
+    dependencies = { "rktjmp/lush.nvim" },
+    lazy = true
   },
 
-  { "norcalli/nvim-colorizer.lua", { "norcalli/nvim-terminal.lua" } },
+  {
+    "yorumicolors/yorumi.nvim",
+    priority = 1000,
+    lazy = true,
+  },
 
   {
     "LazyVim/LazyVim",
@@ -139,6 +126,9 @@ return {
       -- colorscheme = "gruvbox",
       -- colorscheme = "rose-pine",
       colorscheme = "kanagawa-wave",
+      -- colorscheme = "yorumi",
+      -- colorscheme = "gruvbox-material",
+      -- colorscheme = "kanagawa-paper",
       -- colorscheme = "gruvbox-baby",
       -- colorscheme = "monokai-pro",
       -- colorscheme = "kanagawa-dragon",
