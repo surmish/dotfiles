@@ -3,7 +3,7 @@
 -- Add any additional options here
 
 vim.opt.tags         = os.getenv("TAGSFILE")
-vim.opt.clipboard    = "unnamedplus"
+vim.opt.clipboard    = "unnamedplus,unnamed"
 vim.opt.undolevels   = 200
 vim.opt.signcolumn   = "no"
 vim.g.snacks_animate = false

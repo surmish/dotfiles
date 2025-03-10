@@ -4,12 +4,22 @@ return {
   { "folke/tokyonight.nvim", lazy = true },
   { "catppuccin/nvim", name = "catppuccin", lazy = true },
   { "luisiacc/gruvbox-baby", lazy = true },
+  { "timmypidashev/darkbox.nvim", lazy = true },
+  
+  { 
+    "WTFox/jellybeans.nvim", 
+    lazy = true,
+    config = function()
+        require("jellybeans").setup()
+    end,
+  },
 
   {
     "EdenEast/nightfox.nvim",
     lazy = true,
     priority = 1000,
     opts = {
+      vim.cmd([[highlight WinSeparator guifg=#666666]]),
       specs = { all = { syntax = { operator = "orange" } } },
       groups = {
         all = {
@@ -17,6 +27,15 @@ return {
           LineNr = { fg = "palette.red" },
         },
       },
+    },
+  },
+
+  {
+    "oonamo/ef-themes.nvim",
+    lazy = true,
+    opts = {
+      light = "ef-spring", -- Ef-theme to select for light backgrounds
+      dark = "ef-winter", -- Ef-theme to select for dark backgrounds
     },
   },
 

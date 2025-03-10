@@ -48,12 +48,22 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	end,
 })
 
-local group = vim.api.nvim_create_augroup("DiffModeColors", { clear = true })
 vim.api.nvim_create_autocmd("VimEnter", {
-	group = group,
+	group = vim.api.nvim_create_augroup("DiffModeColors", { clear = true }),
 	pattern = { "*", "diff" },
 	command = "if &diff | colorscheme moonbow | endif",
 })
+
+-- vim.api.nvim_create_autocmd({ "VimEnter", "BufRead", "BufNewFile" }, {
+--   group = vim.api.nvim_create_augroup("p4filetypedetect", { clear = true }),
+--   pattern = { "*" },
+--   callback = function()
+--     local first_line = vim.fn.getline(1)
+--     if first_line:match("^Change") then
+--       vim.bo.filetype = "diff"
+--     end
+--   end
+-- })
 
 function OpenPerforceFileWithRevision(depotPath)
 	-- Strip the revision number from the depot path, if present
@@ -93,6 +103,18 @@ end, { nargs = 1 })
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "make,perl,tcl,tcsh,python",
 	command = "setlocal tabstop=4 shiftwidth=4",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "yaml",
+  callback = function()
+    local filepath = vim.api.nvim_buf_get_name(0)
+    local filesize = vim.fn.getfsize(filepath)
+    if filesize > (1024 * 1024) then
+      vim.api.nvim_command("ownsyntax off")
+      Snacks.indent.disable()
+    end
+  end,
 })
 
 vim.api.nvim_create_autocmd("FileType", {

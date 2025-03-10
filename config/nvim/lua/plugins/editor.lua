@@ -34,30 +34,14 @@ return {
   {
     "folke/snacks.nvim",
     ---@type snacks.Config
-    --
     opts = {
-      zen = {
-        toggles = {
-          dim = true,
-          git_signs = false,
-          mini_diff_signs = false,
-          number = false,
-          -- diagnostics = false,
-          -- inlay_hints = false,
-        },
-        -- window = {
-        --   backdrop = 1,
-        --   height = 0.9,
-        --   width = 160,
-        --   options = {
-        --     number = false,
-        --     relativenumber = false,
-        --     signcolumn = "no",
-        --     list = false,
-        --     cursorline = false,
-        --   },
-        -- },
-      },
+      git = { enabled = false, },
+      scroll = { enabled = false, },
+      lazygit = { enabled = false, },
+      profiler = { enabled = false, },
+      notifier = { enabled = false, },
+      quickfile = { enabled = true, },
+      gitbrowse = { enabled = false, },
     },
   },
 

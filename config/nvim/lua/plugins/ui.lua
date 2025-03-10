@@ -18,7 +18,13 @@ return {
     },
   },
 
-  { "rcarriga/nvim-notify", enabled = false, },
-  { "kwkarlwang/bufresize.nvim", event = "VeryLazy" },
-  { "mrjones2014/smart-splits.nvim", event = "VeryLazy" },
+  {
+    "sphamba/smear-cursor.nvim",
+    enabled = true,
+    lazy = false,
+    opts = {
+      smear_between_neighbor_lines = false,
+    },
+  },
+
 }
